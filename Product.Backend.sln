@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{36750422-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{40215BB2-85C2-499C-AD84-AE369E5AF9AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.Application", "ProductCatalog.Application\ProductCatalog.Application.csproj", "{E04CCD94-BC4B-4A23-96F8-4D1C5A5AD7BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Application", "ProductCatalog.Application\ProductCatalog.Application.csproj", "{E04CCD94-BC4B-4A23-96F8-4D1C5A5AD7BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.Domain", "ProductCatalog.Domain\ProductCatalog.Domain.csproj", "{98732E1F-8778-4A6D-95BC-AB80EB88C946}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Domain", "ProductCatalog.Domain\ProductCatalog.Domain.csproj", "{98732E1F-8778-4A6D-95BC-AB80EB88C946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductCatalog.Data", "ProductCatalog.Data\ProductCatalog.Data.csproj", "{EE13035A-0495-41E4-995E-8B5AC967F330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Data", "ProductCatalog.Data\ProductCatalog.Data.csproj", "{EE13035A-0495-41E4-995E-8B5AC967F330}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{1BB4FED0-D1C4-48B0-96F7-4C02151514F9}"
 EndProject
