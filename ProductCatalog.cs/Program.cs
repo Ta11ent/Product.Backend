@@ -1,6 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProductData(builder.Configuration);
+//add repository or somethink else
+builder.Services.AddCustomAutoMapper();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
