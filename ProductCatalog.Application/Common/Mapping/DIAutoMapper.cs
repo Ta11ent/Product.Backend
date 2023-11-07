@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProductCatalog.Application.Interfaces;
+using ProductCatalog.Application.Common.Interfaces;
 using System.Reflection;
 
 namespace ProductCatalog.Application.Common.Mapping

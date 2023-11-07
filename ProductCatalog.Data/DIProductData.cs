@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductCatalog.Application.Interfaces;
+using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Data
 {

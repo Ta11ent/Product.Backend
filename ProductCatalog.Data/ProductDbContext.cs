@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductCatalog.Application.Interfaces;
+using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Data.EntityTypeConfiguration;
 using ProductCatalog.Domain;
 
