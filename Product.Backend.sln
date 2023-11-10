@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34004.107
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{7118D80D-F345-4CEF-B337-51F4EFB0C02B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.cs", "ProductCatalog.cs\ProductCatalog.cs.csproj", "{2321C6B7-BF8E-40B2-AB37-A05D4025EA79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.APIcs", "ProductCatalog.cs\ProductCatalog.APIcs.csproj", "{2321C6B7-BF8E-40B2-AB37-A05D4025EA79}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{E7A78087-A194-4CFB-9E7E-D87EECE04F04}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E7A78087-A194-4CFB-9E7E-D87EECE04F04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{36750422-A891-4B98-8C85-F94C01B2ACEC}"
 EndProject
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Domain", "ProductCatalog.Domain\ProductCatalog.Domain.csproj", "{98732E1F-8778-4A6D-95BC-AB80EB88C946}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Data", "ProductCatalog.Data\ProductCatalog.Data.csproj", "{EE13035A-0495-41E4-995E-8B5AC967F330}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Persistence", "ProductCatalog.Data\ProductCatalog.Persistence.csproj", "{EE13035A-0495-41E4-995E-8B5AC967F330}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{1BB4FED0-D1C4-48B0-96F7-4C02151514F9}"
 EndProject
