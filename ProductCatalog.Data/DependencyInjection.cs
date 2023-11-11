@@ -5,9 +5,9 @@ using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Data
 {
-    public static class DIProductData
+    public static class DependencyInjection
     {
-        public static IServiceCollection AddProductData(this IServiceCollection services, 
+        public static IServiceCollection AddPersistence(this IServiceCollection services, 
             IConfiguration configuration)
         {
             var connectionString = configuration["DbConnection"];

@@ -1,2 +1,2 @@
 ﻿global using ProductCatalog.Data;
-global using ProductCatalog.Application.Common.Mapping;
+global using ProductCatalog.Application;

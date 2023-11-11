@@ -2,6 +2,6 @@
 {
     public interface IRepository
     {
-        Task SaveAsync();
+        Task SaveChangeAsync();
     }
 }
