@@ -17,4 +17,10 @@
     <ProjectReference Include="..\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Queries\Catalog\" />
+    <Folder Include="Application\Queries\Product\" />
+    <Folder Include="Common\Validation\" />
+  </ItemGroup>
+
 </Project>
