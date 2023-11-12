@@ -6,7 +6,7 @@ using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Application.Application.Queries.Category.GetCategoryList
 {
-    public class GetCategoryListQueryHandler : IRequestHandler<GetCategoryListQuery, GetCategoryListResponse>
+    public class GetCategoryListQueryHandler : IRequestHandler<GetCategoryListQuery, CategoryListResponse>
     {
         private readonly IProductDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -14,7 +14,7 @@ namespace ProductCatalog.Application.Application.Queries.Category.GetCategoryLis
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
         }
-        public async Task<GetCategoryListResponse> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
+        public async Task<CategoryListResponse> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
         {
             var categories = await
                 _dbContext.Categories
@@ -23,7 +23,7 @@ namespace ProductCatalog.Application.Application.Queries.Category.GetCategoryLis
                 .ProjectTo<CategoryListDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new GetCategoryListResponse(categories, request);
+            return new CategoryListResponse(categories, request);
         }
     }
 }
