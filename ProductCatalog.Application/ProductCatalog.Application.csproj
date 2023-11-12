@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Queries\Catalog\" />
     <Folder Include="Application\Queries\Product\" />
     <Folder Include="Common\Validation\" />
   </ItemGroup>

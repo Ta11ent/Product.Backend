@@ -2,7 +2,7 @@
 
 namespace ProductCatalog.Application.Common.Response
 {
-    internal class Response<T> : IResponse<T> where T : class
+    public class Response<T> : IResponse<T> where T : class
     {
         public Response(T _data) {
             data = _data;

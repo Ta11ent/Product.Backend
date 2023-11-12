@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace ProductCatalog.Application.Common.Response
 {
-    internal class PageResponse<T> : IResponse<T> where T : IList
+    public class PageResponse<T> : IResponse<T> where T : IList
     {
         public PageResponse(T _data, IPagination pagination) { 
 
@@ -11,8 +11,8 @@ namespace ProductCatalog.Application.Common.Response
             meta = new Meta
             {
                 count = _data.Count,
-                page = pagination.page,
-                pageSize = pagination.pageSize
+                page = pagination.Page,
+                pageSize = pagination.PageSize,
             };
             isSuccess = _data is null ? false : true;
 
@@ -22,7 +22,7 @@ namespace ProductCatalog.Application.Common.Response
         public bool isSuccess { get; set; }
         
     }
-    internal class Meta
+    public class Meta
     {
         public int count { get; set; }
         public int page { get; set; }

@@ -2,7 +2,7 @@
 {
     public interface IPagination
     {
-        int page { get; set; }
-        int pageSize { get; set; }
+        int Page { get; set; }
+        int PageSize { get; set; }
     }
 }
