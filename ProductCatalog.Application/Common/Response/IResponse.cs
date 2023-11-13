@@ -1,4 +1,4 @@
-﻿namespace ProductCatalog.Application.Common.Abstractions
+﻿namespace ProductCatalog.Application.Common.Response
 {
     internal interface IResponse<T>
     {

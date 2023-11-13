@@ -1,4 +1,4 @@
-﻿namespace ProductCatalog.Application.Common.Abstractions
+﻿namespace ProductCatalog.Application.Common.Pagination
 {
     public interface IPagination
     {

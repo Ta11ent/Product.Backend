@@ -1,6 +1,4 @@
-﻿using ProductCatalog.Application.Common.Abstractions;
-
-namespace ProductCatalog.Application.Common.Pagination
+﻿namespace ProductCatalog.Application.Common.Pagination
 {
     public class Pagination : IPagination
     {

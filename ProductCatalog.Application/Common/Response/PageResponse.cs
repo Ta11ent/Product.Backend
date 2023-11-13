@@ -1,4 +1,4 @@
-﻿using ProductCatalog.Application.Common.Abstractions;
+﻿using ProductCatalog.Application.Common.Pagination;
 using System.Collections;
 
 namespace ProductCatalog.Application.Common.Response

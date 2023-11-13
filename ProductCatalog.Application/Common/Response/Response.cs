@@ -1,6 +1,4 @@
-﻿using ProductCatalog.Application.Common.Abstractions;
-
-namespace ProductCatalog.Application.Common.Response
+﻿namespace ProductCatalog.Application.Common.Response
 {
     public class Response<T> : IResponse<T> where T : class
     {

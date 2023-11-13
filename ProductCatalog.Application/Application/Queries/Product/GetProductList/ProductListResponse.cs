@@ -1,4 +1,4 @@
-﻿using ProductCatalog.Application.Common.Abstractions;
+﻿using ProductCatalog.Application.Common.Pagination;
 using ProductCatalog.Application.Common.Response;
 
 namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
