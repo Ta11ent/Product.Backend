@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace ProductCatalog.APIcs.Validation
+﻿namespace ProductCatalog.APIcs.Validation
 {
     public class ValidationFilter<T> : IEndpointFilter where T : class
     {

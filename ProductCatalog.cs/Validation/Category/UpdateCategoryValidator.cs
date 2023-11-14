@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using ProductCatalog.cs.Models.Category;
-
-namespace ProductCatalog.APIcs.Validation.Category
+﻿namespace ProductCatalog.APIcs.Validation.Category
 {
     public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryDto>
     {

@@ -21,6 +21,7 @@ namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
 
             product.Name = request.Name;
             product.Description = request.Description;
+            product.CategoryId = request.CategoryId;
 
             await _dbContect.SaveChangesAsync(cancellationToken);
         }

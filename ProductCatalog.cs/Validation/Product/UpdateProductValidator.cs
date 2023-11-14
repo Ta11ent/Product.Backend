@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using ProductCatalog.cs.Models.Product;
+﻿using ProductCatalog.cs.Models.Product;
 
 namespace ProductCatalog.APIcs.Validation.Product
 {
@@ -10,6 +9,7 @@ namespace ProductCatalog.APIcs.Validation.Product
             RuleFor(x => x.ProductId).NotEqual(Guid.Empty);
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Description).NotEmpty().MaximumLength(300);
+            RuleFor(x => x.CategoryId).NotEqual(Guid.Empty);
         }
     }
 }
