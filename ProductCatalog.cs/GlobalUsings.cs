@@ -1,3 +1,13 @@
 ﻿global using ProductCatalog.Data;
 global using ProductCatalog.Application;
 global using FluentValidation;
+global using Asp.Versioning;
+global using Asp.Versioning.Conventions;
+global using MediatR;
+global using ProductCatalog.APIcs.Endopoints;
+global using ProductCatalog.Application.Common.Mapping;
+global using AutoMapper;
+global using ProductCatalog.APIcs.Models.Category;
+global using ProductCatalog.APIcs.Validation;
+global using ProductCatalog.APIcs.Validation.Category;
+global using ProductCatalog.cs.Models.Category;
