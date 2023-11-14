@@ -21,8 +21,6 @@ namespace ProductCatalog.Application
                      config.AddProfile(new AssemblyMappingProfile(typeof(IProductDbContext).Assembly));
                  });
 
-            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
-
             return services;
         }
     }
