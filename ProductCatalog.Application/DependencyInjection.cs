@@ -1,9 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
-using ProductCatalog.Application.Common.Abstractions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Application.Common.Mapping;
-using ProductCatalog.Application.Common.Response;
 using System.Reflection;
 
 namespace ProductCatalog.Application
