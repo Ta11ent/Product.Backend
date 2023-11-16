@@ -6,7 +6,6 @@ namespace ProductCatalog.APIcs.Validation.Product
     {
         public UpdateProductValidator() 
         {
-            RuleFor(x => x.ProductId).NotEqual(Guid.Empty);
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Description).NotEmpty().MaximumLength(300);
             RuleFor(x => x.CategoryId).NotEqual(Guid.Empty);

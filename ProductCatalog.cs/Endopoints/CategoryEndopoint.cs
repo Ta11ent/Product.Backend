@@ -22,7 +22,7 @@ namespace ProductCatalog.APIcs.Endopoints
                         ? Results.Ok(response)
                         : Results.NotFound();
                 })
-                .WithName("GetById")
+                .WithName("GetCategoryById")
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Get the Category by Id")
@@ -48,7 +48,7 @@ namespace ProductCatalog.APIcs.Endopoints
                     var apiVersion = context.GetRequestedApiVersion();
                     var command = mapper.Map<CreateCategoryCommand>(entity);
                     var id = await sender.Send(command);
-                    return Results.CreatedAtRoute("GetByID", new { id });
+                    return Results.CreatedAtRoute("GetCategoryById", new { id });
                 })
                 .AddEndpointFilter<ValidationFilter<CreateCategoryDto>>()
                 .WithApiVersionSet(versionSet)

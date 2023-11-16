@@ -23,6 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 CategoryEndopoint.Map(app);
+ProductEndopoint.Map(app);
 
 app.UseHttpsRedirection();
 

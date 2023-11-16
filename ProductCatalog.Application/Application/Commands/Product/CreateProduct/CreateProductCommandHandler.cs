@@ -14,7 +14,8 @@ namespace ProductCatalog.Application.Application.Commands.Product.CreateProduct
             {
                 ProductId = Guid.NewGuid(),
                 Name = request.Name,
-                Description = request.Description 
+                Description = request.Description,
+                CategoryId = request.CategoryId              
             };
 
             await _dbContext.Products.AddAsync(product);
