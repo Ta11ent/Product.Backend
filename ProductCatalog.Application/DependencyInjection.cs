@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProductCatalog.Application.Common.Interfaces;
-using ProductCatalog.Application.Common.Mapping;
-using System.Reflection;
 
 namespace ProductCatalog.Application
 {
@@ -11,13 +8,6 @@ namespace ProductCatalog.Application
         {
             services.AddMediatR(config => 
             config.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
-
-            services.AddAutoMapper(config =>
-                 {
-                     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
-                     config.AddProfile(new AssemblyMappingProfile(typeof(IProductDbContext).Assembly));
-                 });
-
             return services;
         }
     }

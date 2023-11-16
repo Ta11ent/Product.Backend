@@ -4,8 +4,8 @@ namespace ProductCatalog.APIcs.Models.Category
 {
     public class GetCategoryListDto : IMapWith<GetCategoryListQuery>
     {
-        public int Page { get; set; }
-        public int PageSize { get; set; }       
+        public int? Page { get; set; }
+        public int? PageSize { get; set; }       
         public void Mapping(Profile profile) 
         {
             profile.CreateMap<GetCategoryListDto, GetCategoryListQuery>()

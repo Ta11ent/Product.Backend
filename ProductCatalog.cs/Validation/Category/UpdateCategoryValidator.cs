@@ -4,7 +4,6 @@
     {
         public UpdateCategoryValidator() 
         { 
-            RuleFor(x => x.CategoryId).NotEqual(Guid.Empty);
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Name).MaximumLength(300);
         }

@@ -50,7 +50,7 @@ namespace ProductCatalog.APIcs.Endopoints
                     var id = await sender.Send(command);
                     return Results.CreatedAtRoute("GetByID", new { id });
                 })
-                .AddEndpointFilter<ValidationFilter<CreateCategoryValidator>>()
+                .AddEndpointFilter<ValidationFilter<CreateCategoryDto>>()
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Create a Category")
@@ -66,7 +66,7 @@ namespace ProductCatalog.APIcs.Endopoints
                     await sender.Send(command);
                     return Results.NoContent();
                 })
-                .AddEndpointFilter<ValidationFilter<UpdateCategoryValidator>>()
+                .AddEndpointFilter<ValidationFilter<UpdateCategoryDto>>()
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Update the Category")

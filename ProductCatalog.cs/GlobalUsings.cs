@@ -9,5 +9,6 @@ global using ProductCatalog.Application.Common.Mapping;
 global using AutoMapper;
 global using ProductCatalog.APIcs.Models.Category;
 global using ProductCatalog.APIcs.Validation;
-global using ProductCatalog.APIcs.Validation.Category;
 global using ProductCatalog.cs.Models.Category;
+global using ProductCatalog.Application.Common.Interfaces;
+global using System.Reflection;
