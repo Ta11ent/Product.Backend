@@ -1,0 +1,58 @@
+{
+  "Routes": [
+    /// <summary>
+    /// Product.Category
+    /// </summary>
+    {
+      "UpstreamPathTemplate": "/api/v{version}/category",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/category"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/category/{Id}",
+      "UpstreamHttpMethod": [ "Get", "Delete", "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/category/{Id}"
+    },
+    /// <summary>
+    /// Product.Product
+    /// </summary>
+    {
+      "UpstreamPathTemplate": "/api/v{version}/product",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/product"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/product/{Id}",
+      "UpstreamHttpMethod": [ "Get", "Delete", "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/category/{Id}"
+    }
+  ]
+}
