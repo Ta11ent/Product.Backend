@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using ProductCatalog.cs.Models.Product;
+﻿using ProductCatalog.cs.Models.Product;
 
 namespace ProductCatalog.APIcs.Validation.Product
 {
