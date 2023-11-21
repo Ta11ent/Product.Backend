@@ -33,13 +33,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C71ACDC4-AC63-4C2D-AD4D-CEEB008AE6E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.API", "ShoppingCart.API\ShoppingCart.API.csproj", "{A7753DA5-0BD2-42B7-A7A8-AE57BB3BFF59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.API", "ShoppingCart.API\ShoppingCart.API.csproj", "{A7753DA5-0BD2-42B7-A7A8-AE57BB3BFF59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Persistence", "ShoppingCatalog.Persistence\ShoppingCart.Persistence.csproj", "{EBA57AA6-53AB-4B2E-BFD4-4B0109F356C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Persistence", "ShoppingCatalog.Persistence\ShoppingCart.Persistence.csproj", "{EBA57AA6-53AB-4B2E-BFD4-4B0109F356C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Application", "ShoppingCart.Application\ShoppingCart.Application.csproj", "{3BE512C5-BAC1-491A-AECA-B03B26414B4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Application", "ShoppingCart.Application\ShoppingCart.Application.csproj", "{3BE512C5-BAC1-491A-AECA-B03B26414B4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoppingCart.Domain", "ChoppingCart.Domain\ChoppingCart.Domain.csproj", "{5205E816-C61D-4787-958F-99EE420890C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingCart.Domain", "ChoppingCart.Domain\ShoppingCart.Domain.csproj", "{5205E816-C61D-4787-958F-99EE420890C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
