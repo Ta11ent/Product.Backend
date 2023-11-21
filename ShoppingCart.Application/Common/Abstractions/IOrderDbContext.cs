@@ -1,4 +1,4 @@
-﻿using ChoppingCart.Domain;
+﻿using ShoppingCart.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace ShoppingCart.Application.Common.Abstractions

@@ -1,4 +1,4 @@
-﻿namespace ChoppingCart.Domain
+﻿namespace ShoppingCart.Domain
 {
     public class Order
     {

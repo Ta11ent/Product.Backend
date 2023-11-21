@@ -1,4 +1,4 @@
-﻿using ChoppingCart.Domain;
+﻿using ShoppingCart.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
