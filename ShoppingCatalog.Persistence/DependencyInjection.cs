@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ShoppingCart.Application.Abstractions;
+using ShoppingCart.Application.Common.Abstractions;
 
 namespace ShoppingCart.Persistence
 {

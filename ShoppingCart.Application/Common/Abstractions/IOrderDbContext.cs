@@ -1,7 +1,7 @@
 ﻿using ChoppingCart.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace ShoppingCart.Application.Abstractions
+namespace ShoppingCart.Application.Common.Abstractions
 {
     public interface IOrderDbContext : IDisposable
     {

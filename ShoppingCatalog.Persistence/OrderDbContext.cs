@@ -1,6 +1,6 @@
 ﻿using ChoppingCart.Domain;
 using Microsoft.EntityFrameworkCore;
-using ShoppingCart.Application.Abstractions;
+using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Persistence.EntityTypeConfiguration;
 
 namespace ShoppingCart.Persistence
