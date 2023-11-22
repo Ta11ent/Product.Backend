@@ -2,7 +2,7 @@
 
 namespace ShoppingCart.Application.Common.Abstractions
 {
-    public interface IProductRangeRepository
+    public interface IProductRangeRepository : IDisposable
     {
         Task<Guid> CreateProductRangeAsync(CreateProductRangeCommand command);
         Task UpdateProductRageAsync(UpdateProductRangeCommand command);
