@@ -2,7 +2,7 @@
 
 namespace ShoppingCart.Application.Common.Abstractions
 {
-    public interface IOrderReppository
+    public interface IOrderReppository : IDisposable
     {
         Task<Guid> CreateOrderAsync(Guid userId);
         Task UpdateOrderAsync(UpdateOrderCommand command);

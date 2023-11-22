@@ -69,6 +69,8 @@ namespace ShoppingCart.Application.Application
             }
             _disposed = true;
         }
+
+        ~ProductRangeRepository() => Dispose(false);
     }
 }
 
