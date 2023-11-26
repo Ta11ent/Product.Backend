@@ -4,11 +4,10 @@ using ShoppingCart.Application.Common.Models.ProductRange;
 
 namespace ShoppingCart.Application.Common.Models.Order
 {
-    public class OrderDetailsDto : IMapWith<Domain.Order>
+    public class OrderListDto : IMapWith<Domain.Order>
     {
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; } // need to add more information about user
-       // public UserDto User { get; set; }
         public IEnumerable<OrderProductRangeDto> ProductRanges { get; set; }
         public DateTime? OrderTime { get; set; }
         public decimal Price { get; set; }
@@ -29,11 +28,4 @@ namespace ShoppingCart.Application.Common.Models.Order
                     opt => opt.MapFrom(y => y.IsPaid));
         }
     }
-
-    //public class UserDto
-    //{
-    //    public Guid UserId { get; set; }
-    //    public string UserName { get; set; }
-    //    public string Email { get; set; }
-    //}
 }

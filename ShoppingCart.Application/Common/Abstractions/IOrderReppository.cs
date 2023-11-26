@@ -8,6 +8,6 @@ namespace ShoppingCart.Application.Common.Abstractions
         Task UpdateOrderAsync(UpdateOrderCommand command);
         Task DeleteOrderAsync(Guid OrderId);
         Task<OrderDetailsResponse> GetOrderDetailsAsync(Guid OrderId);
-        Task<OrderPageResponse> GetOrderListAsync(OrderListQuery query);
+        Task<OrderListResponse> GetOrderListAsync(OrderListQuery query);
     }
 }

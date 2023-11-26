@@ -72,7 +72,7 @@ namespace ShoppingCart.Application.Application
             return new OrderDetailsResponse(data);
         }
 
-        public Task<OrderPageResponse> GetOrderListAsync(OrderListQuery query)
+        public Task<OrderListResponse> GetOrderListAsync(OrderListQuery query)
         {
             throw new NotImplementedException();
         }
