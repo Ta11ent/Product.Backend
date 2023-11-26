@@ -1,8 +1,8 @@
 ﻿namespace ProductCatalog.Data
 {
-    internal class DbInitialize
+    public class DbInitialize
     {
-        internal static void Initialize(ProductDbContext dbContext)
+        public static void Initialize(ProductDbContext dbContext)
         {
             dbContext.Database.EnsureCreated();
         }

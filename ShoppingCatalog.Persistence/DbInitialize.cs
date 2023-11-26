@@ -1,8 +1,8 @@
 ﻿namespace ShoppingCart.Persistence
 {
-    internal class DbInitialize
+    public class DbInitialize
     {
-        internal static void Initialize(OrderDbContext dbContext)
+        public static void Initialize(OrderDbContext dbContext)
         {
             dbContext.Database.EnsureCreated();
         }

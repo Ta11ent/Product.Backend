@@ -15,6 +15,20 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    try
+    {
+        var context = serviceProvider.GetRequiredService<OrderDbContext>();
+        DbInitialize.Initialize(context);
+    }
+    catch (Exception exception)
+    {
+        var loger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        loger.LogError(exception, "Ann error ocurred while app initialization");
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
