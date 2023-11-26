@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCart.Application.Common.Pagination
 {
-    public class Pagination : IPagination
+    public class PaginationParam : IPaginationParam
     {
         private readonly int startItemsPerPage = 20;
         private readonly int startPage = 1;

@@ -7,5 +7,6 @@ namespace ShoppingCart.Application.Common.Abstractions
         Task<Guid> CreateProductRangeAsync(CreateProductRangeCommand command);
         Task UpdateProductRageAsync(UpdateProductRangeCommand command);
         Task DeleteProductRageAsync(Guid productRangeId);
+        Task SaveAsync();
     }
 }

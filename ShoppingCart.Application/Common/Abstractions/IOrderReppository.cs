@@ -9,5 +9,6 @@ namespace ShoppingCart.Application.Common.Abstractions
         Task DeleteOrderAsync(Guid OrderId);
         Task<OrderDetailsResponse> GetOrderDetailsAsync(Guid OrderId);
         Task<OrderListResponse> GetOrderListAsync(OrderListQuery query);
+        Task SaveAsync();
     }
 }

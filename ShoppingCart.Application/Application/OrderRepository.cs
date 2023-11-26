@@ -31,7 +31,6 @@ namespace ShoppingCart.Application.Application
             };
 
             await _dbContext.Orders.AddAsync(order);
-            await _dbContext.SaveChangesAsync();
 
             return order.OrderId;
         }
@@ -46,8 +45,6 @@ namespace ShoppingCart.Application.Application
 
             order.OrderTime = command.OrderTime;
             order.IsPaid = command.IsPaid;
- 
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteOrderAsync(Guid OrderId)
@@ -58,7 +55,6 @@ namespace ShoppingCart.Application.Application
                 throw new NotFoundException(nameof(Order), OrderId);
 
             _dbContext.Orders.Remove(order);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<OrderDetailsResponse> GetOrderDetailsAsync(Guid OrderId)
@@ -72,10 +68,20 @@ namespace ShoppingCart.Application.Application
             return new OrderDetailsResponse(data);
         }
 
-        public Task<OrderListResponse> GetOrderListAsync(OrderListQuery query)
+        public async Task<OrderListResponse> GetOrderListAsync(OrderListQuery query)
         {
-            throw new NotImplementedException();
+            var data =
+                   await _dbContext.Orders
+                   .Include(x => x.ProductRanges)
+                   .Skip((query.Page - 1) * query.PageSize)
+                   .Take(query.PageSize)
+                   .ProjectTo<OrderListDto>(_mapper.ConfigurationProvider)
+                   .ToListAsync();
+
+            return new OrderListResponse(data, query);
         }
+
+        public async Task SaveAsync() => await _dbContext.SaveChangesAsync();
 
         public void Dispose()
         {

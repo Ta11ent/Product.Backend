@@ -26,8 +26,7 @@ namespace ShoppingCart.Application.Application
             };
 
             await _dbContext.ProductRanges.AddAsync(productRange);
-            await _dbContext.SaveChangesAsync();
-
+            
             return productRange.ProductRangeId;
         }
 
@@ -40,8 +39,6 @@ namespace ShoppingCart.Application.Application
                 throw new NotFoundException(nameof(ProductRange), command.ProductRangeId);
 
             productRange.Count = command.Count;
-
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteProductRageAsync(Guid productRangeId)
@@ -53,8 +50,8 @@ namespace ShoppingCart.Application.Application
                 throw new NotFoundException(nameof(ProductRange), productRangeId);
 
             _dbContext.ProductRanges.Remove(productRange);
-            await _dbContext.SaveChangesAsync();
         }
+        public async Task SaveAsync() => await _dbContext.SaveChangesAsync();
 
         public void Dispose()
         {

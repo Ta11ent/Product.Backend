@@ -5,7 +5,7 @@ namespace ShoppingCart.Application.Common.Response
 {
     public class PageResponse<T> : IResponse<T> where T : IList
     {
-        public PageResponse(T _data, IPagination pagination)
+        public PageResponse(T _data, IPaginationParam pagination)
         {
 
             data = _data;

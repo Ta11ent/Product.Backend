@@ -15,4 +15,8 @@
     <ProjectReference Include="..\ChoppingCart.Domain\ShoppingCart.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Services\" />
+  </ItemGroup>
+
 </Project>
