@@ -43,8 +43,9 @@ namespace ShoppingCart.Application.Application
             if (order is null)
                 throw new NotFoundException(nameof(Order), command.OrderId);
 
-            order.OrderTime = command.OrderTime;
             order.IsPaid = command.IsPaid;
+            if (command.IsPaid)
+                order.OrderTime = DateTime.Now;
         }
 
         public async Task DeleteOrderAsync(Guid OrderId)
@@ -65,7 +66,7 @@ namespace ShoppingCart.Application.Application
                 .ProjectTo<OrderDetailsDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.OrderId == OrderId);
 
-            return new OrderDetailsResponse(data);
+            return new OrderDetailsResponse(data!);
         }
 
         public async Task<OrderListResponse> GetOrderListAsync(OrderListQuery query)

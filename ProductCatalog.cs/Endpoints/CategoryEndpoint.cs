@@ -4,9 +4,9 @@ using ProductCatalog.Application.Application.Commands.Category.UpdateCategory;
 using ProductCatalog.Application.Application.Queries.Category.GetCategoryDetails;
 using ProductCatalog.Application.Application.Queries.Category.GetCategoryList;
 
-namespace ProductCatalog.APIcs.Endopoints
+namespace ProductCatalog.APIcs.Endpoints
 {
-    public static class CategoryEndopoint
+    public static class CategoryEndpoint
     {
         public static void Map(WebApplication app)
         {

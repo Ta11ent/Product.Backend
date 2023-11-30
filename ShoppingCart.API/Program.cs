@@ -1,3 +1,5 @@
+using System.Net.Http;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(config =>

@@ -5,9 +5,9 @@ using ProductCatalog.Application.Application.Queries.Product.GetProductDetails;
 using ProductCatalog.Application.Application.Queries.Product.GetProductList;
 using ProductCatalog.cs.Models.Product;
 
-namespace ProductCatalog.APIcs.Endopoints
+namespace ProductCatalog.APIcs.Endpoints
 {
-    public static class ProductEndopoint
+    public static class ProductEndpoint
     {
         public static void Map(WebApplication app)
         {

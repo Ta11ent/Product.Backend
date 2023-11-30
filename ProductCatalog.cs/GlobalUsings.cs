@@ -4,7 +4,7 @@ global using FluentValidation;
 global using Asp.Versioning;
 global using Asp.Versioning.Conventions;
 global using MediatR;
-global using ProductCatalog.APIcs.Endopoints;
+global using ProductCatalog.APIcs.Endpoints;
 global using ProductCatalog.Application.Common.Mapping;
 global using AutoMapper;
 global using ProductCatalog.APIcs.Models.Category;

@@ -37,8 +37,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-CategoryEndopoint.Map(app);
-ProductEndopoint.Map(app);
+CategoryEndpoint.Map(app);
+ProductEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 
