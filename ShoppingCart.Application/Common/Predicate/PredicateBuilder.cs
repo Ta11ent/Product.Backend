@@ -8,7 +8,7 @@ namespace ShoppingCart.Application.Common.Predicate
         internal static Expression<Func<T, bool>> And<T, P>(this Expression<Func<T, bool>> expr1,
                                                              Expression<Func<T, bool>> expr2, P request)
         {
-            if (string.IsNullOrWhiteSpace(request.ToString()))
+            if (request is null)
                 expr2 = f => true;
 
             var invokedExpr = Expression.Invoke(expr2, expr1.Parameters.Cast<Expression>());

@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
 using ShoppingCart.Application.Common.Models.Order;
+using ShoppingCart.Application.Common.Predicate;
 using ShoppingCart.Domain;
+using System;
 
 namespace ShoppingCart.Application.Application
 {
@@ -71,8 +73,14 @@ namespace ShoppingCart.Application.Application
 
         public async Task<OrderListResponse> GetOrderListAsync(OrderListQuery query)
         {
+            var predicate = PredicateBuilder.True<Order>();
             var data =
                    await _dbContext.Orders
+                   .Where(predicate
+                    .And(x => x.OrderTime >= query.DateFrom, query.DateFrom)
+                    .And(x => x.OrderTime <= query.DateTo, query.DateTo)
+                    .And(x => x.UserId == query.UserId, query.UserId)
+                    .And(x => x.IsPaid == query.IsPaid, query.IsPaid))
                    .Include(x => x.ProductRanges)
                    .Skip((query.Page - 1) * query.PageSize)
                    .Take(query.PageSize)
