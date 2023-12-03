@@ -16,6 +16,8 @@ namespace ShoppingCart.Persistence
         {
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductRangeConfiguration());
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

@@ -25,11 +25,14 @@ namespace ShoppingCart.Application.Application
 
         public async Task<Guid> CreateProductRangeAsync(CreateProductRangeCommand command)
         {
-            var order =_orderRepository.GetOrderListAsync(new OrderListQuery
+            var order = _orderRepository.GetOrderListAsync(new OrderListQuery
             {
                 UserId = command.UserId,
                 IsPaid = false
             }).Result.data.FirstOrDefault();
+
+            //var order =_dbContext.Orders
+            //    .FirstOrDefault(x => x.UserId == command.UserId && x.IsPaid == false);
 
             Guid orderId = order is null
                 ? await _orderRepository.CreateOrderAsync(command.UserId)

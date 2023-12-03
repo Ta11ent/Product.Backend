@@ -5,3 +5,4 @@ global using ShoppingCart.Application;
 global using ShoppingCart.Persistence;
 global using Asp.Versioning;
 global using FluentValidation;
+global using ShoppingCart.API.Endpoints;
