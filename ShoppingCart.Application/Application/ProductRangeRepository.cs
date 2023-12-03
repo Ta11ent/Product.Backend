@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
-using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.ProductRange;
 using ShoppingCart.Domain;
 
@@ -25,30 +24,38 @@ namespace ShoppingCart.Application.Application
 
         public async Task<Guid> CreateProductRangeAsync(CreateProductRangeCommand command)
         {
-            var order = _orderRepository.GetOrderListAsync(new OrderListQuery
-            {
-                UserId = command.UserId,
-                IsPaid = false
-            }).Result.data.FirstOrDefault();
-
-            //var order =_dbContext.Orders
-            //    .FirstOrDefault(x => x.UserId == command.UserId && x.IsPaid == false);
+            var order = _dbContext.Orders
+                .FirstOrDefault(x => x.UserId == command.UserId && x.IsPaid == false);
 
             Guid orderId = order is null
                 ? await _orderRepository.CreateOrderAsync(command.UserId)
                 : order.OrderId;
 
-            var productRange = new ProductRange
-            {
-                ProductRangeId = Guid.NewGuid(),
-                ProductId = command.ProductId,
-                OrderId = orderId,
-                Count = command.Count
-            };
+            ProductRange productRange = _dbContext.ProductRanges
+                    .FirstOrDefaultAsync(x => x.OrderId == orderId && x.ProductId == command.ProductId).Result!;
 
-            await _dbContext.ProductRanges.AddAsync(productRange);
-            
-            return productRange.OrderId;
+            if(productRange is null)
+            {
+                productRange = new ProductRange
+                {
+                    ProductRangeId = Guid.NewGuid(),
+                    ProductId = command.ProductId,
+                    OrderId = orderId,
+                    Count = command.Count
+                };
+                await _dbContext.ProductRanges.AddAsync(productRange);
+                return productRange.ProductRangeId;
+            }
+            else
+            {
+                await UpdateProductRageAsync(new UpdateProductRangeCommand
+                {
+                    OrderId = orderId,
+                    ProductRangeId = productRange.ProductRangeId,
+                    Count = productRange.Count + command.Count
+                });
+            }
+            return productRange.ProductRangeId;
         }
 
         public async Task UpdateProductRageAsync(UpdateProductRangeCommand command)

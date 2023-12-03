@@ -20,6 +20,7 @@ namespace ShoppingCart.API.Endpoints
                     var apiVersion = context.GetRequestedApiVersion();
                     var command = mapper.Map<CreateProductRangeCommand>(data);
                     var id = await repos.CreateProductRangeAsync(command);
+                    await repos.SaveAsync();
                     return Results.CreatedAtRoute("GetOrderById", new { id }); //nee to rebuid to get ProductRange Details
                 })
                 .AddEndpointFilter<ValidationFilter<CreateProductRangeDto>>()

@@ -14,7 +14,7 @@ namespace ShoppingCart.API.Models.ProductRange
                 .ForMember(x => x.ProductId,
                     opt => opt.MapFrom(y => y.ProductId))
                 .ForMember(x => x.UserId,
-                    opt => opt.MapFrom(y => y.ProductId))
+                    opt => opt.MapFrom(y => y.UserId))
                 .ForMember(x => x.Count,
                     opt => opt.MapFrom(y => y.Count));
         }
