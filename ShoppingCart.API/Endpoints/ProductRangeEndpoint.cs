@@ -14,6 +14,21 @@ namespace ShoppingCart.API.Endpoints
               .HasApiVersion(1.0)
               .Build();
 
+            app.MapGet("api/v{version:apiVersion}/productRange/{Id}",
+              async (HttpContext context, Guid Id, IProductRangeRepository repos) =>
+              {
+                  var apiVersion = context.GetRequestedApiVersion();
+                  return await repos.GetProductRangeAsync(Id) is var response
+                   ? Results.Ok(response)
+                   : Results.NotFound();
+              })
+              .WithName("GetProductRangeById")
+              .WithApiVersionSet(versionSet)
+              .MapToApiVersion(1.0)
+              .WithSummary("Get the Product Range by Id")
+              .WithDescription("JSON object containing Product Range information")
+              .WithOpenApi();
+
             app.MapPost("api/v{version:apiVersion}/productRange",
                 async(HttpContext context, CreateProductRangeDto data, IProductRangeRepository repos, IMapper mapper) =>
                 {
@@ -21,7 +36,7 @@ namespace ShoppingCart.API.Endpoints
                     var command = mapper.Map<CreateProductRangeCommand>(data);
                     var id = await repos.CreateProductRangeAsync(command);
                     await repos.SaveAsync();
-                    return Results.CreatedAtRoute("GetOrderById", new { id }); //nee to rebuid to get ProductRange Details
+                    return Results.CreatedAtRoute("GetProductRangeById", new { id }); 
                 })
                 .AddEndpointFilter<ValidationFilter<CreateProductRangeDto>>()
                 .WithApiVersionSet(versionSet)

@@ -3,7 +3,7 @@ using ShoppingCart.Application.Common.Mapping;
 
 namespace ShoppingCart.Application.Common.Models.ProductRange
 {
-    public class OrderProductRangeDto : IMapWith<Domain.ProductRange>
+    public class ProductRangeDetailsDto : IMapWith<Domain.ProductRange>
     {
         public Guid ProductRangeId { get; set; }
         public Guid ProductId { get; set; }
@@ -13,7 +13,7 @@ namespace ShoppingCart.Application.Common.Models.ProductRange
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.ProductRange, OrderProductRangeDto>()
+            profile.CreateMap<Domain.ProductRange, ProductRangeDetailsDto>()
                 .ForMember(x => x.ProductRangeId,
                     opt => opt.MapFrom(y => y.ProductRangeId))
                 .ForMember(x => x.ProductId,

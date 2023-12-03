@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
+using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.ProductRange;
 using ShoppingCart.Domain;
 
@@ -20,6 +22,19 @@ namespace ShoppingCart.Application.Application
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _orderRepository = orderRepository;
             _mapper = mapper;
+        }
+
+        public async Task<ProductRangeDetailsResponse> GetProductRangeAsync(Guid Id)
+        {
+            var productRange = 
+                await _dbContext.ProductRanges
+                .ProjectTo<ProductRangeDetailsDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.ProductRangeId == Id);
+
+            if (productRange is null)
+                throw new NotFoundException(nameof(productRange), Id);
+
+            return new ProductRangeDetailsResponse(productRange);
         }
 
         public async Task<Guid> CreateProductRangeAsync(CreateProductRangeCommand command)

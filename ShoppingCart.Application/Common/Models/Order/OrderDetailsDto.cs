@@ -9,7 +9,7 @@ namespace ShoppingCart.Application.Common.Models.Order
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; } // need to add more information about user
        // public UserDto User { get; set; }
-        public IEnumerable<OrderProductRangeDto> ProductRanges { get; set; }
+        public IEnumerable<ProductRangeDetailsDto> ProductRanges { get; set; }
         public DateTime? OrderTime { get; set; }
         public decimal Price { get; set; }
         public bool IsPaid { get; set; }
