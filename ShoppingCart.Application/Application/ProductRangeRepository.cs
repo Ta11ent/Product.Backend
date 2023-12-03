@@ -65,7 +65,6 @@ namespace ShoppingCart.Application.Application
             {
                 await UpdateProductRageAsync(new UpdateProductRangeCommand
                 {
-                    OrderId = orderId,
                     ProductRangeId = productRange.ProductRangeId,
                     Count = productRange.Count + command.Count
                 });
