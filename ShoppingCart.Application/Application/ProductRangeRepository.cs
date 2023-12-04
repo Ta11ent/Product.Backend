@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
-using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.ProductRange;
 using ShoppingCart.Domain;
 
@@ -14,14 +13,16 @@ namespace ShoppingCart.Application.Application
         private readonly IOrderDbContext _dbContext;
         private readonly IOrderReppository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly IProductService _productService;
 
         private bool _disposed = false;
         public ProductRangeRepository(IOrderDbContext dbContext,
-            IOrderReppository orderRepository, IMapper mapper) {
+            IOrderReppository orderRepository, IMapper mapper, IProductService productService) {
 
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _productService = productService;
         }
 
         public async Task<ProductRangeDetailsResponse> GetProductRangeAsync(Guid Id)
@@ -33,6 +34,14 @@ namespace ShoppingCart.Application.Application
 
             if (productRange is null)
                 throw new NotFoundException(nameof(productRange), Id);
+            else
+            {
+                var productDetails =
+                    await _productService.GetProductByIdAsync(Id);
+
+                productRange.Name = productDetails.Name;
+                productRange.Description = productDetails.Description;
+            }
 
             return new ProductRangeDetailsResponse(productRange);
         }

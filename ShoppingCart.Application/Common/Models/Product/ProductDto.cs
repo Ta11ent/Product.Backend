@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCart.Application.Common.Models.Product
 {
-    internal class ProductDto
+    public class ProductDto
     {
         internal Guid ProductId { get; set; }
         internal string Name { get; set; }

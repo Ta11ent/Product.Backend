@@ -2,8 +2,9 @@
 
 namespace ShoppingCart.Application.Common.Abstractions
 {
-    internal interface IProductService
+    public interface IProductService
     {
-        Task<IEnumerable<ProductDto>> GetProducts();
+        Task<IEnumerable<ProductDto>> GetProductsAsync();
+        Task<ProductDto> GetProductByIdAsync(Guid id);
     }
 }

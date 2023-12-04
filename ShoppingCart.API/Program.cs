@@ -5,7 +5,7 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     config.AddProfile(new AssemblyMappingProfile(typeof(IOrderDbContext).Assembly));
 });
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddApiVersioning(opt => opt.ApiVersionReader = new UrlSegmentApiVersionReader());
@@ -14,21 +14,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    try
-    {
-        var context = serviceProvider.GetRequiredService<OrderDbContext>();
-        DbInitialize.Initialize(context);
-    }
-    catch (Exception exception)
-    {
-        var loger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        loger.LogError(exception, "Ann error ocurred while app initialization");
-    }
-}
 
 if (app.Environment.IsDevelopment())
 {
