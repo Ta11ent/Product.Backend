@@ -37,7 +37,7 @@ namespace ShoppingCart.Application.Application
             else
             {
                 var productDetails =
-                    await _productService.GetProductByIdAsync(Id);
+                    await _productService.GetProductByIdAsync(productRange.ProductId);
 
                 productRange.Name = productDetails.Name;
                 productRange.Description = productDetails.Description;

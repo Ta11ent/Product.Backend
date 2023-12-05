@@ -11,9 +11,13 @@ namespace ShoppingCart.Application
         {
             services.AddScoped<IOrderReppository, OrderRepository>();
             services.AddScoped<IProductRangeRepository, ProductRangeRepository>();
+            
+            services.AddHttpClient(nameof(ProductService), option =>
+            {
+                option.BaseAddress = new Uri(configuration["ServiceURLs:ProductAPI"]);
+                option.Timeout = new TimeSpan(0, 0, 20);
+            });
             services.AddScoped<IProductService, ProductService>();
-            services.AddHttpClient("Product", option =>
-                option.BaseAddress = new Uri(configuration["ServiceURLs:ProductAPI"]));
 
             return services;
         }

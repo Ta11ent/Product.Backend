@@ -2,8 +2,8 @@
 {
     public class ProductDto
     {
-        internal Guid ProductId { get; set; }
-        internal string Name { get; set; }
-        internal string Description { get; set; }
+        public Guid ProductId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
