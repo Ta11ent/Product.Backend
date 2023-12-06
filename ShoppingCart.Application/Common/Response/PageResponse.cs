@@ -9,17 +9,19 @@ namespace ShoppingCart.Application.Common.Response
         {
 
             data = _data;
-            meta = new Meta
-            {
-                count = _data.Count,
-                page = pagination.Page,
-                pageSize = pagination.PageSize,
-            };
+            meta = pagination is null
+                ? default
+                : new Meta
+                    {
+                        count = _data.Count,
+                        page = pagination.Page,
+                        pageSize = pagination.PageSize,
+                    };
             isSuccess = _data is null ? false : true;
-
         }
+
         public T data { get; set; }
-        public Meta meta { get; set; }
+        public Meta? meta { get; set; }
         public bool isSuccess { get; set; }
 
     }

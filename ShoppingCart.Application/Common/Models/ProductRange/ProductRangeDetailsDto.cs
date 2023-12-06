@@ -7,8 +7,8 @@ namespace ShoppingCart.Application.Common.Models.ProductRange
     {
         public Guid ProductRangeId { get; set; }
         public Guid ProductId { get; set; }
-        public string Name { get; set; } // need to understand how I can map the data from another microservice
-        public string Description { get; set; } // the same
+        public string Name { get; set; } 
+        public string Description { get; set; }
         public int Count { get; set; }
 
         public void Mapping(Profile profile)

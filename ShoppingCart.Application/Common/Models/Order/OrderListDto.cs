@@ -7,15 +7,15 @@ namespace ShoppingCart.Application.Common.Models.Order
     public class OrderListDto : IMapWith<Domain.Order>
     {
         public Guid OrderId { get; set; }
-        public Guid UserId { get; set; } // need to add more information about user
-        public IEnumerable<ProductRangeDetailsDto> ProductRanges { get; set; }
+        public Guid UserId { get; set; } 
+        public List<ProductRangeDetailsDto> ProductRanges { get; set; }
         public DateTime? OrderTime { get; set; }
         public decimal Price { get; set; }
         public bool IsPaid { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Order, OrderDetailsDto>()
+            profile.CreateMap<Domain.Order, OrderListDto>()
                 .ForMember(x => x.OrderId,
                     opt => opt.MapFrom(y => y.OrderId))
                  .ForMember(x => x.UserId,
@@ -24,6 +24,8 @@ namespace ShoppingCart.Application.Common.Models.Order
                     opt => opt.MapFrom(y => y.ProductRanges))
                   .ForMember(x => x.OrderTime,
                     opt => opt.MapFrom(y => y.OrderTime))
+                  .ForMember(x => x.Price,
+                    opt => opt.MapFrom(y => y.Price))
                   .ForMember(x => x.IsPaid,
                     opt => opt.MapFrom(y => y.IsPaid));
         }

@@ -22,6 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 ProductRangeEndpoint.Map(app);
+OrderEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 

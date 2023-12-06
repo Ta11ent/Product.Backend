@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning.Conventions;
 using AutoMapper;
-using Microsoft.AspNetCore.Hosting.Server;
 using ShoppingCart.API.Models.ProductRange;
 using ShoppingCart.API.Validation;
 using ShoppingCart.Application.Common.Models.ProductRange;

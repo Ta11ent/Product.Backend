@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
 using ShoppingCart.Application.Common.Models.Order;
+using ShoppingCart.Application.Common.Models.Product;
 using ShoppingCart.Application.Common.Predicate;
 using ShoppingCart.Domain;
-using System;
 
 namespace ShoppingCart.Application.Application
 {
@@ -14,13 +14,15 @@ namespace ShoppingCart.Application.Application
     {
         private readonly IOrderDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IProductService _productService;
 
         private bool _disposed = false;
 
-        public OrderRepository(IOrderDbContext dbContext, IMapper mapper)
+        public OrderRepository(IOrderDbContext dbContext, IMapper mapper, IProductService productService)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
+            _productService = productService;
         }
 
         public async Task<Guid> CreateOrderAsync(Guid userId)
@@ -76,16 +78,27 @@ namespace ShoppingCart.Application.Application
             var predicate = PredicateBuilder.True<Order>();
             var data =
                    await _dbContext.Orders
+                   .Include(x => x.ProductRanges)
                    .Where(predicate
                     .And(x => x.OrderTime >= query.DateFrom, query.DateFrom)
                     .And(x => x.OrderTime <= query.DateTo, query.DateTo)
                     .And(x => x.UserId == query.UserId, query.UserId)
                     .And(x => x.IsPaid == query.IsPaid, query.IsPaid))
-                   .Include(x => x.ProductRanges)
                    .Skip((query.Page - 1) * query.PageSize)
                    .Take(query.PageSize)
                    .ProjectTo<OrderListDto>(_mapper.ConfigurationProvider)
                    .ToListAsync();
+
+            var ProductIds = new List<Guid>();
+            foreach(var item in data)
+                ProductIds = (item.ProductRanges.Select(x => x.ProductId).ToList());
+
+            var productDetails = await _productService.GetProductsAsync(new ProductQuery(ProductIds));
+            foreach (var item in data)
+            {
+                item.ProductRanges.
+            }
+           
 
             return new OrderListResponse(data, query);
         }
