@@ -13,3 +13,4 @@ global using ProductCatalog.cs.Models.Category;
 global using ProductCatalog.Application.Common.Interfaces;
 global using System.Reflection;
 global using ProductCatalog.APIcs.Models.Product; 
+global using ProductCatalog.API.Endpoints;

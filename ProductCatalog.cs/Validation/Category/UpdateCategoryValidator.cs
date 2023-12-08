@@ -5,7 +5,7 @@
         public UpdateCategoryValidator() 
         { 
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.Name).MaximumLength(300);
+            RuleFor(x => x.Description).MaximumLength(300);
         }
     }
 }

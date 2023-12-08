@@ -39,6 +39,7 @@ if (app.Environment.IsDevelopment())
 
 CategoryEndpoint.Map(app);
 ProductEndpoint.Map(app);
+CostEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 

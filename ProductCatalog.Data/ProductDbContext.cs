@@ -2,6 +2,7 @@
 using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Data.EntityTypeConfiguration;
 using ProductCatalog.Domain;
+using ProductCatalog.Persistence.EntityTypeConfiguration;
 
 namespace ProductCatalog.Data
 {
@@ -9,6 +10,7 @@ namespace ProductCatalog.Data
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Cost> Costs { get; set; }
 
         public ProductDbContext(DbContextOptions<ProductDbContext> options) 
             : base(options) { }
@@ -16,6 +18,7 @@ namespace ProductCatalog.Data
         {
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CostConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

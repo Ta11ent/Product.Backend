@@ -1,4 +1,6 @@
-﻿using ProductCatalog.Application.Application.Commands.Product.CreateProduct;
+﻿using ProductCatalog.API.Models.Cost;
+using ProductCatalog.Application.Application.Commands.Cost.CreateCost;
+using ProductCatalog.Application.Application.Commands.Product.CreateProduct;
 using ProductCatalog.Application.Application.Commands.Product.DeleteProduct;
 using ProductCatalog.Application.Application.Commands.Product.UpdateProduct;
 using ProductCatalog.Application.Application.Queries.Product.GetProductDetails;
@@ -47,8 +49,11 @@ namespace ProductCatalog.APIcs.Endpoints
                 async(HttpContext context, CreateProductDto entity, IMapper mapper, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
-                    var command = mapper.Map<CreateProductCommand>(entity);
-                    var id = await sender.Send(command);
+                    var productCommand = mapper.Map<CreateProductCommand>(entity);
+                    var id = await sender.Send(productCommand);
+                    var costCommand =
+                        mapper.Map<CreateCostCommand>(new CreateCostDto() { Price = entity.Price, ProductId = id });
+                    await sender.Send(costCommand);
                     return Results.CreatedAtRoute("GetProductById", new { id });
                 })
                 .WithApiVersionSet(versionSet)

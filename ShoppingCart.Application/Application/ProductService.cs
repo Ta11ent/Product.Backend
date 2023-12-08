@@ -14,9 +14,9 @@ namespace ShoppingCart.Application.Application
         public ProductService(IHttpClientFactory httpClientFactory) =>
                _httpClient = httpClientFactory.CreateClient(nameof(ProductService));
 
-        public async Task<IEnumerable<ProductDto>> GetProductsAsync(string ids)
+        public async Task<IEnumerable<ProductDto>> GetProductsAsync(string param)
         {
-            var response = await _httpClient.GetAsync(getProductsRequest+ids);
+            var response = await _httpClient.GetAsync(getProductsRequest+param);
             var apiContent = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<PageResponse<List<ProductDto>>>(apiContent) is var dataContent
                 ? dataContent!.data

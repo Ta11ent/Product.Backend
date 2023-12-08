@@ -7,6 +7,7 @@ namespace ProductCatalog.Application.Common.Interfaces
     {
         DbSet<Category> Categories { get; set; }
         DbSet<Product> Products { get; set; }
+        DbSet<Cost> Costs { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

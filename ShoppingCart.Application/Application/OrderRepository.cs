@@ -75,7 +75,8 @@ namespace ShoppingCart.Application.Application
             var ProductIds = data!.ProductRanges.Select(x => x.ProductId).Distinct().ToList();
 
             var productDetails = await _productService
-                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId)));
+                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId))
+                    +QueryBuilder.GeneratePaginationParam(ProductIds.Count));
 
             foreach (var product in data.ProductRanges)
                 AddProductDetails(product, ref productDetails);
@@ -103,7 +104,8 @@ namespace ShoppingCart.Application.Application
             var ProductIds =  data.SelectMany(x => x.ProductRanges.Select(x => x.ProductId)).Distinct().ToList();
            
             var productDetails = await _productService
-                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId)));
+                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId))
+                    +QueryBuilder.GeneratePaginationParam(ProductIds.Count));
 
             foreach (var item in data)
                 foreach (var product in item.ProductRanges)
