@@ -19,7 +19,8 @@ namespace ProductCatalog.Application.Application.Commands.Product.DeleteProduct
             if (product == null) 
                 throw new NotFoundExceptions(nameof(product), request.ProductId);
 
-            _dbContext.Products.Remove(product);
+            // _dbContext.Products.Remove(product);
+            product.Available = false;
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }

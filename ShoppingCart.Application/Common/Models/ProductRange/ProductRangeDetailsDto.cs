@@ -9,6 +9,7 @@ namespace ShoppingCart.Application.Common.Models.ProductRange
         public Guid ProductId { get; set; }
         public string Name { get; set; } 
         public string Description { get; set; }
+        public bool Available { get; set; }
         public int Count { get; set; }
 
         public void Mapping(Profile profile)

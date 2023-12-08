@@ -8,5 +8,6 @@ namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
+        public bool? Available { get; set; }
     }
 }

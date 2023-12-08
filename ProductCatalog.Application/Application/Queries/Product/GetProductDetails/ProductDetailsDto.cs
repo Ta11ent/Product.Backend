@@ -9,6 +9,7 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         public Guid ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool Available { get; set; }
         public CategoryDetailsDto CategoryDetails { get; set; }
         public void Mapping (Profile profile)
         {
@@ -20,7 +21,10 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
                 .ForMember(x => x.Description,
                     opt => opt.MapFrom(y => y.Description))
                 .ForMember(x => x.CategoryDetails,
-                    opt => opt.MapFrom(y => y.Category));
+                    opt => opt.MapFrom(y => y.Category))
+                .ForMember(x => x.Available,
+                    opt => opt.MapFrom(y => y.Available));
+
         }
     }
 }

@@ -22,6 +22,10 @@ namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
             product.Name = request.Name;
             product.Description = request.Description;
             product.CategoryId = request.CategoryId;
+            product.Available = request.Available is null
+                ? product.Available
+                : request.Available.Value;
+            
 
             await _dbContect.SaveChangesAsync(cancellationToken);
         }

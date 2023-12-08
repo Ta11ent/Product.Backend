@@ -8,6 +8,7 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
         public Guid ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool Available { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Product, ProductListDto>()
@@ -16,7 +17,9 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
                 .ForMember(x => x.Name,
                     opt => opt.MapFrom(y => y.Name))
                 .ForMember(x => x.Description,
-                    opt => opt.MapFrom(y => y.Description));
+                    opt => opt.MapFrom(y => y.Description))
+                .ForMember(x => x.Available,
+                    opt => opt.MapFrom(y => y.Available));
         }
     }
 }

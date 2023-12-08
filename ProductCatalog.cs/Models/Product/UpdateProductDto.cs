@@ -8,6 +8,7 @@ namespace ProductCatalog.cs.Models.Product
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
+        public bool? Available { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<UpdateProductDto, UpdateProductCommand>()
@@ -18,7 +19,9 @@ namespace ProductCatalog.cs.Models.Product
                 .ForMember(x => x.Description,
                     opt => opt.MapFrom(y => y.Description))
                 .ForMember(x => x.CategoryId,
-                    opt => opt.MapFrom(y => y.CategoryId));
+                    opt => opt.MapFrom(y => y.CategoryId))
+                .ForMember(x => x.Available,
+                    opt => opt.MapFrom(y => y.Available));
         }
     }
 }

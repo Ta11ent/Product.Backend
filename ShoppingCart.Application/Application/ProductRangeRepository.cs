@@ -41,6 +41,8 @@ namespace ShoppingCart.Application.Application
 
                 productRange.Name = productDetails.Name;
                 productRange.Description = productDetails.Description;
+                productRange.Available = productDetails.Available;
+
             }
 
             return new ProductRangeDetailsResponse(productRange);

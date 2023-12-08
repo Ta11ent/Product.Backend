@@ -12,6 +12,7 @@ namespace ProductCatalog.Data.EntityTypeConfiguration
             builder.HasIndex(x => x.ProductId).IsUnique();
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(300).IsRequired();
+            builder.Property(x => x.Available).IsRequired();
 
         }
     }

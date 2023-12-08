@@ -104,6 +104,7 @@ namespace ShoppingCart.Application.Application
                     var pr = productDetails.First(x => x.ProductId == product.ProductId);
                     product.Description = pr.Description;
                     product.Name = pr.Name;
+                    product.Available = pr.Available;
                 }
             }
 
