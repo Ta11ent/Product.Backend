@@ -60,6 +60,20 @@ namespace ShoppingCart.API.Endpoints
               .WithSummary("Update the Order")
               .WithDescription("Update the Order object")
               .WithOpenApi();
+
+            app.MapDelete("api/v{version:apiVersion}/orders/{Id}",
+              async (HttpContext context, Guid Id, IOrderReppository repos) =>
+              {
+                  var apiVersion = context.GetRequestedApiVersion();
+                  await repos.DeleteOrderAsync(Id);
+                  await repos.SaveAsync();
+                  return Results.NoContent();
+              })
+              .WithApiVersionSet(versionSet)
+              .MapToApiVersion(1.0)
+              .WithSummary("Delete the Order")
+              .WithDescription("Delete the Order object")
+              .WithOpenApi();
         }
     }
 }

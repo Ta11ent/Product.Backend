@@ -6,6 +6,7 @@ using ShoppingCart.Application.Common.Exceptions;
 using ShoppingCart.Application.Common.Helpers;
 using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.Product;
+using ShoppingCart.Application.Common.Models.ProductRange;
 using ShoppingCart.Application.Common.Predicate;
 using ShoppingCart.Domain;
 
@@ -71,6 +72,14 @@ namespace ShoppingCart.Application.Application
                 .ProjectTo<OrderDetailsDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.OrderId == OrderId);
 
+            var ProductIds = data!.ProductRanges.Select(x => x.ProductId).Distinct().ToList();
+
+            var productDetails = await _productService
+                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId)));
+
+            foreach (var product in data.ProductRanges)
+                AddProductDetails(product, ref productDetails);
+
             return new OrderDetailsResponse(data!);
         }
 
@@ -90,29 +99,33 @@ namespace ShoppingCart.Application.Application
                    .ProjectTo<OrderListDto>(_mapper.ConfigurationProvider)
                    .ToListAsync();
 
-            var ProductIds = new List<Guid>();
-            foreach(var item in data)
-                ProductIds.AddRange(item.ProductRanges.Select(x => x.ProductId));
 
+            var ProductIds =  data.SelectMany(x => x.ProductRanges.Select(x => x.ProductId)).Distinct().ToList();
+           
             var productDetails = await _productService
                 .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId)));
 
             foreach (var item in data)
-            {
                 foreach (var product in item.ProductRanges)
-                {
-                    var pr = productDetails.First(x => x.ProductId == product.ProductId);
-                    product.Description = pr.Description;
-                    product.Name = pr.Name;
-                    product.Available = pr.Available;
-                }
-            }
+                    AddProductDetails(product, ref productDetails);
+
+            //data.SelectMany(x => x.ProductRanges
+            //    .Select(y => AddProductDetails(y, ref productDetails)));
 
             return new OrderListResponse(data, query);
         }
 
         public async Task SaveAsync() => await _dbContext.SaveChangesAsync();
 
+        private ProductRangeDetailsDto AddProductDetails(ProductRangeDetailsDto product,
+            ref IEnumerable<ProductDto> productDetails)
+        {
+            var pr = productDetails.First(x => x.ProductId == product.ProductId);
+            product.Description = pr.Description;
+            product.Name = pr.Name;
+            product.Available = pr.Available;
+            return product;
+        }
         public void Dispose()
         {
             Dispose(true);
