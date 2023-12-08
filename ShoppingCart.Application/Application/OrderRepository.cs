@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Exceptions;
+using ShoppingCart.Application.Common.Helpers;
 using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.Product;
 using ShoppingCart.Application.Common.Predicate;
@@ -91,14 +92,20 @@ namespace ShoppingCart.Application.Application
 
             var ProductIds = new List<Guid>();
             foreach(var item in data)
-                ProductIds = (item.ProductRanges.Select(x => x.ProductId).ToList());
+                ProductIds.AddRange(item.ProductRanges.Select(x => x.ProductId));
 
-            var productDetails = await _productService.GetProductsAsync(new ProductQuery(ProductIds));
+            var productDetails = await _productService
+                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId)));
+
             foreach (var item in data)
             {
-                item.ProductRanges.
+                foreach (var product in item.ProductRanges)
+                {
+                    var pr = productDetails.First(x => x.ProductId == product.ProductId);
+                    product.Description = pr.Description;
+                    product.Name = pr.Name;
+                }
             }
-           
 
             return new OrderListResponse(data, query);
         }

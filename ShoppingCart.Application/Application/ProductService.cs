@@ -7,31 +7,29 @@ namespace ShoppingCart.Application.Application
 {
     public class ProductService : IProductService
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly HttpClient _httpClient;
+        private readonly string getProductByIdRequest = "api/v1.0/product/";
+        private readonly string getProductsRequest = "api/v1.0/product?";
 
         public ProductService(IHttpClientFactory httpClientFactory) =>
-               _clientFactory = httpClientFactory;
+               _httpClient = httpClientFactory.CreateClient(nameof(ProductService));
 
-        public async Task<IEnumerable<ProductDto>> GetProductsAsync(ProductQuery filter)
+        public async Task<IEnumerable<ProductDto>> GetProductsAsync(string ids)
         {
-            var httpClient = _clientFactory.CreateClient(nameof(ProductService));
-            var response = await httpClient.GetAsync($"api/v1.0/product?{filter.ProductId}");
+            var response = await _httpClient.GetAsync(getProductsRequest+ids);
             var apiContent = await response.Content.ReadAsStringAsync();
-            var dataContent = JsonConvert.DeserializeObject<PageResponse<List<ProductDto>>>(apiContent);
-            if (dataContent.isSuccess)
-                return dataContent.data;
-            return new List<ProductDto>();
+            return JsonConvert.DeserializeObject<PageResponse<List<ProductDto>>>(apiContent) is var dataContent
+                ? dataContent!.data
+                : new List<ProductDto>();
         }
 
         public async Task<ProductDto> GetProductByIdAsync(Guid id)
         {
-            var httpClient = _clientFactory.CreateClient(nameof(ProductService));
-            var response = await httpClient.GetAsync($"api/v1.0/product/{id}");
+            var response = await _httpClient.GetAsync(getProductByIdRequest+id);
             var apiContent = await response.Content.ReadAsStringAsync();
-            var dataContent = JsonConvert.DeserializeObject<Response<ProductDto>>(apiContent);
-            if (dataContent.isSuccess)
-                return dataContent.data;
-            return new ProductDto();
+            return JsonConvert.DeserializeObject<Response<ProductDto>>(apiContent) is var dataContent
+                ? dataContent!.data
+                : new ProductDto();
         }
     }
 }

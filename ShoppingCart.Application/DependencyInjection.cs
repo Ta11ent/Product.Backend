@@ -14,7 +14,7 @@ namespace ShoppingCart.Application
             
             services.AddHttpClient(nameof(ProductService), option =>
             {
-                option.BaseAddress = new Uri(configuration["ServiceURLs:ProductAPI"]);
+                option.BaseAddress = new Uri(configuration["ServiceURLs:ProductAPI"]!);
                 option.Timeout = new TimeSpan(0, 0, 20);
             });
             services.AddScoped<IProductService, ProductService>();
