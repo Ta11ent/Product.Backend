@@ -19,7 +19,7 @@ namespace ProductCatalog.API.Endpoints
                     var id = await sender.Send(command);
                     return Results.Ok();
                 })
-                .AddEndpointFilter<ValidationFilter<CreateCostCommand>>()
+                .AddEndpointFilter<ValidationFilter<CreateCostDto>>()
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Create a Price")

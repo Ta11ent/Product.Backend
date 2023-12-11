@@ -12,6 +12,10 @@ namespace ProductCatalog.Persistence.EntityTypeConfiguration
             builder.HasIndex(x => x.PriceId).IsUnique();
             builder.Property(x => x.PriceId).IsRequired();
             builder.Property(x => x.Price).IsRequired();
+            builder.HasOne(x => x.Product)
+                .WithMany(y => y.Costs)
+                .HasPrincipalKey(x => x.ProductId)
+                .HasForeignKey(x => x.ProductId);
         }
     }
 }

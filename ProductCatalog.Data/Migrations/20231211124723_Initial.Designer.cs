@@ -9,11 +9,11 @@ using ProductCatalog.Data;
 
 #nullable disable
 
-namespace ProductCatalog.Data.Migrations
+namespace ProductCatalog.Persistence.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20231208162446_ThirdMigration")]
-    partial class ThirdMigration
+    [Migration("20231211124723_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,31 @@ namespace ProductCatalog.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ProductCatalog.Domain.Cost", b =>
+                {
+                    b.Property<Guid>("PriceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DatePrice")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PriceId");
+
+                    b.HasIndex("PriceId")
+                        .IsUnique();
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Costs");
+                });
+
             modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -81,6 +106,17 @@ namespace ProductCatalog.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ProductCatalog.Domain.Cost", b =>
+                {
+                    b.HasOne("ProductCatalog.Domain.Product", "Product")
+                        .WithMany("Costs")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
                 {
                     b.HasOne("ProductCatalog.Domain.Category", "Category")
@@ -95,6 +131,11 @@ namespace ProductCatalog.Data.Migrations
             modelBuilder.Entity("ProductCatalog.Domain.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
+                {
+                    b.Navigation("Costs");
                 });
 #pragma warning restore 612, 618
         }

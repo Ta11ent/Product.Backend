@@ -24,13 +24,14 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 
             var products = await
                 _dbContext.Products
+                .Include(x => x.Costs)
                 .Where(predicate
                     .And(x => x.CategoryId == request.CategoryId,
                         request.CategoryId)
                     .And(x => x.Available == request.Available,
                         request.Available)
                     .And(x => request.ProductIds!.Contains(x.ProductId),
-                        request.ProductIds.Any() ? request.ProductIds : null))
+                        request.ProductIds!.Any() ? request.ProductIds : null))
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .OrderBy(x => x.Name)

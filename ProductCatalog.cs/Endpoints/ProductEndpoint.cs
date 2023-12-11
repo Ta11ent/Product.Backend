@@ -51,8 +51,7 @@ namespace ProductCatalog.APIcs.Endpoints
                     var apiVersion = context.GetRequestedApiVersion();
                     var productCommand = mapper.Map<CreateProductCommand>(entity);
                     var id = await sender.Send(productCommand);
-                    var costCommand =
-                        mapper.Map<CreateCostCommand>(new CreateCostDto() { Price = entity.Price, ProductId = id });
+                    var costCommand = new CreateCostCommand(){ Price = entity.Price, ProductId = id };
                     await sender.Send(costCommand);
                     return Results.CreatedAtRoute("GetProductById", new { id });
                 })

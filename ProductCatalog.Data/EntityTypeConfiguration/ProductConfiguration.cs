@@ -13,6 +13,10 @@ namespace ProductCatalog.Data.EntityTypeConfiguration
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(300).IsRequired();
             builder.Property(x => x.Available).IsRequired();
+            builder.HasOne(x => x.Category)
+                .WithMany(y => y.Products)
+                .HasPrincipalKey(x => x.CategoryId)
+                .HasForeignKey(x => x.CategoryId);
 
         }
     }

@@ -2,8 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using ProductCatalog.Application.Common.Exceptions;
 using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Domain;
+using System.Numerics;
 
 namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetails
 {
@@ -22,9 +25,13 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         {
             var product = await
                 _dbContext.Products
+                .Include(x => x.Category)
+                .Include(x => x.Costs) // need to add logic
                 .Where(x => x.ProductId == request.ProductId)
                 .ProjectTo<ProductDetailsDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
+               
 
             if (product == null)
                 throw new NotFoundExceptions(nameof(product), request.ProductId);

@@ -10,6 +10,7 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Available { get; set; }
+        public decimal Price { get; set; } 
         public CategoryDetailsDto CategoryDetails { get; set; }
         public void Mapping (Profile profile)
         {
@@ -23,7 +24,9 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
                 .ForMember(x => x.CategoryDetails,
                     opt => opt.MapFrom(y => y.Category))
                 .ForMember(x => x.Available,
-                    opt => opt.MapFrom(y => y.Available));
+                    opt => opt.MapFrom(y => y.Available))
+                .ForMember(x => x.Price,
+                    opt => opt.MapFrom(y => y.Costs.First().Price));
 
         }
     }

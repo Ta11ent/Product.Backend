@@ -8,7 +8,7 @@ using ProductCatalog.Data;
 
 #nullable disable
 
-namespace ProductCatalog.Data.Migrations
+namespace ProductCatalog.Persistence.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
     partial class ProductDbContextModelSnapshot : ModelSnapshot
@@ -66,6 +66,8 @@ namespace ProductCatalog.Data.Migrations
                     b.HasIndex("PriceId")
                         .IsUnique();
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("Costs");
                 });
 
@@ -101,6 +103,17 @@ namespace ProductCatalog.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ProductCatalog.Domain.Cost", b =>
+                {
+                    b.HasOne("ProductCatalog.Domain.Product", "Product")
+                        .WithMany("Costs")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
                 {
                     b.HasOne("ProductCatalog.Domain.Category", "Category")
@@ -115,6 +128,11 @@ namespace ProductCatalog.Data.Migrations
             modelBuilder.Entity("ProductCatalog.Domain.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
+                {
+                    b.Navigation("Costs");
                 });
 #pragma warning restore 612, 618
         }
