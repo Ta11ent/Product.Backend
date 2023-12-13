@@ -4,14 +4,12 @@ using System.Text;
 
 namespace Identity.API.Configuration
 {
-    public static class JWT
+    public static class JwtAuthentication
     {
         public static IServiceCollection AddJwtAuthenticationConfiguration(this IServiceCollection services, 
             IConfiguration configuration)
         {
-            var issuer = configuration.GetSection("JwtConfig:Issuer").Value!;
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JwtConfig:Secret").Value!));
-            var audience = new List<string>() { configuration.GetSection("JwtConfig:Audience").Value! };
+            var jwtConfig = configuration.GetSection(nameof(JwtConfig)).Get<JwtConfig>();
 
             services.AddAuthentication(options =>
             {
@@ -26,14 +24,15 @@ namespace Identity.API.Configuration
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = issuer,
+                    ValidIssuer = jwtConfig!.Issuer,
                     ValidateAudience = true,
-                    ValidAudiences = audience,
+                    ValidAudiences = new List<string>() { jwtConfig.Audience },
                     ValidateLifetime = true,
-                    IssuerSigningKey = signingKey,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
                     ValidateIssuerSigningKey = true
                 };
-});
+            });
+
             return services; 
         }
     }
