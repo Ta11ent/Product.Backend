@@ -1,30 +1,19 @@
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Identity.Application.Common.Abstractions;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
-
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
-
 builder.Services.AddJwtAuthenticationConfiguration(builder.Configuration);
-//builder.Services.AddAuthorization();
 builder.Services.AddAuthorizationConfiguration();
-
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-
-
-
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,6 +22,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//Test
 app.MapGet("api/v1.0/test", async () =>
 {
 
@@ -53,7 +43,10 @@ app.MapGet("api/v1.0/test", async () =>
     return new JwtSecurityTokenHandler().WriteToken(jwt);
 });
 
-app.MapGet("api/v1.0/test2", async () => { return "Hello World"; })
+app.MapGet("api/v1.0/test2", async (ITokenService token, IOptions<JwtConfig> config) => {
+    var s = token.GenerateAccessToken(new List<Claim>());
+    return "Hello World";
+})
     .RequireAuthorization("Admin");
 
 

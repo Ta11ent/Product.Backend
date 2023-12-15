@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace Identity.API.Configuration
 {
@@ -17,16 +15,16 @@ namespace Identity.API.Configuration
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddJwtBearer("Bearer", options =>
             {
-                options.RequireHttpsMetadata = false;
+                options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtConfig!.Issuer,
-                    ValidateAudience = true,
-                    ValidAudiences = new List<string>() { jwtConfig.Audience },
+                    ValidateIssuer = jwtConfig!.Issuer is null ? false : true,
+                    ValidIssuer = jwtConfig.Issuer!,
+                    ValidateAudience = jwtConfig.Audience is null ? false : true,
+                    ValidAudiences = new List<string>() { jwtConfig.Audience! },
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret)),
                     ValidateIssuerSigningKey = true

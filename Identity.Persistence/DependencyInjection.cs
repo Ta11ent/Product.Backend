@@ -16,15 +16,9 @@ namespace Identity.Persistence
                 config.UseSqlServer(connectionString);
             });
 
-            //services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<AuthDbContext>();
-
             services.AddIdentityCore<IdentityUser>(config => { config.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<AuthDbContext>();
 
-            //builder.Services.AddIdentityCore<IdentityUser>(config => { config.User.RequireUniqueEmail = true; })
-            //               .AddEntityFrameworkStores<AuthDbContext>()
-            //               .AddApiEndpoints();
             return services;
         }
     }

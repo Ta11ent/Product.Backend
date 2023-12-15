@@ -33,7 +33,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithOpenApi();
 
             app.MapGet("api/v{version:apiVersion}/product",
-                async(HttpContext context, [AsParameters] GetProductListDto entity, IMapper mapper, ISender sender) => 
+                async (HttpContext context, [AsParameters] GetProductListDto entity, IMapper mapper, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
                     var query = mapper.Map<GetProductListQuery>(entity);

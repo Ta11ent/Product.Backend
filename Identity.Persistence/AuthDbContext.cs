@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Persistence
 {
-    public class AuthDbContext : IdentityDbContext
+    public class AuthDbContext : IdentityDbContext<IdentityUser>
     {
-      //  public DbSet<IdentityUser> AppUsers { get; set; }
         public AuthDbContext(DbContextOptions<AuthDbContext> options)
             : base(options) { }
     }
