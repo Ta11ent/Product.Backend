@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Identity.Application.Application
 {
-    public class TokenService : ITokenService
+    internal class TokenService : ITokenService
     {    
         private readonly JwtConfig _jwtConfig;
         public TokenService(IOptions<JwtConfig> options) => _jwtConfig = options.Value;

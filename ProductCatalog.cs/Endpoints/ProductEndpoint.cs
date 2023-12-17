@@ -47,7 +47,7 @@ namespace ProductCatalog.APIcs.Endpoints
 
             app.MapPost("api/v{version:apiVersion}/product", 
                 async(HttpContext context, CreateProductDto entity, IMapper mapper, ISender sender) =>
-                {
+                {                  
                     var apiVersion = context.GetRequestedApiVersion();
                     var productCommand = mapper.Map<CreateProductCommand>(entity);
                     var id = await sender.Send(productCommand);

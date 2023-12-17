@@ -3,7 +3,7 @@ using System.Security.Claims;
 
 namespace Identity.Application.Common.Abstractions
 {
-    public interface IPrincipalExpToken
+    public interface ITokenPrincipalExpService
     {
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }

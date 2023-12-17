@@ -8,10 +8,10 @@ using System.Text;
 
 namespace Identity.Application.Application
 {
-    public class PrincipalExpToken : IPrincipalExpToken
+    public class TokenPrincipalExpService : ITokenPrincipalExpService
     {
         private readonly JwtConfig _jwtConfig;
-        public PrincipalExpToken(IOptions<JwtConfig> options) => _jwtConfig = options.Value;
+        public TokenPrincipalExpService(IOptions<JwtConfig> options) => _jwtConfig = options.Value;
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters

@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Identity.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Persistence
 {
@@ -16,10 +17,11 @@ namespace Identity.Persistence
                 config.UseSqlServer(connectionString);
             });
 
-            services.AddIdentityCore<IdentityUser>(config => { config.User.RequireUniqueEmail = true; })
+            services.AddIdentityCore<AppUser>(config => { config.User.RequireUniqueEmail = true; })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>();
 
-            return services;
+                return services;
         }
     }
 }

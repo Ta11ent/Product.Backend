@@ -1,8 +1,10 @@
-﻿namespace Identity.Persistence
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Persistence
 {
-    internal static class DbInitializer
+    public static class DbInitializer
     {
-        internal static void Initializee(AuthDbContext context)
+        public static void Initialize(AuthDbContext context)
         {
             context.Database.EnsureCreated();
         }

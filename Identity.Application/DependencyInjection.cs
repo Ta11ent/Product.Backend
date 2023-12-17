@@ -12,8 +12,9 @@ namespace Identity.Application
             IConfiguration configuration)
         {
             services.Configure<JwtConfig>(configuration.GetSection(nameof(JwtConfig)));
+            services.AddTransient<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IPrincipalExpToken, PrincipalExpToken>();
+           // services.AddScoped<ITokenPrincipalExpService, TokenPrincipalExpService>();
             return services;
         }
     }
