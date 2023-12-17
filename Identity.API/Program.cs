@@ -1,8 +1,11 @@
-using Identity.API.Endpoints;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(AuthDbContext).Assembly));
+});
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddJwtAuthenticationConfiguration(builder.Configuration);

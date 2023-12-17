@@ -1,4 +1,6 @@
-﻿using Identity.Application.Common.Abstractions;
+﻿using AutoMapper;
+using Identity.API.Models;
+using Identity.Application.Common.Models.User.Create;
 
 namespace Identity.API.Endpoints
 {
@@ -10,16 +12,11 @@ namespace Identity.API.Endpoints
             //    .HasApiVersion(1.0)
             //    .Build();
 
-            app.MapPost("api/createTest", async (IUserService userService) =>
+            app.MapPost("api/createTest", 
+                async (IUserService userService, IMapper mapper, CreateUserDto user) =>
             {
-                return await userService.CreateUserAsync(new Application.Common.Models.User.Create.CreateUserCommand()
-                {
-                    UserName = "Admin",
-                    Email = "Admin@gmail.com",
-                    PhoneNumber = "",
-                    Password = "_P@ssw0rd",
-                    Roles = new[] { "Admin", "User" }
-                }) is var response
+                var command = mapper.Map<CreateUserCommand>(user);
+                return await userService.CreateUserAsync(command) is var response
                     ? Results.Ok(response)
                     : Results.BadRequest(response.Errors);
             });
