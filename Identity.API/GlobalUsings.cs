@@ -7,3 +7,4 @@ global using Identity.API.Endpoints;
 global using Identity.Application.Common.Abstractions;
 global using Identity.Application.Common.Mapping;
 global using System.Reflection;
+global using FluentValidation;

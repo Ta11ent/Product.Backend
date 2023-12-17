@@ -10,6 +10,7 @@ builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddJwtAuthenticationConfiguration(builder.Configuration);
 builder.Services.AddAuthorizationConfiguration();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 
