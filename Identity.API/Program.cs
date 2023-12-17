@@ -11,6 +11,7 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddJwtAuthenticationConfiguration(builder.Configuration);
 builder.Services.AddAuthorizationConfiguration();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddApiVersioning(opt => opt.ApiVersionReader = new UrlSegmentApiVersionReader());
 
 builder.Services.AddEndpointsApiExplorer();
 
