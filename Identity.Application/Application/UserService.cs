@@ -1,8 +1,11 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Application.Common.Models.User.Create;
 using Identity.Application.Common.Models.User.Login;
+using Identity.Application.Common.Models.User.Common;
 using Identity.Domain;
+using Identity.Persistence;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Identity.Application.Application
@@ -11,11 +14,13 @@ namespace Identity.Application.Application
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly AuthDbContext _dbContext;
 
         //private readonly SignInManager<IdentityUser> _signInManager;
-        public UserService(UserManager<AppUser> userManager, ITokenService tokenService) { 
+        public UserService(UserManager<AppUser> userManager, ITokenService tokenService, AuthDbContext dbContext) { 
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(_tokenService));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(AuthDbContext));
         }
 
         public async Task<CreateUserResponse> CreateUserAsync(CreateUserCommand userCommand)
@@ -42,6 +47,22 @@ namespace Identity.Application.Application
             }
 
             return new CreateUserResponse() { UserName = user.UserName, UserId = user.Id };
+        }
+
+        public async Task<CommonResponse> DisableUserAsync(string id) => await ChangeUserState(id, false);
+
+        public async Task<CommonResponse> EnableUserAsync(string id) => await ChangeUserState(id, true);
+
+        private async Task<CommonResponse> ChangeUserState(string id, bool state)
+        {
+            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == id);
+            if (user is null)
+                return new CommonResponse() { Error = $"User with id: {id} not found" };
+
+            user.Enabled = state;
+            await _dbContext.SaveChangesAsync();
+
+            return new CommonResponse() { Success = true };
         }
 
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginCommand user)

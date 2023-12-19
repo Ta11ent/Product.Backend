@@ -14,7 +14,7 @@ namespace Identity.API.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
-            app.MapPost("api/createTest", 
+            app.MapPost("pi/v{version:apiVersion}/users", 
             async (HttpContext context, IUserService userService, IMapper mapper, CreateUserDto user) => 
             {
 
@@ -30,6 +30,32 @@ namespace Identity.API.Endpoints
             .WithSummary("Create User")
             .WithDescription("JSON object")
             .WithOpenApi();
+
+            app.MapPut("api/v{version:apiVersion}/users/{Id}/disable",
+             async (HttpContext context, string Id, IUserService service) =>
+             {
+                 var apiVersion = context.GetRequestedApiVersion();
+                 await service.DisableUserAsync(Id);
+                 return Results.NoContent();
+             })
+             .WithApiVersionSet(versionSet)
+             .MapToApiVersion(1.0)
+             .WithSummary("Disable the User")
+             .WithDescription("Update the User object")
+             .WithOpenApi();
+
+            app.MapPut("api/v{version:apiVersion}/users/{Id}/enable",
+             async (HttpContext context, string Id, IUserService service) =>
+             {
+                 var apiVersion = context.GetRequestedApiVersion();
+                 await service.EnableUserAsync(Id);
+                 return Results.NoContent();
+             })
+             .WithApiVersionSet(versionSet)
+             .MapToApiVersion(1.0)
+             .WithSummary("Enable the User")
+             .WithDescription("Update the User object")
+             .WithOpenApi();
         }
     }
 }
