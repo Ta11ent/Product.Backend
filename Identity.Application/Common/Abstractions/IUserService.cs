@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Common.Models.User.Create;
 using Identity.Application.Common.Models.User.Login;
 using Identity.Application.Common.Models.User.Common;
+using Identity.Application.Common.Models.User.Password;
 
 namespace Identity.Application.Common.Abstractions
 {
@@ -10,5 +11,6 @@ namespace Identity.Application.Common.Abstractions
         Task<CreateUserResponse> CreateUserAsync(CreateUserCommand user);
         Task<CommonResponse> DisableUserAsync(string Id);
         Task<CommonResponse> EnableUserAsync(string Id);
+        Task<CommonResponse> ResetPassword(ResetPasswordCommand entity);
     }
 }

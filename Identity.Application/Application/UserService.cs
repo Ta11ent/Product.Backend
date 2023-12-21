@@ -7,6 +7,7 @@ using Identity.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Identity.Application.Common.Models.User.Password;
 
 namespace Identity.Application.Application
 {
@@ -61,6 +62,19 @@ namespace Identity.Application.Application
 
             user.Enabled = state;
             await _dbContext.SaveChangesAsync();
+
+            return new CommonResponse() { Success = true };
+        }
+
+        public async Task<CommonResponse> ResetPassword(ResetPasswordCommand entity)
+        {
+            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+            if (user is null)
+                return new CommonResponse() { Error = $"User with id: {entity.Id} not found" };
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, entity.Password);
 
             return new CommonResponse() { Success = true };
         }

@@ -3,6 +3,7 @@ using Identity.API.Models;
 using Identity.API.Validation;
 using Identity.Application.Common.Models.User.Create;
 using Asp.Versioning.Conventions;
+using Identity.Application.Common.Models.User.Password;
 
 namespace Identity.API.Endpoints
 {
@@ -54,6 +55,23 @@ namespace Identity.API.Endpoints
              .WithApiVersionSet(versionSet)
              .MapToApiVersion(1.0)
              .WithSummary("Enable the User")
+             .WithDescription("Update the User object")
+             .WithOpenApi();
+
+            app.MapPut("api/v{version:apiVersion}/users/{Id}/resetPassword",
+             async (HttpContext context, string Id, ResetPasswordDto entity,
+                    IUserService service, IMapper mapper) =>
+             {
+                 var apiVersion = context.GetRequestedApiVersion();
+                 var command = mapper.Map<ResetPasswordCommand>(entity);
+                 command.Id = Id;
+                 await service.ResetPassword(command);
+                 return Results.NoContent();
+             })
+             .AddEndpointFilter<ValidationFilter<ResetPasswordDto>>()
+             .WithApiVersionSet(versionSet)
+             .MapToApiVersion(1.0)
+             .WithSummary("Reset user password")
              .WithDescription("Update the User object")
              .WithOpenApi();
         }
