@@ -18,7 +18,7 @@ namespace Identity.Persistence
             });
 
             services.AddIdentityCore<AppUser>(config => { config.User.RequireUniqueEmail = true; })
-                .AddRoles<IdentityRole>()
+                .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<AuthDbContext>();
 
                 return services;

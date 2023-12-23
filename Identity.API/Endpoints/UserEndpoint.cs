@@ -23,7 +23,7 @@ namespace Identity.API.Endpoints
                 var command = mapper.Map<CreateUserCommand>(user);
                 return await userService.CreateUserAsync(command) is var response
                     ? Results.Ok(response)
-                    : Results.BadRequest(response.Errors);
+                    : Results.BadRequest(response);
             })
             .AddEndpointFilter<ValidationFilter<CreateUserDto>>()
             .WithApiVersionSet(versionSet)

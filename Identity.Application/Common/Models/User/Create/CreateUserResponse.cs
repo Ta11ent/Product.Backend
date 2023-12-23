@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Identity.Application.Common.Response;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Common.Models.User.Create
 {
-    public class CreateUserResponse
+    public class CreateUserResponse : Response<CreateUserResponseDto>
     {
-        public string UserName { get; set; } = string.Empty;
-        public string UserId { get; set; } = string.Empty;
-        public IEnumerable<IdentityError> Errors { get; set; }
+        public CreateUserResponse(CreateUserResponseDto user, IEnumerable<IdentityError> errors) : base(user, errors) { }
     }
 }
