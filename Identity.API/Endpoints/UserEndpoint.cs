@@ -4,6 +4,7 @@ using Identity.API.Validation;
 using Identity.Application.Common.Models.User.Create;
 using Asp.Versioning.Conventions;
 using Identity.Application.Common.Models.User.Password;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Identity.API.Endpoints
 {
@@ -15,15 +16,42 @@ namespace Identity.API.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
+
+            app.MapGet("api/v{version:apiVersion}/users/{Id}",
+                async (HttpContext context, string Id, IUserService userService) =>
+                {
+                    var apiVersion = context.GetRequestedApiVersion();
+                    return await userService.GetUserAsync(Id) is var response 
+                        ? Results.Ok(response)
+                        : Results.NotFound();
+                })
+                .WithName("GetUserById")
+                .WithApiVersionSet(versionSet)
+                .MapToApiVersion(1.0)
+                .WithSummary("Get the User by Id")
+                .WithDescription("JSON object containing User information")
+                .WithOpenApi();
+
+            app.MapGet("api/v{version:apiVersion}/users",
+               async (HttpContext context, string Id, IUserService userService) =>
+               {
+                   var apiVersion = context.GetRequestedApiVersion();
+                   return await userService.GetUsersAsync();
+               })
+               .WithApiVersionSet(versionSet)
+               .MapToApiVersion(1.0)
+               .WithSummary("Get Users")
+               .WithDescription("JSON object containing Users information")
+               .WithOpenApi();
+
             app.MapPost("pi/v{version:apiVersion}/users", 
-            async (HttpContext context, IUserService userService, IMapper mapper, CreateUserDto user) => 
+            async (HttpContext context, IUserService userService, IMapper mapper, CreateUserDto entity) => 
             {
 
                 var apiVersion = context.GetRequestedApiVersion();
-                var command = mapper.Map<CreateUserCommand>(user);
-                return await userService.CreateUserAsync(command) is var response
-                    ? Results.Ok(response)
-                    : Results.BadRequest(response);
+                var command = mapper.Map<CreateUserCommand>(entity);
+                var user = await userService.CreateUserAsync(command);
+                return Results.CreatedAtRoute("GetUserById", new { user.data.UserId });
             })
             .AddEndpointFilter<ValidationFilter<CreateUserDto>>()
             .WithApiVersionSet(versionSet)
