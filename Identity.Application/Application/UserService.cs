@@ -1,6 +1,5 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Application.Common.Models.User.Create;
-using Identity.Application.Common.Models.User.Login;
 using Identity.Domain;
 using Identity.Persistence;
 using Microsoft.AspNetCore.Identity;
@@ -61,23 +60,6 @@ namespace Identity.Application.Application
 
         public async Task<Response<string>> EnableUserAsync(string id) => await ChangeUserState(id, true);
 
-        private async Task<Response<string>> ChangeUserState(string id, bool state)
-        {
-            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == id);
-            if (user is null)
-                return new Response<string>(string.Empty, new List<IdentityError>() {
-                        new IdentityError() {
-                            Description = $"User with id: {id} not found",
-                            Code = "404"
-                        }
-                });
-
-            user.Enabled = state;
-            await _dbContext.SaveChangesAsync();
-
-            return new Response<string>(id, null);
-        }
-
         public async Task<Response<string>> ResetPassword(ResetPasswordCommand entity)
         {
             var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == entity.Id);
@@ -123,6 +105,23 @@ namespace Identity.Application.Application
                         }
                 });
             return new UserResponse(user, null);
+        }
+
+        private async Task<Response<string>> ChangeUserState(string id, bool state)
+        {
+            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == id);
+            if (user is null)
+                return new Response<string>(string.Empty, new List<IdentityError>() {
+                        new IdentityError() {
+                            Description = $"User with id: {id} not found",
+                            Code = "404"
+                        }
+                });
+
+            user.Enabled = state;
+            await _dbContext.SaveChangesAsync();
+
+            return new Response<string>(id, null);
         }
         /*
         public async Task<UserLoginResponse> LoginUserAsync(UserLoginCommand user)

@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Common.Models.User.Login
+﻿namespace Identity.Application.Common.Models.Access.Login
 {
     public class UserLoginCommand
     {

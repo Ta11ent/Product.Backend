@@ -4,7 +4,6 @@ using Identity.API.Validation;
 using Identity.Application.Common.Models.User.Create;
 using Asp.Versioning.Conventions;
 using Identity.Application.Common.Models.User.Password;
-using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Identity.API.Endpoints
 {
