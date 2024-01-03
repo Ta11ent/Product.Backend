@@ -4,12 +4,10 @@ using Identity.Domain;
 using Identity.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using Identity.Application.Common.Models.User.Password;
 using Identity.Application.Common.Models.User.Get;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
-using System.Threading;
 using Identity.Application.Common.Response;
 
 namespace Identity.Application.Application
@@ -30,7 +28,7 @@ namespace Identity.Application.Application
             _mapper = mapper;
         }
 
-        public async Task<CreateUserResponse> CreateUserAsync(CreateUserCommand userCommand)
+        public virtual async Task<CreateUserResponse> CreateUserAsync(CreateUserCommand userCommand)
         {
             var user = new AppUser()
             {
@@ -44,25 +42,25 @@ namespace Identity.Application.Application
             };
             var result = await _userManager.CreateAsync(user, userCommand.Password);
             if(!result.Succeeded)
-                return new CreateUserResponse(null, result.Errors) { };
+                return new CreateUserResponse(null!, result.Errors) { };
 
             result = await _userManager.AddToRolesAsync(user, userCommand.Roles);
             if(!result.Succeeded)
             {
                 await _userManager.DeleteAsync(user);
-                return new CreateUserResponse(null, result.Errors);
+                return new CreateUserResponse(null!, result.Errors);
             }
 
             return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, UserId = user.Id }, null);
         }
 
-        public async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
+        public virtual async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
 
-        public async Task<Response<string>> EnableUserAsync(string id) => await ChangeUserState(id, true);
+        public virtual async Task<Response<string>> EnableUserAsync(string id) => await ChangeUserState(id, true);
 
-        public async Task<Response<string>> ResetPassword(ResetPasswordCommand entity)
+        public virtual async Task<Response<string>> ResetPassword(ResetPasswordCommand entity)
         {
-            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == entity.Id);
+            var user = await _userManager.FindByIdAsync(entity.Id);
 
             if (user is null)
                 return new Response<string>(string.Empty, new List<IdentityError>() {
@@ -75,36 +73,36 @@ namespace Identity.Application.Application
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             await _userManager.ResetPasswordAsync(user, token, entity.Password);
 
-            return new Response<string>(entity.Id, null);
+            return new Response<string>(entity.Id, null!);
         }
 
-        public async Task<UsersResponse> GetUsersAsync() {
+        public virtual async Task<UsersResponse> GetUsersAsync() {
             var users =
                 await _dbContext.AppUsers
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .ToListAsync();
 
-            return new UsersResponse(users, null);
+            return new UsersResponse(users, null!);
         }
 
-        public async Task<UserResponse> GetUserAsync(string Id) {
+        public virtual async Task<UserResponse> GetUserAsync(string id) {
 
             var user =
                 await _dbContext.AppUsers
-                .Where(x => x.Id == Id)
+                .Where(x => x.Id == id)
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if(user is null)
-                return new UserResponse(default, new List<IdentityError>() {
+                return new UserResponse(default!, new List<IdentityError>() {
                         new IdentityError() {
-                            Description = $"User with id: {Id} not found",
+                            Description = $"User with id: {id} not found",
                             Code = "404"
                         }
                 });
-            return new UserResponse(user, null);
+            return new UserResponse(user, null!);
         }
 
         private async Task<Response<string>> ChangeUserState(string id, bool state)

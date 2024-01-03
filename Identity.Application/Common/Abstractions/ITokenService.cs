@@ -6,5 +6,7 @@ namespace Identity.Application.Common.Abstractions
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();
+        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        DateTime RefreshTokenExpiryTime();
     }
 }

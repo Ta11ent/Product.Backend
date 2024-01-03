@@ -1,8 +1,10 @@
-﻿namespace Identity.Application.Common.Models.Access.Login
+﻿using Identity.Application.Common.Response;
+using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Application.Common.Models.Access.Login
 {
-    public class UserLoginResponse
+    public class UserLoginResponse : Response<UserLoginDto>
     {
-        public string AccessToken { get; set; } = string.Empty;
-        public string RefreshToken { get; set; } = string.Empty;
+        public UserLoginResponse(UserLoginDto user, IEnumerable<IdentityError> errors) : base(user, errors) { }
     }
 }
