@@ -1,5 +1,4 @@
 ﻿using Identity.Domain;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,8 @@ namespace Identity.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-           // builder.Entity<AppUser>(entity => entity.ToTable(name: "Users"));
+            // builder.Entity<AppUser>(entity => entity.ToTable(name: "Users"));
+
             base.OnModelCreating(builder);
         }
     }

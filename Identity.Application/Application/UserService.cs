@@ -15,15 +15,12 @@ namespace Identity.Application.Application
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        //private readonly ITokenService _tokenService;
         private readonly AuthDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        //private readonly SignInManager<IdentityUser> _signInManager;
         public UserService(UserManager<AppUser> userManager, AuthDbContext dbContext, IMapper mapper)
-        { //ITokenService tokenService,
+        { 
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            //_tokenService = tokenService ?? throw new ArgumentNullException(nameof(_tokenService));
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(AuthDbContext));
             _mapper = mapper;
         }
@@ -42,7 +39,7 @@ namespace Identity.Application.Application
             };
             var result = await _userManager.CreateAsync(user, userCommand.Password);
             if(!result.Succeeded)
-                return new CreateUserResponse(null!, result.Errors) { };
+                return new CreateUserResponse(null!, result.Errors);
 
             result = await _userManager.AddToRolesAsync(user, userCommand.Roles);
             if(!result.Succeeded)
@@ -51,7 +48,7 @@ namespace Identity.Application.Application
                 return new CreateUserResponse(null!, result.Errors);
             }
 
-            return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, UserId = user.Id }, null);
+            return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, UserId = user.Id }, null!);
         }
 
         public virtual async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
@@ -119,24 +116,7 @@ namespace Identity.Application.Application
             user.Enabled = state;
             await _dbContext.SaveChangesAsync();
 
-            return new Response<string>(id, null);
+            return new Response<string>(id, null!);
         }
-        /*
-        public async Task<UserLoginResponse> LoginUserAsync(UserLoginCommand user)
-        {
-            //var PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(new IdentityUser(), "Password");
-            throw new NotImplementedException();
-        }
-
-        private List<Claim> GEnerateClaims(ref CreateUserCommand user)
-        {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            foreach (var role in user.Roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-
-            return claims;
-        }
-        */
     }
 }

@@ -10,9 +10,9 @@ namespace Identity.Application.Application
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
-        private readonly TokenService _tokenService;
-        public AccessService(SignInManager<AppUser> signInManager, 
-            UserManager<AppUser> userManager, TokenService tokenService)
+        private readonly ITokenService _tokenService;
+        public AccessService( 
+            UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
         {
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));

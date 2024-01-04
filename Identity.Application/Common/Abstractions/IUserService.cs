@@ -7,7 +7,6 @@ namespace Identity.Application.Common.Abstractions
 {
     public interface IUserService
     {
-       // Task<UserLoginResponse> LoginUserAsync(UserLoginCommand user);
         Task<CreateUserResponse> CreateUserAsync(CreateUserCommand user);
         Task<Response<string>> DisableUserAsync(string id);
         Task<Response<string>> EnableUserAsync(string id);

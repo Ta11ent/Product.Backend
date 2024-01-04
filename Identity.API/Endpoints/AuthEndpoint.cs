@@ -13,7 +13,7 @@ namespace Identity.API.Endpoints
             var versionSet = app.NewApiVersionSet()
                 .HasApiVersion(1.0)
                 .Build();
-
+            /*
             app.MapGet("api/v{version:apiVersion}/login",
                 async (HttpContext context, LoginDto entity, IAccessService service, IMapper mapper) =>
                 {
@@ -33,6 +33,7 @@ namespace Identity.API.Endpoints
                 .WithSummary("Login")
                 .WithDescription("JSON object")
                 .WithOpenApi();
+           */
         }
     }
 }
