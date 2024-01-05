@@ -4,8 +4,6 @@ using Identity.API.Validation;
 using Identity.Application.Common.Models.User.Create;
 using Asp.Versioning.Conventions;
 using Identity.Application.Common.Models.User.Password;
-using Identity.Domain;
-using Microsoft.AspNetCore.Identity;
 
 namespace Identity.API.Endpoints
 {
@@ -45,14 +43,15 @@ namespace Identity.API.Endpoints
                .WithDescription("JSON object containing Users information")
                .WithOpenApi();
 
-            app.MapPost("pi/v{version:apiVersion}/users", 
+            app.MapPost("api/v{version:apiVersion}/users", 
             async (HttpContext context, IUserService userService, IMapper mapper, CreateUserDto entity) => 
             {
-
                 var apiVersion = context.GetRequestedApiVersion();
                 var command = mapper.Map<CreateUserCommand>(entity);
                 var user = await userService.CreateUserAsync(command);
-                return Results.CreatedAtRoute("GetUserById", new { user.data.UserId });
+                return user.isSuccess 
+                    ? Results.CreatedAtRoute("GetUserById", new { user.data.UserId })
+                    : Results.BadRequest(user.errors.ToList());
             })
             .AddEndpointFilter<ValidationFilter<CreateUserDto>>()
             .WithApiVersionSet(versionSet)

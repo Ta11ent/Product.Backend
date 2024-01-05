@@ -3,6 +3,7 @@ using AutoMapper;
 using Identity.API.Models;
 using Identity.API.Validation;
 using Identity.Application.Common.Models.Access.Login;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Endpoints
 {
@@ -13,9 +14,9 @@ namespace Identity.API.Endpoints
             var versionSet = app.NewApiVersionSet()
                 .HasApiVersion(1.0)
                 .Build();
-            /*
+            
             app.MapGet("api/v{version:apiVersion}/login",
-                async (HttpContext context, LoginDto entity, IAccessService service, IMapper mapper) =>
+                async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]LoginDto entity) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
                     var command = mapper.Map<UserLoginCommand>(entity);
@@ -27,13 +28,12 @@ namespace Identity.API.Endpoints
                             ? Results.NotFound()
                             : Results.Unauthorized();
                 })
-                .AddEndpointFilter<ValidationFilter<UserLoginDto>>()
+                .AddEndpointFilter<ValidationFilter<LoginDto>>()
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Login")
                 .WithDescription("JSON object")
                 .WithOpenApi();
-           */
         }
     }
 }

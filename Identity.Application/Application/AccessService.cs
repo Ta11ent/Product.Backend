@@ -30,7 +30,7 @@ namespace Identity.Application.Application
                 });
 
             var succeeded = await _userManager.CheckPasswordAsync(user, entity.Password);
-            if(!succeeded) 
+            if(!succeeded || !user.Enabled) 
                 return new UserLoginResponse(null!, new List<IdentityError>() {
                         new IdentityError() {
                             Description = $"User unauthorized",
@@ -39,6 +39,7 @@ namespace Identity.Application.Application
                  });
 
             await _signInManager.PasswordSignInAsync(user, entity.Password, false, false);
+
             var claims = GenerateClaims(ref user);
 
             return new UserLoginResponse(new UserLoginDto() { 

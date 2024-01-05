@@ -8,7 +8,7 @@ namespace Identity.API.Models
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<string> Roles { get; set; } = new List<string>();
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateUserDto, CreateUserCommand>()
