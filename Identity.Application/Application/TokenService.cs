@@ -13,7 +13,7 @@ namespace Identity.Application.Application
     {    
         private readonly JwtConfig _jwtConfig;
         public TokenService(IOptions<JwtConfig> options) => _jwtConfig = options.Value;
-        public virtual string GenerateAccessToken(IEnumerable<Claim> claims)
+        public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Secret));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -38,7 +38,7 @@ namespace Identity.Application.Application
             }
         }
 
-        public virtual ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -59,7 +59,7 @@ namespace Identity.Application.Application
             return principal;
         }
 
-        public virtual DateTime RefreshTokenExpiryTime() => DateTime.Now.AddMinutes(_jwtConfig.ExpRefToken);
+        public DateTime RefreshTokenExpiryTime() => DateTime.Now.AddMinutes(_jwtConfig.ExpRefToken);
     }
 
 }

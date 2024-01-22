@@ -20,9 +20,11 @@ namespace Identity.API.Endpoints
                 async (HttpContext context, string Id, IUserService userService) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
-                    return await userService.GetUserAsync(Id) is var response 
-                        ? Results.Ok(response)
-                        : Results.NotFound();
+                    var result = await userService.GetUserAsync(Id);
+
+                    return !result.isSuccess && result.errors.Any(x => x.Code == "404")
+                        ? Results.NotFound(result)
+                        : Results.Ok(result);
                 })
                 .WithName("GetUserById")
                 .WithApiVersionSet(versionSet)
@@ -32,7 +34,7 @@ namespace Identity.API.Endpoints
                 .WithOpenApi();
 
             app.MapGet("api/v{version:apiVersion}/users",
-               async (HttpContext context, string Id, IUserService userService) =>
+               async (HttpContext context, IUserService userService) =>
                {
                    var apiVersion = context.GetRequestedApiVersion();
                    return await userService.GetUsersAsync();
@@ -51,7 +53,7 @@ namespace Identity.API.Endpoints
                 var user = await userService.CreateUserAsync(command);
                 return user.isSuccess 
                     ? Results.CreatedAtRoute("GetUserById", new { user.data.UserId })
-                    : Results.BadRequest(user.errors.ToList());
+                    : Results.BadRequest(user);
             })
             .AddEndpointFilter<ValidationFilter<CreateUserDto>>()
             .WithApiVersionSet(versionSet)

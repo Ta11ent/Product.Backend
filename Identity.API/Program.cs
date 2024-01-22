@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 
 UserEndpoint.Map(app);
-AuthEndpoint.Map(app);
+//AuthEndpoint.Map(app);
 
 app.UseAuthentication();
 app.UseAuthorization();

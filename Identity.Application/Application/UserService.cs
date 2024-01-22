@@ -25,7 +25,7 @@ namespace Identity.Application.Application
             _mapper = mapper;
         }
 
-        public virtual async Task<CreateUserResponse> CreateUserAsync(CreateUserCommand userCommand)
+        public async Task<CreateUserResponse> CreateUserAsync(CreateUserCommand userCommand)
         {
             var user = new AppUser()
             {
@@ -51,11 +51,11 @@ namespace Identity.Application.Application
             return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, UserId = user.Id }, null!);
         }
 
-        public virtual async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
+        public async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
 
-        public virtual async Task<Response<string>> EnableUserAsync(string id) => await ChangeUserState(id, true);
+        public async Task<Response<string>> EnableUserAsync(string id) => await ChangeUserState(id, true);
 
-        public virtual async Task<Response<string>> ResetPassword(ResetPasswordCommand entity)
+        public async Task<Response<string>> ResetPassword(ResetPasswordCommand entity)
         {
             var user = await _userManager.FindByIdAsync(entity.Id);
 
@@ -73,7 +73,7 @@ namespace Identity.Application.Application
             return new Response<string>(entity.Id, null!);
         }
 
-        public virtual async Task<UsersResponse> GetUsersAsync() {
+        public async Task<UsersResponse> GetUsersAsync() {
             var users =
                 await _dbContext.AppUsers
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
@@ -83,16 +83,17 @@ namespace Identity.Application.Application
             return new UsersResponse(users, null!);
         }
 
-        public virtual async Task<UserResponse> GetUserAsync(string id) {
+        public async Task<UserResponse> GetUserAsync(string id) {
+             var user =
+                 await _dbContext.AppUsers
+                 .Include(x => x.AppUserRoles)
+                    .ThenInclude(x => x.AppRole)
+                 .Where(x => x.Id == id)
+                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                // .AsNoTracking()
+                 .FirstOrDefaultAsync();
 
-            var user =
-                await _dbContext.AppUsers
-                .Where(x => x.Id == id)
-                .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-            if(user is null)
+            if (user is null)
                 return new UserResponse(default!, new List<IdentityError>() {
                         new IdentityError() {
                             Description = $"User with id: {id} not found",

@@ -2,8 +2,8 @@
 
 namespace Identity.Domain
 {
-    public class AppRole : IdentityRole<string>
+    public class AppRole : IdentityRole
     {
-        public List<AppUser> Users { get; set; } = new();
+        public ICollection<AppUserRole> AppUserRoles { get; set; }
     }
 }

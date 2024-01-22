@@ -2,9 +2,9 @@
 
 namespace Identity.Domain
 {
-    public class AppUser : IdentityUser<string>
+    public class AppUser : IdentityUser
     {
         public bool Enabled { get; set; }
-        public List<AppRole> Roles { get; set; } = new();
+        public ICollection<AppUserRole> AppUserRoles { get; set; }
     }
 }

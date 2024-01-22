@@ -16,17 +16,10 @@ namespace Identity.Persistence
                 config.UseSqlServer(connectionString);
             });
 
-
-            /* services.AddIdentityCore<AppUser>(config => { config.User.RequireUniqueEmail = true; })
-                 //.AddSignInManager<SignInManager<AppUser>>()
-                 .AddRoles<AppRole>()
-                 .AddEntityFrameworkStores<AuthDbContext>();
-            */
-
             services.AddIdentity<AppUser, AppRole>(config => { config.User.RequireUniqueEmail = true; })
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<AuthDbContext>();
-
+            
             return services;
         }
     }

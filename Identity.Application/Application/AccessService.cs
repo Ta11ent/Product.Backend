@@ -42,11 +42,15 @@ namespace Identity.Application.Application
 
             var claims = GenerateClaims(ref user);
 
+            /*
             return new UserLoginResponse(new UserLoginDto() { 
                 AccessToken = _tokenService.GenerateAccessToken(claims),
                 RefreshToken = _tokenService.GenerateRefreshToken(),
                 RefreshTokenExpTime = _tokenService.RefreshTokenExpiryTime()
             }, null!);
+            */
+
+            return null;
 
         }
 
