@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.Model\Identity.Domain.csproj" />
-    <ProjectReference Include="..\Identity.Persistence\Identity.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

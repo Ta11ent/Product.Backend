@@ -1,7 +1,6 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Application.Common.Models.User.Create;
 using Identity.Domain;
-using Identity.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Identity.Application.Common.Models.User.Password;
@@ -15,13 +14,13 @@ namespace Identity.Application.Application
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly AuthDbContext _dbContext;
+        private readonly IAuthDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public UserService(UserManager<AppUser> userManager, AuthDbContext dbContext, IMapper mapper)
+        public UserService(UserManager<AppUser> userManager, IAuthDbContext dbContext, IMapper mapper)
         { 
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(AuthDbContext));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(IAuthDbContext));
             _mapper = mapper;
         }
 
@@ -90,7 +89,7 @@ namespace Identity.Application.Application
                     .ThenInclude(x => x.AppRole)
                  .Where(x => x.Id == id)
                  .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
-                // .AsNoTracking()
+                 .AsNoTracking()
                  .FirstOrDefaultAsync();
 
             if (user is null)

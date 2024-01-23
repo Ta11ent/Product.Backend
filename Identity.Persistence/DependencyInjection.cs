@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Identity.Domain;
+using Identity.Application.Common.Abstractions;
 
 namespace Identity.Persistence
 {
@@ -16,6 +17,7 @@ namespace Identity.Persistence
                 config.UseSqlServer(connectionString);
             });
 
+            services.AddScoped<IAuthDbContext, AuthDbContext>();
             services.AddIdentity<AppUser, AppRole>(config => { config.User.RequireUniqueEmail = true; })
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<AuthDbContext>();

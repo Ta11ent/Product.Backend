@@ -1,4 +1,5 @@
-﻿using Identity.Domain;
+﻿using Identity.Application.Common.Abstractions;
+using Identity.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace Identity.Persistence
 {
     public class AuthDbContext : IdentityDbContext<AppUser, AppRole, string,
         IdentityUserClaim<string>, AppUserRole, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>>
+        IdentityRoleClaim<string>, IdentityUserToken<string>> , IAuthDbContext
     {
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }

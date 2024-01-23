@@ -22,10 +22,9 @@ namespace Identity.Application.Common.Models.User.Get
                 .ForMember(x => x.Email,
                     opt => opt.MapFrom(y => y.Email))
                 .ForMember(x => x.Enable,
-                    opt => opt.MapFrom(y => y.Enabled));
-            /*
+                    opt => opt.MapFrom(y => y.Enabled))
                 .ForMember(x => x.Roles,
-                    opt => opt.MapFrom(y => y.AppUserRoles.Select(x => x.AppRole.Name)));*/
+                    opt => opt.MapFrom(y => y.AppUserRoles.Select(x => x.AppRole.Name)));
         }
     }
 }

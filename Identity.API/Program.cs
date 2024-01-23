@@ -4,7 +4,7 @@ builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(Jw
 builder.Services.AddAutoMapper(config =>
 {
     config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
-    config.AddProfile(new AssemblyMappingProfile(typeof(AuthDbContext).Assembly));
+    config.AddProfile(new AssemblyMappingProfile(typeof(IAuthDbContext).Assembly));
 });
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
 }
 
 UserEndpoint.Map(app);
-//AuthEndpoint.Map(app);
+AuthEndpoint.Map(app);
 
 app.UseAuthentication();
 app.UseAuthorization();
