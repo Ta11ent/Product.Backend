@@ -15,7 +15,6 @@ namespace Identity.API.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
-
             app.MapGet("api/v{version:apiVersion}/users/{Id}",
                 async (HttpContext context, string Id, IUserService userService) =>
                 {
@@ -52,7 +51,7 @@ namespace Identity.API.Endpoints
                 var command = mapper.Map<CreateUserCommand>(entity);
                 var user = await userService.CreateUserAsync(command);
                 return user.isSuccess 
-                    ? Results.CreatedAtRoute("GetUserById", new { user.data.UserId })
+                    ? Results.CreatedAtRoute("GetUserById", new { user.data.Id }, null)
                     : Results.BadRequest(user);
             })
             .AddEndpointFilter<ValidationFilter<CreateUserDto>>()
@@ -88,7 +87,7 @@ namespace Identity.API.Endpoints
              .WithDescription("Update the User object")
              .WithOpenApi();
 
-            app.MapPut("api/v{version:apiVersion}/users/{Id}/resetPassword",
+            app.MapPut("api/v{version:apiVersion}/users/{Id}/rp",
              async (HttpContext context, string Id, ResetPasswordDto entity,
                     IUserService service, IMapper mapper) =>
              {

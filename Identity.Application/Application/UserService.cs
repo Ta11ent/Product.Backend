@@ -17,6 +17,8 @@ namespace Identity.Application.Application
         private readonly IAuthDbContext _dbContext;
         private readonly IMapper _mapper;
 
+        private bool _disposed = false;
+
         public UserService(UserManager<AppUser> userManager, IAuthDbContext dbContext, IMapper mapper)
         { 
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -47,7 +49,7 @@ namespace Identity.Application.Application
                 return new CreateUserResponse(null!, result.Errors);
             }
 
-            return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, UserId = user.Id }, null!);
+            return new CreateUserResponse(new CreateUserResponseDto() { UserName = user.UserName, Id = user.Id }, null!);
         }
 
         public async Task<Response<string>> DisableUserAsync(string id) => await ChangeUserState(id, false);
@@ -118,5 +120,20 @@ namespace Identity.Application.Application
 
             return new Response<string>(id, null!);
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        protected void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing) _dbContext.Dispose();
+            }
+            _disposed = true;
+        }
+        ~UserService() => Dispose(false);
     }
 }

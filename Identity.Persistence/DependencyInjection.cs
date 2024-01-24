@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Identity.Domain;
 using Identity.Application.Common.Abstractions;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Persistence
 {
@@ -20,7 +21,8 @@ namespace Identity.Persistence
             services.AddScoped<IAuthDbContext, AuthDbContext>();
             services.AddIdentity<AppUser, AppRole>(config => { config.User.RequireUniqueEmail = true; })
                 .AddRoles<AppRole>()
-                .AddEntityFrameworkStores<AuthDbContext>();
+                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddDefaultTokenProviders();
             
             return services;
         }

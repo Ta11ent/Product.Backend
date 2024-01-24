@@ -5,7 +5,7 @@ using Identity.Application.Common.Response;
 
 namespace Identity.Application.Common.Abstractions
 {
-    public interface IUserService
+    public interface IUserService : IDisposable
     {
         Task<CreateUserResponse> CreateUserAsync(CreateUserCommand user);
         Task<Response<string>> DisableUserAsync(string id);

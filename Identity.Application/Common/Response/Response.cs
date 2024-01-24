@@ -8,7 +8,6 @@ namespace Identity.Application.Common.Response
             data = _data;
             isSuccess = _data is null ? false : true;
             errors = _errors;
-            
         }
         public T data { get; set; }
         public bool isSuccess { get; set; }
