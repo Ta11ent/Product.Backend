@@ -15,11 +15,6 @@ namespace Identity.Application
         {
             services.Configure<JwtConfig>(configuration.GetSection(nameof(JwtConfig)));
 
-            //services.AddAutoMapper(config =>
-            //{
-            //    config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
-            //    config.AddProfile(new AssemblyMappingProfile(typeof(AuthDbContext).Assembly));
-            //});
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccessService, AccessService>();

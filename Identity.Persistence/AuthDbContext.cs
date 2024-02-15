@@ -8,11 +8,12 @@ namespace Identity.Persistence
 {
     public class AuthDbContext : IdentityDbContext<AppUser, AppRole, string,
         IdentityUserClaim<string>, AppUserRole, IdentityUserLogin<string>,
-        IdentityRoleClaim<string>, IdentityUserToken<string>> , IAuthDbContext
+        IdentityRoleClaim<string>, AppUserToken> , IAuthDbContext
     {
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
         public DbSet<AppUserRole> AppUserRole { get; set; }
+        public DbSet<AppUserToken> AppUserTokens { get; set; }
  
         public AuthDbContext(DbContextOptions<AuthDbContext> options)
             : base(options) { }
@@ -35,6 +36,11 @@ namespace Identity.Persistence
                     .WithOne(e => e.AppRole)
                     .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
+            });
+
+            builder.Entity<AppUserToken>(b =>
+            {
+                b.HasKey(e => e.Id);
             });
         }
     }

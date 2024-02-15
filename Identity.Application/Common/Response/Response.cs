@@ -4,10 +4,10 @@ namespace Identity.Application.Common.Response
 {
     public class Response<T> : IResponse<T>
     {
-        public Response(T _data, IEnumerable<IdentityError> _errors) {
-            data = _data;
-            isSuccess = _data is null ? false : true;
-            errors = _errors;
+        public Response(T data, IEnumerable<IdentityError> errors = null!) {
+            this.data = data;
+            this.isSuccess = data is null ? false : true;
+            this.errors = errors;
         }
         public T data { get; set; }
         public bool isSuccess { get; set; }

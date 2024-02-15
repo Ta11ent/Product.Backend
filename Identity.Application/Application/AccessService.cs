@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Application.Common.Models.Access.Login;
+using Identity.Application.Common.Models.User.Get;
 using Identity.Domain;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -9,57 +10,56 @@ namespace Identity.Application.Application
     public class AccessService : IAccessService
     {
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
+
+        private List<IdentityError> _errors = new List<IdentityError>();
         public AccessService( 
-            UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
+            IUserService userService, SignInManager<AppUser> signInManager, ITokenService tokenService)
         {
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
-        public async Task<UserLoginResponse> LoginUserAsync(UserLoginCommand entity)
+        public async Task<LoginResponse> LoginUserAsync(LoginCommand command)
         {
-            var user = await _userManager.FindByNameAsync(entity.UserName);
-            if (user is null)
-                return new UserLoginResponse(null!, new List<IdentityError>() {
-                        new IdentityError() {
-                            Description = $"User with name: {entity.UserName} not found",
-                            Code = "404"
-                        }
-                });
+            var user = await _userService.GetUserByNameAsync(command.UserName);
+            if (!user.isSuccess)
+                return new LoginResponse(null!, user.errors);
+            else if (!user.data.Enable)
+            {
+                _errors.Add(new IdentityError() { Description = $"User unauthorized", Code = "401" });
+                return new LoginResponse(null!, _errors);
+            }
 
-            var succeeded = await _userManager.CheckPasswordAsync(user, entity.Password);
-            if(!succeeded || !user.Enabled) 
-                return new UserLoginResponse(null!, new List<IdentityError>() {
-                        new IdentityError() {
-                            Description = $"User unauthorized",
-                            Code = "401"
-                        }
-                 });
+            var result = await _signInManager.PasswordSignInAsync(user.data.UserName, command.Password, false, false);
+            if (!result.Succeeded)
+            {
+                _errors.Add(new IdentityError() { Description = $"User disabled", Code = "403" });
+                return new LoginResponse(null!, _errors);
+            }
 
-            await _signInManager.PasswordSignInAsync(user, entity.Password, false, false);
+            var claims = GenerateClaims(user.data);
 
-            var claims = GenerateClaims(ref user);
+            var accessToken = _tokenService.GenerateAccessToken(claims);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            var expTime = _tokenService.RefreshTokenExpiryTime();
 
-            /*
-            return new UserLoginResponse(new UserLoginDto() { 
-                AccessToken = _tokenService.GenerateAccessToken(claims),
-                RefreshToken = _tokenService.GenerateRefreshToken(),
-                RefreshTokenExpTime = _tokenService.RefreshTokenExpiryTime()
-            }, null!);
-            */
+            await _userService.SetUserTokenAsync(user.data.Id, nameof(AccessService), nameof(refreshToken), refreshToken, expTime);
 
-            return null;
-
+            return new LoginResponse(new LogInDto()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                RefreshTokenExp = expTime
+            });
         }
 
-        private List<Claim> GenerateClaims(ref AppUser user)
+        private List<Claim> GenerateClaims(UserDto user)
         {
-            var roles = _userManager.GetRolesAsync(user).Result;
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.UserName!));
-            foreach (var role in roles)
+            foreach (var role in user.Roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
             return claims;

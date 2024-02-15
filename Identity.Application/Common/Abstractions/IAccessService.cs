@@ -4,6 +4,6 @@ namespace Identity.Application.Common.Abstractions
 {
     public interface IAccessService
     {
-        Task<UserLoginResponse> LoginUserAsync(UserLoginCommand user);
+        Task<LoginResponse> LoginUserAsync(LoginCommand command);
     }
 }

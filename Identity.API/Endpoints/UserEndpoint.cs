@@ -19,7 +19,7 @@ namespace Identity.API.Endpoints
                 async (HttpContext context, string Id, IUserService userService) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
-                    var result = await userService.GetUserAsync(Id);
+                    var result = await userService.GetUserByIdAsync(Id);
 
                     return !result.isSuccess && result.errors.Any(x => x.Code == "404")
                         ? Results.NotFound(result)
@@ -94,7 +94,7 @@ namespace Identity.API.Endpoints
                  var apiVersion = context.GetRequestedApiVersion();
                  var command = mapper.Map<ResetPasswordCommand>(entity);
                  command.Id = Id;
-                 await service.ResetPassword(command);
+                 await service.ResetPasswordAsync(command);
                  return Results.NoContent();
              })
              .AddEndpointFilter<ValidationFilter<ResetPasswordDto>>()

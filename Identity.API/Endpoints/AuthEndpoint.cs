@@ -4,6 +4,7 @@ using Identity.API.Models;
 using Identity.API.Validation;
 using Identity.Application.Common.Models.Access.Login;
 using Microsoft.AspNetCore.Mvc;
+using Identity.API.Cookies;
 
 namespace Identity.API.Endpoints
 {
@@ -19,14 +20,17 @@ namespace Identity.API.Endpoints
                 async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]LoginDto entity) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
-                    var command = mapper.Map<UserLoginCommand>(entity);
-                    var result = await service.LoginUserAsync(command);
+                    var command = mapper.Map<LoginCommand>(entity);
+                    var response = await service.LoginUserAsync(command);
 
-                    return result.isSuccess
-                        ? Results.Ok()
-                        : !result.isSuccess && result.errors.Any(x => x.Code == "404") 
-                            ? Results.NotFound()
-                            : Results.Unauthorized();
+                    if(response.isSuccess)
+                        new Cookie(context).SetRefreshToken(response.data.RefreshToken, response.data.RefreshTokenExp);
+
+                    return response.isSuccess
+                         ? Results.Ok(response)
+                         : !response.isSuccess && response.errors.Any(x => x.Code == "404") 
+                             ? Results.NotFound()
+                             : Results.Unauthorized();
                 })
                 .AddEndpointFilter<ValidationFilter<LoginDto>>()
                 .WithApiVersionSet(versionSet)

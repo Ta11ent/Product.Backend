@@ -7,11 +7,14 @@ namespace Identity.Application.Common.Abstractions
 {
     public interface IUserService : IDisposable
     {
-        Task<CreateUserResponse> CreateUserAsync(CreateUserCommand user);
+        Task<CreateUserResponse> CreateUserAsync(CreateUserCommand command);
         Task<Response<string>> DisableUserAsync(string id);
         Task<Response<string>> EnableUserAsync(string id);
-        Task<Response<string>> ResetPassword(ResetPasswordCommand entity);
+        Task<Response<string>> ResetPasswordAsync(ResetPasswordCommand command);
         Task<UsersResponse> GetUsersAsync();
-        Task<UserResponse> GetUserAsync(string id);
+        Task<UserResponse> GetUserByIdAsync(string id);
+        Task<UserResponse> GetUserByNameAsync(string name);
+        Task<bool> CheckPasswordAsync(CheckPasswordCommand command);
+        Task SetUserTokenAsync(string userId, string loginProvider, string tokenName, string? tokenValue, DateTime expDate);
     }
 }

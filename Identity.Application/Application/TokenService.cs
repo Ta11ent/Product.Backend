@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Application.Common.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,7 +26,7 @@ namespace Identity.Application.Application
                 signingCredentials: signinCredentials
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+             return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
         }
 
         public virtual string GenerateRefreshToken()
