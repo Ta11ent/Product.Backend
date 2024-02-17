@@ -155,6 +155,18 @@ namespace Identity.Application.Application
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<UserTokenResponse> GetUserTokenAsync(string userId, string loginProvider, string tokenName)
+        {
+            var token =
+                await _dbContext.AppUserTokens
+                .Where(x => x.UserId == userId && x.LoginProvider == loginProvider && x.Name == tokenName)
+                .ProjectTo<UserTokenDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return new UserTokenResponse(token!);
+        }
+
         private async Task<Response<string>> ChangeUserState(string id, bool state)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -183,6 +195,7 @@ namespace Identity.Application.Application
             }
             _disposed = true;
         }
+
         ~UserService() => Dispose(false);
     }
 }

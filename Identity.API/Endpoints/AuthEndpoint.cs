@@ -2,9 +2,9 @@
 using AutoMapper;
 using Identity.API.Models;
 using Identity.API.Validation;
-using Identity.Application.Common.Models.Access.Login;
 using Microsoft.AspNetCore.Mvc;
 using Identity.API.Cookies;
+using Identity.Application.Common.Models.Access.Login;
 
 namespace Identity.API.Endpoints
 {
@@ -38,6 +38,8 @@ namespace Identity.API.Endpoints
                 .WithSummary("Login")
                 .WithDescription("JSON object")
                 .WithOpenApi();
+
+      
         }
     }
 }

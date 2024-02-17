@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Common.Abstractions;
+using Identity.Application.Common.Models.Access;
 using Identity.Application.Common.Models.Access.Login;
 using Identity.Application.Common.Models.User.Get;
 using Identity.Domain;
@@ -21,22 +22,22 @@ namespace Identity.Application.Application
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
-        public async Task<LoginResponse> LoginUserAsync(LoginCommand command)
+        public async Task<TokenResponse> LoginUserAsync(LoginCommand command)
         {
             var user = await _userService.GetUserByNameAsync(command.UserName);
             if (!user.isSuccess)
-                return new LoginResponse(null!, user.errors);
+                return new TokenResponse(null!, user.errors);
             else if (!user.data.Enable)
             {
                 _errors.Add(new IdentityError() { Description = $"User unauthorized", Code = "401" });
-                return new LoginResponse(null!, _errors);
+                return new TokenResponse(null!, _errors);
             }
 
             var result = await _signInManager.PasswordSignInAsync(user.data.UserName, command.Password, false, false);
             if (!result.Succeeded)
             {
                 _errors.Add(new IdentityError() { Description = $"User disabled", Code = "403" });
-                return new LoginResponse(null!, _errors);
+                return new TokenResponse(null!, _errors);
             }
 
             var claims = GenerateClaims(user.data);
@@ -47,7 +48,41 @@ namespace Identity.Application.Application
 
             await _userService.SetUserTokenAsync(user.data.Id, nameof(AccessService), nameof(refreshToken), refreshToken, expTime);
 
-            return new LoginResponse(new LogInDto()
+            return new TokenResponse(new TokenDto()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                RefreshTokenExp = expTime
+            });
+        }
+
+        public async Task<TokenResponse> RefreshUserAsync(RefreshCommand command)
+        {
+            var principal = _tokenService.GetPrincipalFromExpiredToken(command.AccessToken);
+            var username = principal.Identity!.Name;
+            var user = await _userService.GetUserByNameAsync(username!);
+            if (!user.isSuccess)
+                return new TokenResponse(null!, user.errors);
+            else if (!user.data.Enable)
+            {
+                _errors.Add(new IdentityError() { Description = $"User unauthorized", Code = "401" });
+                return new TokenResponse(null!, _errors);
+            }
+
+            var token = await _userService.GetUserTokenAsync(user.data.Id, nameof(AccessService), "refreshToken");
+            if(token.data == null || token.data.ExpiryDate <= DateTime.Now)
+            {
+                _errors.Add(new IdentityError() { Description = "Refresh Token was expired", Code = "403" });
+                return new TokenResponse(null!, _errors);
+            }
+
+            var accessToken = _tokenService.GenerateAccessToken(principal.Claims);
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            var expTime = _tokenService.RefreshTokenExpiryTime();
+
+            await _userService.SetUserTokenAsync(user.data.Id, nameof(AccessService), nameof(refreshToken), refreshToken, expTime);
+
+            return new TokenResponse(new TokenDto()
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
