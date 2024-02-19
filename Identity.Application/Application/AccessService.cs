@@ -70,9 +70,9 @@ namespace Identity.Application.Application
             }
 
             var token = await _userService.GetUserTokenAsync(user.data.Id, nameof(AccessService), "refreshToken");
-            if(token.data == null || token.data.ExpiryDate <= DateTime.Now)
+            if(token.data == null || token.data.Value != command.RefreshToken || token.data.ExpiryDate <= DateTime.Now)
             {
-                _errors.Add(new IdentityError() { Description = "Refresh Token was expired", Code = "403" });
+                _errors.Add(new IdentityError() { Description = "Invalid client request", Code = "403" });
                 return new TokenResponse(null!, _errors);
             }
 
