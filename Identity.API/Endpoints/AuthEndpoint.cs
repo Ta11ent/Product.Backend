@@ -68,6 +68,25 @@ namespace Identity.API.Endpoints
                 .WithDescription("JSON object")
                 .WithOpenApi();
 
+            app.MapPost("api/v{version:apiVersion}/Logout",
+               async (HttpContext context, IAccessService service, IMapper mapper, string? refreshToken) =>
+               {
+                   var apiVersion = context.GetRequestedApiVersion();
+
+                   if (refreshToken is null && !context.Request.Cookies.ContainsKey("refreshToken"))
+                       return Results.BadRequest();
+                   refreshToken = refreshToken ?? context.Request.Cookies["refreshToken"];
+
+                   return await service.LogoutUserAsync(refreshToken!) is var response
+                    ? Results.Ok()
+                    : Results.BadRequest();
+               })
+               .WithApiVersionSet(versionSet)
+               .MapToApiVersion(1.0)
+               .WithSummary("Logout")
+               .WithOpenApi();
+
+
         }
     }
 }

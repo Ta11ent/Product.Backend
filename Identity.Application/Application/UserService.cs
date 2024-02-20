@@ -8,6 +8,8 @@ using Identity.Application.Common.Models.User.Get;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Identity.Application.Common.Response;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Xml.Linq;
 
 namespace Identity.Application.Application
 {
@@ -157,14 +159,35 @@ namespace Identity.Application.Application
 
         public async Task<UserTokenResponse> GetUserTokenAsync(string userId, string loginProvider, string tokenName)
         {
-            var token =
+            var data =
                 await _dbContext.AppUserTokens
                 .Where(x => x.UserId == userId && x.LoginProvider == loginProvider && x.Name == tokenName)
                 .ProjectTo<UserTokenDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            return new UserTokenResponse(token!);
+            return new UserTokenResponse(data!);
+        }
+
+        public async Task<UserTokenResponse> GetUserTokenAsync(string token)
+        {
+            var data =
+                await _dbContext.AppUserTokens
+                .Where(x => x.Value == token)
+                .ProjectTo<UserTokenDto>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return new UserTokenResponse(data!);
+        }
+        public async Task<bool> RemoveUserTokenAsync(string id)
+        {
+            var token = await _dbContext.AppUserTokens.FindAsync(new object[] { id });
+            if (token == null) return false; 
+
+            _dbContext.AppUserTokens.Remove(token);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         private async Task<Response<string>> ChangeUserState(string id, bool state)

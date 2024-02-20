@@ -8,5 +8,6 @@ namespace Identity.Application.Common.Abstractions
     {
         Task<TokenResponse> LoginUserAsync(LoginCommand command);
         Task<TokenResponse> RefreshUserAsync(RefreshCommand command);
+        Task<bool> LogoutUserAsync(string refreshToken);
     }
 }

@@ -2,7 +2,6 @@
 using Identity.Application.Common.Models.User.Password;
 using Identity.Application.Common.Models.User.Get;
 using Identity.Application.Common.Response;
-using Identity.Application.Common.Models.Access.Login;
 
 namespace Identity.Application.Common.Abstractions
 {
@@ -18,6 +17,8 @@ namespace Identity.Application.Common.Abstractions
         Task<bool> CheckPasswordAsync(CheckPasswordCommand command);
         Task SetUserTokenAsync(string userId, string loginProvider, string tokenName, string? tokenValue, DateTime expDate);
         Task<UserTokenResponse> GetUserTokenAsync(string userId, string loginProvider, string tokenName);
+        Task<UserTokenResponse> GetUserTokenAsync(string token);
+        Task<bool> RemoveUserTokenAsync(string id);
         
     }
 }

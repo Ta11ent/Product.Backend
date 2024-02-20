@@ -70,7 +70,7 @@ namespace Identity.Application.Application
             }
 
             var token = await _userService.GetUserTokenAsync(user.data.Id, nameof(AccessService), "refreshToken");
-            if(token.data == null || token.data.Value != command.RefreshToken || token.data.ExpiryDate <= DateTime.Now)
+            if(!token.isSuccess || token.data.Value != command.RefreshToken || token.data.ExpiryDate <= DateTime.Now)
             {
                 _errors.Add(new IdentityError() { Description = "Invalid client request", Code = "403" });
                 return new TokenResponse(null!, _errors);
@@ -90,6 +90,13 @@ namespace Identity.Application.Application
             });
         }
 
+        public async Task<bool> LogoutUserAsync(string refreshToken)
+        {
+            var token = await _userService.GetUserTokenAsync(refreshToken);
+            if(!token.isSuccess) return false;
+
+            return await _userService.RemoveUserTokenAsync(token.data.Id);
+        }
         private List<Claim> GenerateClaims(UserDto user)
         {
             var claims = new List<Claim>();
