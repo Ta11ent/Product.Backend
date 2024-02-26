@@ -16,11 +16,12 @@ namespace Identity.API.Endpoints
             var versionSet = app.NewApiVersionSet()
                 .HasApiVersion(1.0)
                 .Build();
-            
-            app.MapPost("api/v{version:apiVersion}/login",
+
+            RouteGroupBuilder groupBuilder = app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(versionSet);
+
+            groupBuilder.MapPost("login",
                 async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]LoginDto entity) =>
                 {
-                    var apiVersion = context.GetRequestedApiVersion();
                     var command = mapper.Map<LoginCommand>(entity);
                     var response = await service.LoginUserAsync(command);
 
@@ -34,17 +35,14 @@ namespace Identity.API.Endpoints
                              : Results.Unauthorized();
                 })
                 .AddEndpointFilter<ValidationFilter<LoginDto>>()
-                .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Login")
                 .WithDescription("JSON object")
                 .WithOpenApi();
 
-            app.MapPost("api/v{version:apiVersion}/RefreshToken", 
+            groupBuilder.MapPost("RefreshToken", 
                 async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]RefreshTokenDto entity) =>
                 {
-                    var apiVersion = context.GetRequestedApiVersion();
-
                     if (entity.RefreshToken is null && !context.Request.Cookies.ContainsKey("refreshToken"))
                         return Results.BadRequest();
                     entity.RefreshToken = entity.RefreshToken ?? context.Request.Cookies["refreshToken"];
@@ -62,13 +60,12 @@ namespace Identity.API.Endpoints
                             : Results.Unauthorized();
                 })
                 .AddEndpointFilter<ValidationFilter<RefreshTokenDto>>()
-                .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Refresh Token")
                 .WithDescription("JSON object")
                 .WithOpenApi();
 
-            app.MapPost("api/v{version:apiVersion}/Logout",
+            groupBuilder.MapPost("Logout",
                async (HttpContext context, IAccessService service, IMapper mapper, string? refreshToken) =>
                {
                    var apiVersion = context.GetRequestedApiVersion();
@@ -81,7 +78,6 @@ namespace Identity.API.Endpoints
                     ? Results.Ok()
                     : Results.BadRequest();
                })
-               .WithApiVersionSet(versionSet)
                .MapToApiVersion(1.0)
                .WithSummary("Logout")
                .WithOpenApi();
