@@ -47,7 +47,7 @@ namespace Identity.Application.Application
                 ValidIssuer = _jwtConfig.Issuer!,
                 ValidateAudience = _jwtConfig.Audience is null ? false : true,
                 ValidAudiences = new List<string>() { _jwtConfig.Audience! },
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Secret)),
                 ValidateIssuerSigningKey = true
             };
