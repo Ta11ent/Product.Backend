@@ -7,7 +7,7 @@
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin",
-                     policy => policy.RequireRole("ADMIN"));
+                     policy => policy.RequireRole("Admin"));
                 options.AddPolicy("User",
                      policy => policy.RequireRole("USER"));
             });
