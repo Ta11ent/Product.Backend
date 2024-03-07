@@ -3,6 +3,7 @@ using Identity.Application.Common.Models.Access;
 using Identity.Application.Common.Models.Access.Login;
 using Identity.Application.Common.Models.User.Get;
 using Identity.Domain;
+using JwtAuthenticationManager.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 

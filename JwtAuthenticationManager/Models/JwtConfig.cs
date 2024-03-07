@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Common.Models
+﻿namespace JwtAuthenticationManager.Models
 {
     public class JwtConfig
     {

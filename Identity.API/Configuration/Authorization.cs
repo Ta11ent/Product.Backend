@@ -2,7 +2,7 @@
 {
     public static class Authorization
     {
-        public static IServiceCollection AddAuthorizationConfiguration(this IServiceCollection services)
+        public static IServiceCollection _AddAuthorizationConfiguration(this IServiceCollection services)
         {
             services.AddAuthorization(options =>
             {

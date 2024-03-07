@@ -9,3 +9,4 @@ global using Identity.Application.Common.Mapping;
 global using System.Reflection;
 global using FluentValidation;
 global using Asp.Versioning;
+global using JwtAuthenticationManager.Configuration;

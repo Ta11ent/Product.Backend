@@ -1,10 +1,11 @@
 ﻿using Identity.Application.Application;
 using Identity.Application.Common.Abstractions;
-using Identity.Application.Common.Mapping;
-using Identity.Application.Common.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using JwtAuthenticationManager;
+using JwtAuthenticationManager.Abstractions;
+
+
 
 namespace Identity.Application
 {
@@ -13,10 +14,8 @@ namespace Identity.Application
         public static IServiceCollection AddApplication(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.Configure<JwtConfig>(configuration.GetSection(nameof(JwtConfig)));
-
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IAccessService, AccessService>();
 
             return services;

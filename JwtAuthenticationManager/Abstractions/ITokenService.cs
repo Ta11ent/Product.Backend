@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
-
-namespace Identity.Application.Common.Abstractions
+namespace JwtAuthenticationManager.Abstractions
 {
     public interface ITokenService
     {

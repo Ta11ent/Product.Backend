@@ -8,8 +8,6 @@ using Identity.Application.Common.Models.User.Get;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Identity.Application.Common.Response;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Xml.Linq;
 
 namespace Identity.Application.Application
 {
