@@ -19,7 +19,7 @@ namespace Identity.API.Endpoints
 
             RouteGroupBuilder groupBuilder = app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(versionSet);
 
-            groupBuilder.MapPost("login",
+            groupBuilder.MapPost("Login",
                 async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]LoginDto entity) =>
                 {
                     var command = mapper.Map<LoginCommand>(entity);

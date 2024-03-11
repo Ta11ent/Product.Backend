@@ -52,7 +52,118 @@
           "Port": 7001
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/category/{Id}"
+      "DownstreamPathTemplate": "/api/v{version}/product/{Id}"
+    },
+    ///<summary>
+    ///Product.Identity
+    ///</summary>
+    {
+      "UpstreamPathTemplate": "/api/v{version}/Login",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/Login"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/RefreshToken",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/RefreshToken"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/Logout",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/Logout"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users/{Id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users/{Id}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users/{Id}/disable",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users/{Id}/disable"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users/{Id}/enable",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users/{Id}/enable"
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/users/{Id}/rp",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7001
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/users/{Id}/rp"
     }
   ]
 }
