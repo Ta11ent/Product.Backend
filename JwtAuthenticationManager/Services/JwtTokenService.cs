@@ -1,29 +1,18 @@
 ﻿using JwtAuthenticationManager.Abstractions;
 using JwtAuthenticationManager.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace JwtAuthenticationManager
+namespace JwtAuthenticationManager.Services
 {
     public class JwtTokenService : ITokenService
     {
         private readonly JwtConfig jwtConfig;
-        public JwtTokenService()
-        {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            IConfiguration config = builder.Build();
-            jwtConfig = config.GetSection(nameof(JwtConfig)).Get<JwtConfig>()!;
-        }
-         
-        public JwtTokenService(JwtConfig jwtConfig) => this.jwtConfig = jwtConfig;
-
+        public JwtTokenService(IOptions<JwtConfig> jwtConfig) => this.jwtConfig = jwtConfig.Value;
         public virtual string GenerateAccessToken(IEnumerable<Claim> claims)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret));

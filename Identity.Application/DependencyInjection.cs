@@ -2,10 +2,8 @@
 using Identity.Application.Common.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using JwtAuthenticationManager;
 using JwtAuthenticationManager.Abstractions;
-
-
+using JwtAuthenticationManager.Services;
 
 namespace Identity.Application
 {

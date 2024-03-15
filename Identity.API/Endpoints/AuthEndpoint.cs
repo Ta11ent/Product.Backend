@@ -68,8 +68,6 @@ namespace Identity.API.Endpoints
             groupBuilder.MapPost("Logout",
                async (HttpContext context, IAccessService service, IMapper mapper, string? refreshToken) =>
                {
-                   var apiVersion = context.GetRequestedApiVersion();
-
                    if (refreshToken is null && !context.Request.Cookies.ContainsKey("refreshToken"))
                        return Results.BadRequest();
                    refreshToken = refreshToken ?? context.Request.Cookies["refreshToken"];

@@ -1,5 +1,4 @@
 ﻿using JwtAuthenticationManager.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -8,17 +7,8 @@ namespace JwtAuthenticationManager
     internal class JwtTokenValidationParameters
     {
         private readonly JwtConfig jwtConfig;
-        internal JwtTokenValidationParameters()
-        {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            IConfiguration config = builder.Build();
-            jwtConfig = config.GetSection(nameof(JwtConfig)).Get<JwtConfig>()!;
-        }
         internal JwtTokenValidationParameters(JwtConfig jwtConfig) => this.jwtConfig = jwtConfig;
-        internal virtual TokenValidationParameters Generate(bool validateLifetime)
+        internal virtual TokenValidationParameters Generate(bool validateLifetime = true)
         {
             return new TokenValidationParameters
             {

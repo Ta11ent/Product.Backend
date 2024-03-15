@@ -5,55 +5,278 @@
     /// </summary>
     {
       "UpstreamPathTemplate": "/api/v{version}/category",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7002
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/category"
+      "DownstreamPathTemplate": "/api/v{version}/category",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "User", "Admin" ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/category",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/category",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/api/v{version}/category/{Id}",
-      "UpstreamHttpMethod": [ "Get", "Delete", "Put" ],
+      "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7002
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/category/{Id}"
+      "DownstreamPathTemplate": "/api/v{version}/category/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "User", "Admin" ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/category/{Id}",
+      "UpstreamHttpMethod": [ "Delete", "Put" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/category/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     /// <summary>
     /// Product.Product
     /// </summary>
     {
       "UpstreamPathTemplate": "/api/v{version}/product",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7002
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/product"
+      "DownstreamPathTemplate": "/api/v{version}/product",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "User", "Admin" ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/product",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/product",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
     },
     {
       "UpstreamPathTemplate": "/api/v{version}/product/{Id}",
-      "UpstreamHttpMethod": [ "Get", "Delete", "Put" ],
+      "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7002
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/product/{Id}"
+      "DownstreamPathTemplate": "/api/v{version}/product/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "User", "Admin" ]
+      }
     },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/product/{Id}",
+      "UpstreamHttpMethod": [ "Put", "Delete", "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7002
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/product/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
+    },
+    ///<summary>
+    ///Product.ShoppingCart
+    ///</summary>
+    {
+      "UpstreamPathTemplate": "/api/v{version}/orders/{Id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/orders/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "Admin", "User" ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/orders/{Id}",
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/orders/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/orders",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/orders/",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
+    },
+
+    {
+      "UpstreamPathTemplate": "/api/v{version}/productRange",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/productRange",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/productRange/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/productRange/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": [ "User", "Admin" ]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/v{version}/productRange/{id}",
+      "UpstreamHttpMethod": [ "Put", "Delete", "Update" ],
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7174
+        }
+      ],
+      "DownstreamPathTemplate": "/api/v{version}/productRange/{Id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role":  "Admin"
+      }
+    },
+
     ///<summary>
     ///Product.Identity
     ///</summary>
@@ -64,7 +287,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/Login"
@@ -76,7 +299,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/RefreshToken"
@@ -88,7 +311,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/Logout"
@@ -100,7 +323,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users"
@@ -112,7 +335,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users/{Id}"
@@ -124,7 +347,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users"
@@ -136,7 +359,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users/{Id}/disable"
@@ -148,7 +371,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users/{Id}/enable"
@@ -160,10 +383,13 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7001
+          "Port": 7024
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/users/{Id}/rp"
     }
-  ]
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:800"
+  }
 }

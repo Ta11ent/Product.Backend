@@ -103,7 +103,11 @@ namespace Identity.Application.Application
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.UserName!));
             foreach (var role in user.Roles)
+            {
                 claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim("Role", role));
+            }
+                
 
             return claims;
         }

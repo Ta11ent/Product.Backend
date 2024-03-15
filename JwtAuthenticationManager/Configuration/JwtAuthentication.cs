@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using JwtAuthenticationManager.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JwtAuthenticationManager.Configuration
@@ -7,6 +9,15 @@ namespace JwtAuthenticationManager.Configuration
     {
         public static IServiceCollection AddJwtAuthenticationConfiguration(this IServiceCollection services)
         {
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            IConfiguration config = builder.Build();
+            var jwtConfig = config.GetSection(nameof(JwtConfig)).Get<JwtConfig>()!;
+            services.Configure<JwtConfig>(config.GetSection(nameof(JwtConfig)));
+
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -17,7 +28,7 @@ namespace JwtAuthenticationManager.Configuration
             {
                 options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
-                options.TokenValidationParameters = new JwtTokenValidationParameters().Generate(true);
+                options.TokenValidationParameters = new JwtTokenValidationParameters(jwtConfig).Generate();
             });
 
             return services; 
