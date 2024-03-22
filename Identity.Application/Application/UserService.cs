@@ -190,7 +190,7 @@ namespace Identity.Application.Application
 
         private async Task<Response<string>> ChangeUserState(string id, bool state)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _dbContext.AppUsers.FirstOrDefaultAsync(x => x.Id == id);
             if (user is null)
             {
                 _errors.Add(new IdentityError() { Description = $"User with id: {id} not found", Code = "404" });
