@@ -55,6 +55,7 @@ namespace ProductCatalog.APIcs.Endpoints
                     await sender.Send(costCommand);
                     return Results.CreatedAtRoute("GetProductById", new { id });
                 })
+                .AddEndpointFilter<ValidationFilter<CreateProductDto>>()
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithSummary("Create a Category")

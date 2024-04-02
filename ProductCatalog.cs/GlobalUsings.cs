@@ -14,3 +14,8 @@ global using ProductCatalog.Application.Common.Interfaces;
 global using System.Reflection;
 global using ProductCatalog.APIcs.Models.Product; 
 global using ProductCatalog.API.Endpoints;
+global using Microsoft.AspNetCore.Diagnostics;
+global using ProductCatalog.Application.Common.Exceptions;
+global using System.Text.Json;
+global using Microsoft.AspNetCore.Mvc;
+global using ProductCatalog.API.Exception;

@@ -6,8 +6,11 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile(new AssemblyMappingProfile(typeof(IProductDbContext).Assembly));
 });
 builder.Services.AddApplication();
-
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddApiVersioning(opt => opt.ApiVersionReader = new UrlSegmentApiVersionReader());
 
@@ -42,5 +45,7 @@ ProductEndpoint.Map(app);
 CostEndpoint.Map(app);
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.Run();
