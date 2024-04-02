@@ -17,7 +17,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
-            app.MapGet("api/v{version:apiVersion}/product/{Id}",
+            app.MapGet("api/v{version:apiVersion}/products/{Id}",
                 async(HttpContext context, Guid Id, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
@@ -32,7 +32,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithDescription("JSON object containing Product information")
                 .WithOpenApi();
 
-            app.MapGet("api/v{version:apiVersion}/product",
+            app.MapGet("api/v{version:apiVersion}/products",
                 async (HttpContext context, [AsParameters] GetProductListDto entity, IMapper mapper, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
@@ -45,7 +45,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithDescription("JSON object containing Product information")
                 .WithOpenApi();
 
-            app.MapPost("api/v{version:apiVersion}/product", 
+            app.MapPost("api/v{version:apiVersion}/products", 
                 async(HttpContext context, CreateProductDto entity, IMapper mapper, ISender sender) =>
                 {                  
                     var apiVersion = context.GetRequestedApiVersion();
@@ -62,7 +62,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithDescription("Create a Category object")
                 .WithOpenApi();
 
-            app.MapPut("api/v{version:apiVersion}/product/{Id}",
+            app.MapPut("api/v{version:apiVersion}/products/{Id}",
                 async(HttpContext context, Guid Id, UpdateProductDto entity, IMapper mapper, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
@@ -78,7 +78,7 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithDescription("Update the Product object")
                 .WithOpenApi();
 
-            app.MapDelete("api/v{version:apiVersion}/product/{Id}", 
+            app.MapDelete("api/v{version:apiVersion}/products/{Id}", 
                 async(HttpContext context, Guid Id, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();

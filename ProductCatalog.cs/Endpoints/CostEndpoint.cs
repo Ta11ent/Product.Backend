@@ -11,7 +11,7 @@ namespace ProductCatalog.API.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
-            app.MapPost("api/v{version:apiVersion}/price",
+            app.MapPost("api/v{version:apiVersion}/prices",
                 async (HttpContext context, CreateCostDto entity, IMapper mapper, ISender sender) =>
                 {
                     var apiVersion = context.GetRequestedApiVersion();
