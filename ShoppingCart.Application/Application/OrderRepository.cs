@@ -105,7 +105,7 @@ namespace ShoppingCart.Application.Application
            
             var productDetails = await _productService
                 .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId))
-                    +QueryBuilder.GeneratePaginationParam(ProductIds.Count));
+                    + QueryBuilder.GeneratePaginationParam(ProductIds.Count));
 
             foreach (var item in data)
                 foreach (var product in item.ProductRanges)

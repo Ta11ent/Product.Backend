@@ -7,6 +7,10 @@ builder.Services.AddAutoMapper(config =>
 });
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddApiVersioning(opt => opt.ApiVersionReader = new UrlSegmentApiVersionReader());
 
@@ -25,6 +29,8 @@ ProductRangeEndpoint.Map(app);
 OrderEndpoint.Map(app);
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.Run();
 

@@ -8,8 +8,8 @@ namespace ShoppingCart.Application.Application
     public class ProductService : IProductService
     {
         private readonly HttpClient _httpClient;
-        private readonly string getProductByIdRequest = "api/v1.0/product/";
-        private readonly string getProductsRequest = "api/v1.0/product?";
+        private readonly string getProductByIdRequest = "api/v1.0/products/";
+        private readonly string getProductsRequest = "api/v1.0/products?";
 
         public ProductService(IHttpClientFactory httpClientFactory) =>
                _httpClient = httpClientFactory.CreateClient(nameof(ProductService));

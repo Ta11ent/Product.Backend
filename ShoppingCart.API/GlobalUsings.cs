@@ -6,3 +6,8 @@ global using ShoppingCart.Persistence;
 global using Asp.Versioning;
 global using FluentValidation;
 global using ShoppingCart.API.Endpoints;
+global using Microsoft.AspNetCore.Diagnostics;
+global using Microsoft.AspNetCore.Mvc;
+global using ShoppingCart.Application.Common.Exceptions;
+global using System.Text.Json;
+global using ShoppingCart.API.Exception;
