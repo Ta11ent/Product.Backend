@@ -14,7 +14,8 @@
         private void InitializeConnection()
         {
             var factory = new ConnectionFactory {
-                HostName = _config.HostName
+                HostName = _config.HostName,
+                Port = _config.Port,
             };
             Connection = factory.CreateConnection();
         }

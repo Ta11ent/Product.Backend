@@ -2,8 +2,8 @@
 {
     public class RabbitMqConfig
     {
-        public string HostName { get;} = string.Empty;
-        public string Queue { get; } =string.Empty;
-        public int Port { get; }
+        public string HostName { get; set; } = string.Empty;
+        public string Queue { get; set; } =string.Empty;
+        public int Port { get; set; }
     }
 }

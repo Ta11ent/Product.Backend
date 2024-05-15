@@ -59,6 +59,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Domain", "Identity
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtAuthenticationManager", "JwtAuthenticationManager\JwtAuthenticationManager.csproj", "{6BAC3B4A-F293-4EBA-86B1-C8DDC9E40F20}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Producer.API", "Producer\Producer.API.csproj", "{05494C09-7EB6-4471-A9E5-FECE07AF8702}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitMqProducer", "RabbitMqProducer", "{AC7FD7FF-47DA-4FF8-B03F-AC20F5F501F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +125,10 @@ Global
 		{6BAC3B4A-F293-4EBA-86B1-C8DDC9E40F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BAC3B4A-F293-4EBA-86B1-C8DDC9E40F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BAC3B4A-F293-4EBA-86B1-C8DDC9E40F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05494C09-7EB6-4471-A9E5-FECE07AF8702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05494C09-7EB6-4471-A9E5-FECE07AF8702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05494C09-7EB6-4471-A9E5-FECE07AF8702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05494C09-7EB6-4471-A9E5-FECE07AF8702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +159,8 @@ Global
 		{7FA4642B-39B0-424D-995A-9A9509E48F63} = {75D09FB3-C490-4EB8-B1C8-92CDCB8AD95C}
 		{F7802D8C-05E2-40C1-AD19-F4D2393A913A} = {7FA4642B-39B0-424D-995A-9A9509E48F63}
 		{EDE9D95A-4230-46E7-A182-6720DBA5C10C} = {7FA4642B-39B0-424D-995A-9A9509E48F63}
+		{05494C09-7EB6-4471-A9E5-FECE07AF8702} = {AC7FD7FF-47DA-4FF8-B03F-AC20F5F501F9}
+		{AC7FD7FF-47DA-4FF8-B03F-AC20F5F501F9} = {7118D80D-F345-4CEF-B337-51F4EFB0C02B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25D1D087-E7BF-4B90-B42F-0D1B82CE6C4B}

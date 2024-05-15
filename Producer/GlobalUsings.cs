@@ -4,3 +4,6 @@ global using Producer.Connection;
 global using Microsoft.Extensions.Options;
 global using System.Text.Json;
 global using System.Text;
+global using Producer.Producer;
+global using Producer.API.Endpoints;
+global using Asp.Versioning;
