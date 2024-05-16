@@ -45,13 +45,16 @@ namespace ShoppingCart.API.Endpoints
 
             app.MapPut("api/v{version:apiVersion}/orders/{Id}",
               async (HttpContext context, Guid Id, UpdateOrderDto entity,
-               IMapper mapper, IOrderReppository repos) =>
+               IMapper mapper, IOrderReppository repos, IRabbitMqProducerService producer) =>
               {
                   var apiVersion = context.GetRequestedApiVersion();
                   entity.OrderId = Id;
                   var command = mapper.Map<UpdateOrderCommand>(entity);
                   await repos.UpdateOrderAsync(command);
                   await repos.SaveAsync();
+
+                  await producer.SendProducerMessage(Id);
+
                   return Results.NoContent();
               })
               .AddEndpointFilter<ValidationFilter<UpdateOrderDto>>()
