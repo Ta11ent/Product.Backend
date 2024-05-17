@@ -2,7 +2,6 @@
 {
     public class Endpoints
     {
-       //public string ProducerAPI { get; init; }
        public Dictionary<string, string> API { get; init; }
     }
 
