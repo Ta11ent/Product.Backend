@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
-using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Mapping;
 using ShoppingCart.Application.Common.Models.ProductRange;
+using ShoppingCart.Application.Common.Models.User;
 
 namespace ShoppingCart.Application.Common.Models.Order
 {
     public class OrderDetailsDto : IMapWith<Domain.Order>
     {
         public Guid OrderId { get; set; }
-        public Guid UserId { get; set; } 
+        private string UserId
+        {
+            set { User = new UserOrderDetailsDto(value);}
+            get { return User.UserId; }
+        }
+        public UserOrderDetailsDto User { get; set; }
         public IEnumerable<ProductRangeDetailsDto> ProductRanges { get; set; }
         public DateTime? OrderTime { get; set; }
         public decimal Price { get; set; }

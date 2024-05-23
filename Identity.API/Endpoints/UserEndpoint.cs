@@ -17,7 +17,6 @@ namespace Identity.API.Endpoints
 
             RouteGroupBuilder groupBuilder = app.MapGroup("api/v{version:apiVersion}")
                 .WithApiVersionSet(versionSet)
-                .RequireAuthorization("Admin")
                 .MapToApiVersion(1.0)
                 .WithOpenApi();
 

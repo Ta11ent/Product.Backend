@@ -2,6 +2,6 @@
 {
     public interface IRabbitMqProducerService
     {
-        Task SendProducerMessage(Guid Id);
+        Task SendProducerMessage(object data);
     }
 }

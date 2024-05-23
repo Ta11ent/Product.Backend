@@ -14,6 +14,7 @@ namespace ShoppingCart.Application
             services.AddScoped<IOrderReppository, OrderRepository>();
             services.AddScoped<IProductRangeRepository, ProductRangeRepository>();
             services.TryAddScoped<IRabbitMqProducerService, ProducerService>();
+            services.TryAddScoped<IUserService, UserService>();
 
             services.Configure<Endpoints>(configuration.GetSection(nameof(Endpoints)));
 
@@ -26,6 +27,12 @@ namespace ShoppingCart.Application
             services.AddHttpClient(nameof(ProducerService), option =>
             {
                 option.BaseAddress = new Uri(configuration["ServiceURL:ProducerAPI"]!);
+                option.Timeout = new TimeSpan(0, 0, 20);
+            });
+
+            services.AddHttpClient(nameof(UserService), option =>
+            {
+                option.BaseAddress = new Uri(configuration["ServiceURL:UserAPI"]!);
                 option.Timeout = new TimeSpan(0, 0, 20);
             });
             services.AddScoped<IProductService, ProductService>();

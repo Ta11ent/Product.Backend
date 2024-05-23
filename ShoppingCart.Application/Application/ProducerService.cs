@@ -10,17 +10,14 @@ namespace ShoppingCart.Application.Application
     {
         private readonly HttpClient _httpClient;
         private readonly Endpoints _config;
-        // private readonly IOrderReppository _repos;
         public ProducerService(IHttpClientFactory httpClientFactory, IOptions<Endpoints> config)
         {
             _httpClient = httpClientFactory.CreateClient(nameof(ProducerService));
             _config = config.Value;
         }
-        public async Task SendProducerMessage(Guid Id)
+        public async Task SendProducerMessage(object message)
         {
-            //  var order = _repos.GetOrderDetailsAsync(Id);
-
-            var dataJson = JsonSerializer.Serialize(Id);
+            var dataJson = JsonSerializer.Serialize(message);
             var body = new StringContent(dataJson, Encoding.UTF8, "application/json");
 
             using var httpResponseMessage = await _httpClient.PostAsync(_config.API["ProducerAPI"], body);

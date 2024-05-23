@@ -7,6 +7,7 @@ using ShoppingCart.Application.Common.Helpers;
 using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.Product;
 using ShoppingCart.Application.Common.Models.ProductRange;
+using ShoppingCart.Application.Common.Models.User;
 using ShoppingCart.Application.Common.Predicate;
 using ShoppingCart.Domain;
 
@@ -17,14 +18,16 @@ namespace ShoppingCart.Application.Application
         private readonly IOrderDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
         private bool _disposed = false;
 
-        public OrderRepository(IOrderDbContext dbContext, IMapper mapper, IProductService productService)
+        public OrderRepository(IOrderDbContext dbContext, IMapper mapper, IProductService productService, IUserService userService)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
             _productService = productService;
+            _userService = userService;
         }
 
         public async Task<Guid> CreateOrderAsync(Guid userId)
@@ -81,6 +84,9 @@ namespace ShoppingCart.Application.Application
             foreach (var product in data.ProductRanges)
                 AddProductDetails(product, ref productDetails);
 
+            var user = await _userService.GetUserAsync(data.User.UserId);
+            AddUserDetails(data.User, ref user);    
+
             return new OrderDetailsResponse(data!);
         }
 
@@ -128,6 +134,13 @@ namespace ShoppingCart.Application.Application
             product.Available = pr.Available;
             return product;
         }
+
+        private void AddUserDetails(UserOrderDetailsDto user, ref UserDto userDetails)
+        {
+            user.UserName = userDetails.UserName;
+            user.Email = userDetails.Email;
+        }
+
         public void Dispose()
         {
             Dispose(true);
