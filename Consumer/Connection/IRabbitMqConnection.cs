@@ -1,8 +1,8 @@
 ﻿using RabbitMQ.Client;
 
-namespace RabbitMqConsumer.Connection
+namespace Consumer.Connection
 {
-    public interface IMqConnection
+    public interface IRabbitMqConnection
     {
         IConnection Connection { get; }
     }
