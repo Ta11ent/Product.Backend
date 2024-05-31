@@ -2,6 +2,6 @@
 {
     public interface IMqConnection
     {
-        public IConnection Connection { get; }
+        IConnection Connection { get; }
     }
 }
