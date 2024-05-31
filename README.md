@@ -16,4 +16,5 @@ The backend part of the online store. The REST Api is an application implemented
 - Swashbuckle
 - RabbitMQ.Client
 - MailKit
-- AspNetCore.Authentication.JwtBearer
+- AspNetCore.Authentication
+- JwtBearer
