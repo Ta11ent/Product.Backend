@@ -1,5 +1,5 @@
 # Online store
-The backend part of the online store. The REST Api is an application implemented on a micro service architecture.
+The backend part of the online store. The REST Api is an application implemented on a microservices architecture.
 
 # Stack
 - Asp Net Core
