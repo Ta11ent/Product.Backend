@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ShoppingCart.Application.Common.Models.Order;
+﻿using ShoppingCart.Application.Application.Commands.Order.UpdateOrder;
 
 namespace ShoppingCart.API.Models.Order
 {

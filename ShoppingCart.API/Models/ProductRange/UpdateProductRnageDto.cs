@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ShoppingCart.Application.Common.Models.ProductRange;
+using ShoppingCart.Application.Application.Commands.ProductRange.UpdateProductRange;
 
 namespace ShoppingCart.API.Models.ProductRange
 {

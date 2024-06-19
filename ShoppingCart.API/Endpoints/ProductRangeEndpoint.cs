@@ -1,8 +1,9 @@
 ﻿using Asp.Versioning.Conventions;
-using AutoMapper;
 using ShoppingCart.API.Models.ProductRange;
-using ShoppingCart.API.Validation;
-using ShoppingCart.Application.Common.Models.ProductRange;
+using ShoppingCart.Application.Application.Commands.ProductRange.CreateProductRange;
+using ShoppingCart.Application.Application.Commands.ProductRange.DeleteProductRange;
+using ShoppingCart.Application.Application.Commands.ProductRange.UpdateProductRange;
+using ShoppingCart.Application.Application.Queries.ProductRange.GetProductRangeDetails;
 
 namespace ShoppingCart.API.Endpoints
 {
@@ -14,62 +15,59 @@ namespace ShoppingCart.API.Endpoints
               .HasApiVersion(1.0)
               .Build();
 
-            app.MapGet("api/v{version:apiVersion}/productRange/{Id}",
-              async (HttpContext context, Guid Id, IProductRangeRepository repos) =>
-              {
-                  var apiVersion = context.GetRequestedApiVersion();
-                  return await repos.GetProductRangeAsync(Id) is var response
-                   ? Results.Ok(response)
-                   : Results.NotFound();
-              })
-              .WithName("GetProductRangeById")
-              .WithApiVersionSet(versionSet)
-              .MapToApiVersion(1.0)
-              .WithSummary("Get the Product Range by Id")
-              .WithDescription("JSON object containing Product Range information")
-              .WithOpenApi();
+                app.MapGet("api/v{version:apiVersion}/productRange/{Id}",
+                  async (HttpContext context, Guid Id, ISender sender) =>
+                  {
+                      var apiVersion = context.GetRequestedApiVersion();
+                      return await sender.Send(new GerProductRangeQuery() { Id = Id } ) is var response
+                       ? Results.Ok(response)
+                       : Results.NotFound();
+                  })
+                  .WithName("GetProductRangeById")
+                  .WithApiVersionSet(versionSet)
+                  .MapToApiVersion(1.0)
+                  .WithSummary("Get the Product Range by Id")
+                  .WithDescription("JSON object containing Product Range information")
+                  .WithOpenApi();
 
-            app.MapPost("api/v{version:apiVersion}/productRange",
-                async(HttpContext context, CreateProductRangeDto data, IProductRangeRepository repos, 
-                    IMapper mapper) =>
-                {
-                    var apiVersion = context.GetRequestedApiVersion();
-                    var command = mapper.Map<CreateProductRangeCommand>(data);
-                    var id = await repos.CreateProductRangeAsync(command);
-                    await repos.SaveAsync();
-                    return Results.CreatedAtRoute("GetProductRangeById", new { id }); 
-                })
-                .AddEndpointFilter<ValidationFilter<CreateProductRangeDto>>()
-                .WithApiVersionSet(versionSet)
-                .MapToApiVersion(1.0)
-                .WithSummary("Adding an item to the shopping cart")
-                .WithDescription("Create a Product range item")
-                .WithOpenApi();
+                app.MapPost("api/v{version:apiVersion}/productRange",
+                    async(HttpContext context, CreateProductRangeDto data, ISender sender, 
+                        IMapper mapper) =>
+                    {
+                        var apiVersion = context.GetRequestedApiVersion();
+                        var command = mapper.Map<CreateProductRangeCommand>(data);
+                        var id = await sender.Send(command);
+                        return Results.CreatedAtRoute("GetProductRangeById", new { id }); 
+                    })
+                    .AddEndpointFilter<ValidationFilter<CreateProductRangeDto>>()
+                    .WithApiVersionSet(versionSet)
+                    .MapToApiVersion(1.0)
+                    .WithSummary("Adding an item to the shopping cart")
+                    .WithDescription("Create a Product range item")
+                    .WithOpenApi();
 
-            app.MapPut("api/v{version:apiVersion}/productRange/{Id}",
-               async (HttpContext context, Guid Id, UpdateProductRnageDto entity, 
-                IMapper mapper, IProductRangeRepository repos) =>
-               {
-                   var apiVersion = context.GetRequestedApiVersion();
-                   entity.ProductRangeId = Id;
-                   var command = mapper.Map<UpdateProductRangeCommand>(entity);
-                   await repos.UpdateProductRageAsync(command);
-                   await repos.SaveAsync();
-                   return Results.NoContent();
-               })
-               .AddEndpointFilter<ValidationFilter<UpdateProductRnageDto>>()
-               .WithApiVersionSet(versionSet)
-               .MapToApiVersion(1.0)
-               .WithSummary("Update the Product Range")
-               .WithDescription("Update the Product Range object")
-               .WithOpenApi();
+                app.MapPut("api/v{version:apiVersion}/productRange/{Id}",
+                   async (HttpContext context, Guid Id, UpdateProductRnageDto entity, 
+                    IMapper mapper, ISender sender) =>
+                   {
+                       var apiVersion = context.GetRequestedApiVersion();
+                       entity.ProductRangeId = Id;
+                       var command = mapper.Map<UpdateProductRangeCommand>(entity);
+                       await sender.Send(command);
+                       return Results.NoContent();
+                   })
+                   .AddEndpointFilter<ValidationFilter<UpdateProductRnageDto>>()
+                   .WithApiVersionSet(versionSet)
+                   .MapToApiVersion(1.0)
+                   .WithSummary("Update the Product Range")
+                   .WithDescription("Update the Product Range object")
+                   .WithOpenApi();
 
             app.MapDelete("api/v{version:apiVersion}/productRange/{Id}",
-               async (HttpContext context, Guid Id, IProductRangeRepository repos) =>
+               async (HttpContext context, Guid Id, ISender sender) =>
                {
                    var apiVersion = context.GetRequestedApiVersion();
-                   await repos.DeleteProductRageAsync(Id);
-                   await repos.SaveAsync();
+                   await sender.Send(new DeleteProductRangeCommand() { ProductRangeId = Id });
                    return Results.NoContent();
                })
                .WithApiVersionSet(versionSet)

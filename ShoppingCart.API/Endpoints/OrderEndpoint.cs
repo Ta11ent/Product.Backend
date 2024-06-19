@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning.Conventions;
-using AutoMapper;
 using ShoppingCart.API.Models.Order;
-using ShoppingCart.API.Validation;
-using ShoppingCart.Application.Common.Models.Order;
-
+using ShoppingCart.Application.Application.Commands.Order.DeleteOrder;
+using ShoppingCart.Application.Application.Commands.Order.UpdateOrder;
+using ShoppingCart.Application.Application.Queries.Order.GetOrderDetails;
+using ShoppingCart.Application.Queries.Order.GetOrderList;
 
 namespace ShoppingCart.API.Endpoints
 {
@@ -22,9 +22,9 @@ namespace ShoppingCart.API.Endpoints
                 .WithOpenApi();
 
             routeGroup.MapGet("orders/{Id}",
-               async (Guid Id, IOrderReppository repos) =>
+               async (Guid Id, ISender sender) =>
                {
-                   return await repos.GetOrderDetailsAsync(Id) is var response
+                   return await sender.Send(new GetOrderDetailsQuery() { OrderId = Id }) is var response
                     ? Results.Ok(response)
                     : Results.NotFound();
                })
@@ -33,27 +33,22 @@ namespace ShoppingCart.API.Endpoints
                .WithDescription("JSON object containing Order information");
 
             routeGroup.MapGet("orders",
-                async ([AsParameters] OrderListQueryDto request, IMapper mapper, IOrderReppository repos) =>
+                async ([AsParameters] OrderListQueryDto request, IMapper mapper, ISender sender) =>
                {
-                   var query = mapper.Map<OrderListQuery>(request);
-                   return await repos.GetOrderListAsync(query);
+                   var query = mapper.Map<GetOrderListQuery>(request);
+                   return await sender.Send(query);
                })
                .WithSummary("Get the list of Orders")
                .WithDescription("JSON object containing Order information");
 
             routeGroup.MapPut("orders/{Id}",
               async (Guid Id, UpdateOrderDto entity,
-               IMapper mapper, IOrderReppository repos, IRabbitMqProducerService producer, IUserService user) =>
+               IMapper mapper, ISender sender, IRabbitMqProducerService producer, IUserService user) =>
               {
                   entity.OrderId = Id;
                   var command = mapper.Map<UpdateOrderCommand>(entity);
-                  await repos.UpdateOrderAsync(command);
-                  await repos.SaveAsync();
-
-                  var response = await repos.GetOrderDetailsAsync(Id);
-                  ///<summary>
-                  ///Broker message
-                  ///</summary>
+                  await sender.Send(command);
+                  var response = await sender.Send(new GetOrderDetailsQuery() { OrderId = Id });
                   await producer.SendProducerMessage(response.data);
 
                   return Results.NoContent();
@@ -63,10 +58,9 @@ namespace ShoppingCart.API.Endpoints
               .WithDescription("Update the Order object");
 
             routeGroup.MapDelete("orders/{Id}",
-              async (Guid Id, IOrderReppository repos) =>
+              async (Guid Id, ISender sender) =>
               {
-                  await repos.DeleteOrderAsync(Id);
-                  await repos.SaveAsync();
+                  await sender.Send(new DeleteOrderCommand() { OrderId = Id });
                   return Results.NoContent();
               })
               .WithSummary("Delete the Order")

@@ -11,3 +11,6 @@ global using Microsoft.AspNetCore.Mvc;
 global using ShoppingCart.Application.Common.Exceptions;
 global using System.Text.Json;
 global using ShoppingCart.API.Exception;
+global using AutoMapper;
+global using MediatR;
+global using ShoppingCart.API.Validation;

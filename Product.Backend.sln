@@ -73,6 +73,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consumer", "Consumer.Backgr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MqConsumer", "MqConsumer", "{E29C3893-1A2D-41AC-AC92-5E51FB44C2D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingCart.Infrastructure", "ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj", "{40E43E56-CA81-4024-8DF1-A3BC10213C01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,10 @@ Global
 		{566B11C7-BE4C-413B-A964-91CA88C7FDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{566B11C7-BE4C-413B-A964-91CA88C7FDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{566B11C7-BE4C-413B-A964-91CA88C7FDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40E43E56-CA81-4024-8DF1-A3BC10213C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40E43E56-CA81-4024-8DF1-A3BC10213C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40E43E56-CA81-4024-8DF1-A3BC10213C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40E43E56-CA81-4024-8DF1-A3BC10213C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +190,7 @@ Global
 		{4B177DB0-1037-4558-B39A-29CD9446FFB7} = {90DFDF09-862D-40D5-99A5-841419232449}
 		{566B11C7-BE4C-413B-A964-91CA88C7FDCD} = {E29C3893-1A2D-41AC-AC92-5E51FB44C2D7}
 		{E29C3893-1A2D-41AC-AC92-5E51FB44C2D7} = {9275D4CB-D97B-4281-9BCA-9B50130BA625}
+		{40E43E56-CA81-4024-8DF1-A3BC10213C01} = {94971BF3-1B2F-47E7-B6E4-EFF04A841D42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25D1D087-E7BF-4B90-B42F-0D1B82CE6C4B}

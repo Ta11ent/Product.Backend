@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using ShoppingCart.Application.Common.Models.Order;
+﻿using ShoppingCart.Application.Queries.Order.GetOrderList;
 
 namespace ShoppingCart.API.Models.Order
 {
-    public class OrderListQueryDto : IMapWith<OrderListQuery>
+    public class OrderListQueryDto : IMapWith<GetOrderListQuery>
     {
         public int? Page { get; set; }
         public int? PageSize { get; set;}
@@ -14,7 +13,7 @@ namespace ShoppingCart.API.Models.Order
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<OrderListQueryDto, OrderListQuery>()
+            profile.CreateMap<OrderListQueryDto, GetOrderListQuery>()
                 .ForMember(x => x.Page,
                     opt => opt.MapFrom(y => y.Page))
                 .ForMember(x => x.PageSize,

@@ -2,11 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using ProductCatalog.Application.Common.Exceptions;
 using ProductCatalog.Application.Common.Interfaces;
-using ProductCatalog.Domain;
-using System.Numerics;
 
 namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetails
 {
