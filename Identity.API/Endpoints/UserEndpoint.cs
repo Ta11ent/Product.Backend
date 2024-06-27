@@ -19,15 +19,13 @@ namespace Identity.API.Endpoints
                 .WithApiVersionSet(versionSet)
                 .MapToApiVersion(1.0)
                 .WithOpenApi();
-
+            
             groupBuilder.MapGet("users/{Id}",
                 async (string Id, IUserService userService) =>
                 {
-                    var result = await userService.GetUserByIdAsync(Id);
-
-                    return !result.isSuccess && result.errors.Any(x => x.Code == "404")
-                        ? Results.NotFound(result)
-                        : Results.Ok(result);
+                    return await userService.GetUserByIdAsync(Id) is var result
+                        ? Results.Ok(result)
+                        : Results.NotFound();
                 })
                 .WithName("GetUserById")
                 .WithSummary("Get the User by Id")
@@ -36,7 +34,9 @@ namespace Identity.API.Endpoints
             groupBuilder.MapGet("users",
                async (IUserService userService) =>
                {
-                   return await userService.GetUsersAsync();
+                   return await userService.GetUsersAsync() is var result
+                    ? Results.Ok(result)
+                    : Results.BadRequest();
                })
                .WithSummary("Get Users")
                .WithDescription("JSON object containing Users information");

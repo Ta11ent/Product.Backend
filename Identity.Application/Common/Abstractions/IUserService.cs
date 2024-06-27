@@ -14,11 +14,6 @@ namespace Identity.Application.Common.Abstractions
         Task<UsersResponse> GetUsersAsync();
         Task<UserResponse> GetUserByIdAsync(string id);
         Task<UserResponse> GetUserByNameAsync(string name);
-        Task<bool> CheckPasswordAsync(CheckPasswordCommand command);
-        Task SetUserTokenAsync(string userId, string loginProvider, string tokenName, string? tokenValue, DateTime expDate);
-        Task<UserTokenResponse> GetUserTokenAsync(string userId, string loginProvider, string tokenName);
-        Task<UserTokenResponse> GetUserTokenAsync(string token);
-        Task<bool> RemoveUserTokenAsync(string id);
-        
+        Task<bool> CheckPasswordAsync(CheckPasswordCommand command); 
     }
 }

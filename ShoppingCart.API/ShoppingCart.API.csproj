@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShoppingCart.Application\ShoppingCart.Application.csproj" />
+    <ProjectReference Include="..\ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj" />
     <ProjectReference Include="..\ShoppingCatalog.Persistence\ShoppingCart.Persistence.csproj" />
   </ItemGroup>
 

@@ -63,18 +63,18 @@ namespace ShoppingCart.API.Endpoints
                    .WithDescription("Update the Product Range object")
                    .WithOpenApi();
 
-            app.MapDelete("api/v{version:apiVersion}/productRange/{Id}",
-               async (HttpContext context, Guid Id, ISender sender) =>
-               {
-                   var apiVersion = context.GetRequestedApiVersion();
-                   await sender.Send(new DeleteProductRangeCommand() { ProductRangeId = Id });
-                   return Results.NoContent();
-               })
-               .WithApiVersionSet(versionSet)
-               .MapToApiVersion(1.0)
-               .WithSummary("Delete the Product Range")
-               .WithDescription("Delete the Product Range object")
-               .WithOpenApi();
+                app.MapDelete("api/v{version:apiVersion}/productRange/{Id}",
+                   async (HttpContext context, Guid Id, ISender sender) =>
+                   {
+                       var apiVersion = context.GetRequestedApiVersion();
+                       await sender.Send(new DeleteProductRangeCommand() { ProductRangeId = Id });
+                       return Results.NoContent();
+                   })
+                   .WithApiVersionSet(versionSet)
+                   .MapToApiVersion(1.0)
+                   .WithSummary("Delete the Product Range")
+                   .WithDescription("Delete the Product Range object")
+                   .WithOpenApi();
         }
     }
 }

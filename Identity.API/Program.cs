@@ -8,6 +8,7 @@ builder.Services.AddAutoMapper(config =>
 });
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure();
 builder.Services.AddJwtAuthenticationConfiguration();
 builder.Services.AddAuthorizationConfiguration();
 

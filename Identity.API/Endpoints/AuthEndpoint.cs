@@ -17,34 +17,35 @@ namespace Identity.API.Endpoints
                 .HasApiVersion(1.0)
                 .Build();
 
-            RouteGroupBuilder groupBuilder = app.MapGroup("api/v{version:apiVersion}").WithApiVersionSet(versionSet);
+            RouteGroupBuilder groupBuilder =
+                app.MapGroup("api/v{version:apiVersion}")
+                .WithApiVersionSet(versionSet)
+                .MapToApiVersion(1.0)
+                .WithOpenApi();
 
             groupBuilder.MapPost("Login",
-                async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]LoginDto entity) =>
+                async (HttpContext context, IAccessService service, IMapper mapper, [FromBody] LoginDto entity) =>
                 {
                     var command = mapper.Map<LoginCommand>(entity);
                     var response = await service.LoginUserAsync(command);
 
-                    if(response.isSuccess)
+                    if (response.isSuccess)
                         new Cookie(context).SetRefreshToken(response.data.RefreshToken, response.data.RefreshTokenExp);
 
                     return response.isSuccess
                          ? Results.Ok(response)
-                         : !response.isSuccess && response.errors.Any(x => x.Code == "404") 
-                             ? Results.NotFound()
-                             : Results.Unauthorized();
+                         : Results.Unauthorized();
                 })
                 .AddEndpointFilter<ValidationFilter<LoginDto>>()
-                .MapToApiVersion(1.0)
                 .WithSummary("Login")
-                .WithDescription("JSON object")
-                .WithOpenApi();
+                .WithDescription("JSON object");
 
-            groupBuilder.MapPost("RefreshToken", 
-                async (HttpContext context, IAccessService service, IMapper mapper, [FromBody]RefreshTokenDto entity) =>
+            groupBuilder.MapPost("RefreshToken",
+                async (HttpContext context, IAccessService service, IMapper mapper, [FromBody] RefreshTokenDto entity) =>
                 {
                     if (entity.RefreshToken is null && !context.Request.Cookies.ContainsKey("refreshToken"))
                         return Results.BadRequest();
+
                     entity.RefreshToken = entity.RefreshToken ?? context.Request.Cookies["refreshToken"];
 
                     var command = mapper.Map<RefreshCommand>(entity);
@@ -55,32 +56,26 @@ namespace Identity.API.Endpoints
 
                     return response.isSuccess
                         ? Results.Ok(response)
-                        : !response.isSuccess && response.errors.Any(x => x.Code == "403")
-                            ? Results.Forbid()
-                            : Results.Unauthorized();
+                        : Results.Unauthorized();
                 })
                 .AddEndpointFilter<ValidationFilter<RefreshTokenDto>>()
-                .MapToApiVersion(1.0)
                 .WithSummary("Refresh Token")
-                .WithDescription("JSON object")
-                .WithOpenApi();
+                .WithDescription("JSON object");
 
             groupBuilder.MapPost("Logout",
                async (HttpContext context, IAccessService service, IMapper mapper, string? refreshToken) =>
                {
                    if (refreshToken is null && !context.Request.Cookies.ContainsKey("refreshToken"))
                        return Results.BadRequest();
+
                    refreshToken = refreshToken ?? context.Request.Cookies["refreshToken"];
 
                    return await service.LogoutUserAsync(refreshToken!) is var response
                     ? Results.Ok()
                     : Results.BadRequest();
                })
-               .MapToApiVersion(1.0)
                .WithSummary("Logout")
-               .WithOpenApi();
-
-
+               .WithDescription("JSON object");
         }
     }
 }

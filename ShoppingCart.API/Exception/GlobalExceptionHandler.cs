@@ -22,8 +22,6 @@
 
         private ProblemDetails CreateProblemDetails(System.Exception exception)
         {
-            const string title = "One or more errors occurs";
-            const string type = "http://www.rfc-editor.org/info/rfc7231#section-6.6.1";
             var code = StatusCodes.Status500InternalServerError;
             var result = string.Empty;
 
@@ -42,8 +40,8 @@
 
             return new ProblemDetails()
             {
-                Type = type,
-                Title = title,
+                Type = "http://www.rfc-editor.org/info/rfc7231#section-6.6.1",
+                Title = "One or more errors occurs",
                 Status = code,
                 Extensions = new Dictionary<string, object?>
                 {

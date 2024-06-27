@@ -6,7 +6,7 @@ namespace Identity.Application.Common.Response
     {
         T data { get; set; }
         bool isSuccess { get; set; }
-        IEnumerable<IdentityError> errors { get; set; }
+        //IEnumerable<IdentityError> errors { get; set; }
 
     }
 }

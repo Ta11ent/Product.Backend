@@ -1,9 +1,4 @@
-﻿using Identity.Application.Application;
-using Identity.Application.Common.Abstractions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using JwtAuthenticationManager.Abstractions;
-using JwtAuthenticationManager.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Identity.Application
 {
@@ -11,10 +6,6 @@ namespace Identity.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITokenService, JwtTokenService>();
-            services.AddScoped<IAccessService, AccessService>();
-
             return services;
         }
     }

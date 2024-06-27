@@ -5,6 +5,7 @@ namespace Identity.Application.Common.Models.User.Get
 {
     public class UserTokenResponse : Response<UserTokenDto>
     {
-        public UserTokenResponse(UserTokenDto data, IEnumerable<IdentityError> errors = null!) : base(data, errors) { }
+        public UserTokenResponse(UserTokenDto data) 
+            : base(data) { }
     }
 }
