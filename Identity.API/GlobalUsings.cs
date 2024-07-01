@@ -11,3 +11,4 @@ global using FluentValidation;
 global using Asp.Versioning;
 global using JwtAuthenticationManager.Configuration;
 global using Identity.Infrastructure;
+global using Identity.API.Exceptions;

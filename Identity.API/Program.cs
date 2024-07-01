@@ -9,6 +9,8 @@ builder.Services.AddAutoMapper(config =>
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.AddJwtAuthenticationConfiguration();
 builder.Services.AddAuthorizationConfiguration();
 
@@ -33,6 +35,7 @@ AuthEndpoint.Map(app);
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.Run();
