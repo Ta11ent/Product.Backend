@@ -19,7 +19,7 @@ namespace MessageService.Application
         public void SendMessage(string obj)
         {
             var data = JsonConvert.DeserializeObject<OrderDetailsDto>(obj);
-            var message = _message.CreateMessage(data);
+            var message = _message.CreateMessage(data!);
             CancellationTokenSource cancellationToken = new();
             Send(message, cancellationToken.Token);
 

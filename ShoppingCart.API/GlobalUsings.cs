@@ -14,3 +14,4 @@ global using ShoppingCart.API.Exception;
 global using AutoMapper;
 global using MediatR;
 global using ShoppingCart.API.Validation;
+global using ShoppingCart.Infrastructure;

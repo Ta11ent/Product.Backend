@@ -1,7 +1,7 @@
-﻿global using RabbitMQ.Client;
-global using Consumer.Background.Models;
+﻿global using Consumer.Config;
+global using Consumer.Consumers;
+global using MassTransit;
 global using Microsoft.Extensions.Options;
-global using RabbitMQ.Client.Events;
-global using System.Text;
-global using Consumer.Background.Consumer;
+global using Newtonsoft.Json;
+global using SharedModels;
 global using MessageService;

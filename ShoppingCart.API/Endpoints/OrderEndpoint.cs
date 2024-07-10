@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning.Conventions;
+using MassTransit;
 using ShoppingCart.API.Models.Order;
 using ShoppingCart.Application.Application.Commands.Order.DeleteOrder;
 using ShoppingCart.Application.Application.Commands.Order.UpdateOrder;
@@ -43,13 +44,14 @@ namespace ShoppingCart.API.Endpoints
 
             routeGroup.MapPut("orders/{Id}",
               async (Guid Id, UpdateOrderDto entity,
-               IMapper mapper, ISender sender, IRabbitMqProducerService producer, IUserService user) =>
+               IMapper mapper, ISender sender, IUserService user, IPublishEndpoint publishEndpoint) => //IRabbitMqProducerService producer
               {
                   entity.OrderId = Id;
                   var command = mapper.Map<UpdateOrderCommand>(entity);
                   await sender.Send(command);
                   var response = await sender.Send(new GetOrderDetailsQuery() { OrderId = Id });
-                  await producer.SendProducerMessage(response.data);
+                  var order = mapper.Map<OrderPaidDto>(response.data);
+                  await publishEndpoint.Publish(order);
 
                   return Results.NoContent();
               })
