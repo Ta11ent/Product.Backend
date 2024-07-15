@@ -9,12 +9,12 @@ The backend part of the online store. The REST Api is an application implemented
 
 # Packages
 - MediatR
-- Entity Framework Core
+- EntityFrameworkCore
 - AutoMapper
 - Fluent Validation
 - Ocelot
 - Swashbuckle
-- RabbitMQ.Client
+- MassTransit.RabbitMQ
 - MailKit
 - AspNetCore.Authentication
 - JwtBearer
