@@ -2,27 +2,27 @@
 using MessageService.Models.Configuration;
 using MessageService.Models.Context;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mail;
 
-namespace MessageService.Application
+namespace MessageService.Application.Email
 {
-    public class Sender: ISender
+    public class SendEmail : ISender<EmailMessageData>
     {
         private readonly EmailConfig _config;
-        private readonly IMessage<MailMessage> _message;
-        public Sender(IOptions<EmailConfig> config, IMessage<MailMessage> messgae) {
+        private readonly IMessage<EmailMessageData, MailMessage> _message;
+        public SendEmail(
+            IOptions<EmailConfig> config,
+            IMessage<EmailMessageData, MailMessage> messgae)
+        {
             _config = config.Value ?? throw new ArgumentNullException(nameof(config));
             _message = messgae;
         }
-        public void SendMessage(string obj)
+        public void SendMessage(EmailMessageData data)
         {
-            var data = JsonConvert.DeserializeObject<OrderDetailsDto>(obj);
             var message = _message.CreateMessage(data!);
             CancellationTokenSource cancellationToken = new();
             Send(message, cancellationToken.Token);
-
         }
         private void Send(MailMessage message, CancellationToken cancellationToken)
         {

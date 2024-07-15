@@ -25,7 +25,7 @@ builder.Services.AddMassTransit(config =>
     });
 });
 
-builder.Services.AddSenderService();
+builder.Services.AddSenderEmailTamplate();
 
 var app = builder.Build();
 

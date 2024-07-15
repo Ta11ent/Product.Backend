@@ -1,9 +1,9 @@
-﻿using MessageService.Models.Context;
-
-namespace MessageService.Abstractions
+﻿namespace MessageService.Abstractions
 {
-    public interface IMessage<T>
+    public interface IMessage<T, O> 
+        where T : class
+        where O : class
     {
-        T CreateMessage(OrderDetailsDto data);
+        O CreateMessage(T data);
     }
 }

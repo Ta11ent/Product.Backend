@@ -1,7 +1,7 @@
 ﻿namespace MessageService.Abstractions
 {
-    public interface ISender
+    public interface ISender<T> where T : class
     {
-        void SendMessage(string obj);
+        void SendMessage(T data);
     }
 }

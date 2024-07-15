@@ -16,3 +16,22 @@ namespace Consumer.Consumers
         }
     }
 }
+
+/*
+ *  //  _emailtemplatePath = @"..\MessageService\Templates\email.html";
+ *  
+ *  
+ *       //StringBuilder mailText = new();
+            //using (var str = new StreamReader(_emailtemplatePath))
+            //{
+            //    mailText.Append(str.ReadToEnd());
+            //    str.Close();
+            //}
+
+            //mailText = mailText
+            //    .Replace("[User]", data.User.UserName)
+            //    .Replace("[Items]", string.Join("", data.ProductRanges.Select(x => $"<li>{x.Name}</li>")))
+            //    .Replace("[Price]", data.Price.ToString());
+
+*/
+
