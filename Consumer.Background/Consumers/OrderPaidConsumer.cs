@@ -1,6 +1,4 @@
-﻿using MessageService.Abstractions;
-
-namespace Consumer.Consumers
+﻿namespace Consumer.Consumers
 {
     public sealed class OrderPaidConsumer : IConsumer<OrderDetails>
     {
