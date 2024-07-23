@@ -44,7 +44,7 @@ namespace ShoppingCart.API.Endpoints
 
             routeGroup.MapPut("orders/{Id}",
               async (Guid Id, UpdateOrderDto entity,
-               IMapper mapper, ISender sender, IUserService user, IPublishEndpoint publishEndpoint) => //IRabbitMqProducerService producer
+               IMapper mapper, ISender sender, IUserService user, IPublishEndpoint publishEndpoint) =>
               {
                   entity.OrderId = Id;
                   var command = mapper.Map<UpdateOrderCommand>(entity);

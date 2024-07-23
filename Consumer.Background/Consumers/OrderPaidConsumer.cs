@@ -1,35 +1,43 @@
-﻿namespace Consumer.Consumers
+﻿using MessageService.Abstractions;
+using Newtonsoft.Json;
+using System.Text;
+
+namespace Consumer.Consumers
 {
     public sealed class OrderPaidConsumer : IConsumer<OrderDetails>
     {
-        private readonly ILogger<OrderPaidConsumer> _logger;
-        public OrderPaidConsumer(ILogger<OrderPaidConsumer> logger) => _logger = logger;
+        private readonly ILogger<OrderPaidConsumer> logger;
+        private readonly IEmailSender emailSender;
+        private readonly IEmailBuilder emailBuilder;
+        public OrderPaidConsumer(
+            ILogger<OrderPaidConsumer> logger,
+            IEmailSender emailSender,
+            IEmailBuilder emailBuilder)
+        {
+            this.logger = logger;
+            this.emailSender = emailSender;
+            this.emailBuilder = emailBuilder;
+        }
+           
         public async Task Consume(ConsumeContext<OrderDetails> context)
         {
             var jsonMessage = JsonConvert.SerializeObject(context.Message);
-            _logger.LogInformation(jsonMessage);
+            logger.LogInformation(jsonMessage);
 
+            StringBuilder products = new();
+            foreach(var item in context.Message.ProductRanges)
+                products.Append($"{item.Name}, Count: {item.Count}\n");
 
-            //Console.WriteLine($"OrderCreated message: {jsonMessage}");
+            var email = emailBuilder
+                 .AddTo(context.Message.Email)
+                 .AddSubject("Information about the paid bill")
+                 .AddBody($"{context.Message.UserName}, Congratulations on your purchase! \n " +
+                    $"{products.ToString()} \n" +
+                    $"Total price: {context.Message.Price}")
+                 .Build();
+
+            emailSender.Send(email);
         }
     }
 }
-
-/*
- *  //  _emailtemplatePath = @"..\MessageService\Templates\email.html";
- *  
- *  
- *       //StringBuilder mailText = new();
-            //using (var str = new StreamReader(_emailtemplatePath))
-            //{
-            //    mailText.Append(str.ReadToEnd());
-            //    str.Close();
-            //}
-
-            //mailText = mailText
-            //    .Replace("[User]", data.User.UserName)
-            //    .Replace("[Items]", string.Join("", data.ProductRanges.Select(x => $"<li>{x.Name}</li>")))
-            //    .Replace("[Price]", data.Price.ToString());
-
-*/
 

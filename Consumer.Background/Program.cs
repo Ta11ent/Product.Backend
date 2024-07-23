@@ -1,8 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<RabbitMqConfig>(builder.Configuration.GetSection(nameof(RabbitMqConfig)));
-builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqConfig>>().Value);
-
 builder.Services.AddMassTransit(config =>
 {
     config.SetKebabCaseEndpointNameFormatter();
@@ -11,21 +8,28 @@ builder.Services.AddMassTransit(config =>
 
     config.UsingRabbitMq((context, cfg) =>
     {
-        var mqSettings = context.GetRequiredService<RabbitMqConfig>();
+       var mqSettings = builder.Configuration.GetSection(nameof(RabbitMqConfig)).Get<RabbitMqConfig>();
 
         cfg.Host(new Uri(mqSettings.Host), c =>
         {
             c.Username(mqSettings.Username);
             c.Password(mqSettings.Password);
         });
-
-        //cfg.ClearSerialization();
-        //cfg.UseRawJsonSerializer();
         cfg.ConfigureEndpoints(context);
     });
 });
 
-builder.Services.AddSenderEmailTamplate();
+builder.Services.AddEmailSender(config =>
+{
+    var emailSettings = builder.Configuration.GetSection(nameof(EmailConfig)).Get<EmailConfig>();
+
+    config.From = emailSettings.From;
+    config.SmtpServer = emailSettings.SmtpServer;
+    config.Port = emailSettings.Port;
+    config.UserName = emailSettings.Username;
+    config.Password = emailSettings.Password;
+})
+.AddEmailBuilder();
 
 var app = builder.Build();
 
