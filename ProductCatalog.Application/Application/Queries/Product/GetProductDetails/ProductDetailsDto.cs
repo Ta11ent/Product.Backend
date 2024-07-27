@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ProductCatalog.Application.Application.Queries.Category.GetCategoryDetails;
 using ProductCatalog.Application.Common.Mapping;
 
 namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetails
@@ -7,11 +6,15 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
     public class ProductDetailsDto : IMapWith<Domain.Product>
     {
         public Guid ProductId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Manufacturer {  get; set; } = string.Empty;
         public bool Available { get; set; }
-        public decimal Price { get; set; } 
-        public CategoryDetailsDto CategoryDetails { get; set; }
+        public decimal Price { get; set; }
+        public string Ccy { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string SubCategory { get; set; } = string.Empty;
+  
         public void Mapping (Profile profile)
         {
             profile.CreateMap<Domain.Product, ProductDetailsDto>()
@@ -21,12 +24,22 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
                     opt => opt.MapFrom(y => y.Name))
                 .ForMember(x => x.Description,
                     opt => opt.MapFrom(y => y.Description))
-                .ForMember(x => x.CategoryDetails,
-                    opt => opt.MapFrom(y => y.Category))
                 .ForMember(x => x.Available,
                     opt => opt.MapFrom(y => y.Available))
+                .ForMember(x => x.Ccy,
+                    opt => opt.MapFrom(y => y.Costs
+                        .OrderByDescending(d => d.DatePrice)
+                        .FirstOrDefault()!.Currency.Code))
+                .ForMember(x => x.SubCategory,
+                    opt => opt.MapFrom(y => y.SubCategory.Name))
+                .ForMember(x => x.Category,
+                    opt => opt.MapFrom(x => x.SubCategory.Category.Name))
+                .ForMember(x => x.Manufacturer,
+                    opt => opt.MapFrom(y => y.Manufacturer.Name))
                 .ForMember(x => x.Price,
-                    opt => opt.MapFrom(y => y.Costs.First().Price));
+                    opt => opt.MapFrom(y => y.Costs
+                    .OrderByDescending(d => d.DatePrice)
+                    .FirstOrDefault()!.Price));
 
         }
     }

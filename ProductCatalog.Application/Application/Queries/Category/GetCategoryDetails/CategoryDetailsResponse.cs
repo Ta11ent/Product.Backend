@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using ProductCatalog.Application.Common.Mapping;
-using ProductCatalog.Application.Common.Response;
+﻿using ProductCatalog.Application.Common.Response;
 
 namespace ProductCatalog.Application.Application.Queries.Category.GetCategoryDetails
 {

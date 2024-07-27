@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Application.Common.Exceptions;
 using ProductCatalog.Application.Common.Interfaces;
 
@@ -14,8 +15,10 @@ namespace ProductCatalog.Application.Application.Commands.Product.DeleteProduct
         {
             var product = await
                 _dbContext.Products
-                .FindAsync(new object[] { request.ProductId }, cancellationToken);
-            
+                 .FirstOrDefaultAsync(x => x.SubCategory.CategoryId == request.CategoryId
+                    && x.SubCategoryId == request.SubCategoryId
+                    && x.ProductId == request.ProductId, cancellationToken);
+
             if (product == null) 
                 throw new NotFoundExceptions(nameof(product), request.ProductId);
 

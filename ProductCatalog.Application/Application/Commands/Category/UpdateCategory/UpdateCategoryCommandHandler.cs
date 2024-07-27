@@ -10,7 +10,6 @@ namespace ProductCatalog.Application.Application.Commands.Category.UpdateCategor
         private readonly IProductDbContext _dbContext;
         public UpdateCategoryCommandHandler(IProductDbContext dbContext) =>
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-
         public async Task Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             var category = await 

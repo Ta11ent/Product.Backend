@@ -6,10 +6,11 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
     public class ProductListDto : IMapWith<Domain.Product>
     {
         public Guid ProductId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Manufacturer { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        public bool Available { get; set; }
+        public string Ccy { get; set; } = string.Empty;
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Product, ProductListDto>()
@@ -19,10 +20,16 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
                     opt => opt.MapFrom(y => y.Name))
                 .ForMember(x => x.Description,
                     opt => opt.MapFrom(y => y.Description))
-                .ForMember(x => x.Available,
-                    opt => opt.MapFrom(y => y.Available))
+                .ForMember(x => x.Manufacturer,
+                    opt => opt.MapFrom(y => y.Manufacturer.Name))
                 .ForMember(x => x.Price,
-                    opt => opt.MapFrom(y => y.Costs.First().Price));
+                    opt => opt.MapFrom(y => y.Costs
+                        .OrderByDescending(d => d.DatePrice)
+                        .FirstOrDefault()!.Price))
+                .ForMember(x => x.Ccy,
+                        opt => opt.MapFrom(y => y.Costs
+                            .OrderByDescending(d => d.DatePrice)
+                            .FirstOrDefault()!.Currency.Code));
         }
     }
 }

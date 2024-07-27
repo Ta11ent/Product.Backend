@@ -26,8 +26,10 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
                 _dbContext.Products
                 .Include(x => x.Costs)
                 .Where(predicate
-                    .And(x => x.CategoryId == request.CategoryId,
+                    .And(x => x.SubCategory.CategoryId == request.CategoryId,
                         request.CategoryId)
+                    .And(x => x.SubCategoryId == request.SubCategoryId,
+                        request.SubCategoryId)
                     .And(x => x.Available == request.Available,
                         request.Available)
                     .And(x => request.ProductIds!.Contains(x.ProductId),

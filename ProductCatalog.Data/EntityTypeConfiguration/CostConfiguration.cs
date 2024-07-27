@@ -4,7 +4,7 @@ using ProductCatalog.Domain;
 
 namespace ProductCatalog.Persistence.EntityTypeConfiguration
 {
-    public class CostConfiguration : IEntityTypeConfiguration<Cost>
+    internal class CostConfiguration : IEntityTypeConfiguration<Cost>
     {
         public void Configure(EntityTypeBuilder<Cost> builder)
         {

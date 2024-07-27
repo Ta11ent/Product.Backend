@@ -1,22 +1,29 @@
-﻿using ProductCatalog.Application.Application.Commands.Product.CreateProduct;
+﻿using ProductCatalog.API.Models.Product;
+using ProductCatalog.Application.Application.Commands.Product.CreateProduct;
 
 namespace ProductCatalog.cs.Models.Product
 {
-    public class CreateProductDto : IMapWith<CreateProductCommand>
+    public class CreateProductDto : ProductPath, IMapWith<CreateProductCommand>
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Guid CategoryId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
+        public Guid Currency { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateProductDto, CreateProductCommand>()
+                .ForMember(x => x.CategoryId,
+                    opt => opt.MapFrom(y => y.CategoryId))
+                .ForMember(x => x.SubCategoryId,
+                    opt => opt.MapFrom(y => y.SubCategoryId))
                 .ForMember(x => x.Name,
                     opt => opt.MapFrom(y => y.Name))
                 .ForMember(x => x.Description,
                     opt => opt.MapFrom(y => y.Description))
-                .ForMember(x => x.CategoryId,
-                    opt => opt.MapFrom(y => y.CategoryId));
+                .ForMember(x => x.Price,
+                    opt => opt.MapFrom(y => y.Price))
+                .ForMember(x => x.CurrencyId,
+                    opt => opt.MapFrom(y => y.Currency));
         }
     }
 }

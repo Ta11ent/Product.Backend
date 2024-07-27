@@ -6,8 +6,8 @@ namespace ProductCatalog.Application.Application.Queries.Category.GetCategoryDet
     public class CategoryDetailsDto : IMapWith<Domain.Category>
     {
         public Guid CategoryId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Category, CategoryDetailsDto>()

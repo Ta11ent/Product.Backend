@@ -22,9 +22,13 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         {
             var product = await
                 _dbContext.Products
-                .Include(x => x.Category)
+                .Include(x => x.SubCategory)
+                    .ThenInclude(x => x.Category)
                 .Include(x => x.Costs) // need to add logic
-                .Where(x => x.ProductId == request.ProductId)
+                .Include(x => x.Manufacturer)
+                .Where(x => x.SubCategory.CategoryId == request.CategoryId 
+                    && x.SubCategoryId == request.SubCategoryId
+                    && x.ProductId == request.ProductId)
                 .ProjectTo<ProductDetailsDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);

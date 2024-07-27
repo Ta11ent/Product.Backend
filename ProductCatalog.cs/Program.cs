@@ -1,3 +1,5 @@
+using ProductCatalog.Domain;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(config =>
@@ -43,6 +45,8 @@ if (app.Environment.IsDevelopment())
 CategoryEndpoint.Map(app);
 ProductEndpoint.Map(app);
 CostEndpoint.Map(app);
+CurrecnyEndpoint.Map(app);
+ManufacturerEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 
