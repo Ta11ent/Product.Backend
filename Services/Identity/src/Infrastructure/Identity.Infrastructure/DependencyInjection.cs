@@ -1,5 +1,6 @@
 ﻿using Identity.Application.Common.Abstractions;
 using Identity.Infrastructure.Services;
+using Identity.src.Core.Application.Common.Abstractions;
 using JwtAuthenticationManager.Abstractions;
 using JwtAuthenticationManager.Services;
 using Microsoft.Extensions.DependencyInjection;

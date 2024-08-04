@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
-    <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
-    <ProjectReference Include="..\Identity.Persistence\Identity.Persistence.csproj" />
-    <ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
+    <ProjectReference Include="..\..\..\..\..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
+    <ProjectReference Include="..\..\Core\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Identity.Infrastructure\Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Identity.Persistence\Identity.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

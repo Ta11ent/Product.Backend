@@ -1,16 +1,14 @@
 ﻿using Identity.Application.Common.Abstractions;
-using Identity.Application.Common.Exceptions;
 using Identity.Application.Common.Models.Access;
 using Identity.Application.Common.Models.Access.Login;
 using Identity.Application.Common.Models.User.Get;
 using Identity.Domain;
+using Identity.src.Core.Application.Common.Abstractions;
 using JwtAuthenticationManager.Abstractions;
-using JwtAuthenticationManager.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Security;
 using System.Security.Claims;
-using System.Security.Permissions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace Identity.Infrastructure.Services
 {

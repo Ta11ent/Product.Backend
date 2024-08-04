@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
     <ProjectReference Include="..\Identity.Model\Identity.Domain.csproj" />
-    <ProjectReference Include="..\JwtAuthenticationManager\JwtAuthenticationManager.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using Identity.Application.Common.Models.Access;
 using Identity.Application.Common.Models.Access.Login;
 
-namespace Identity.Application.Common.Abstractions
+namespace Identity.src.Core.Application.Common.Abstractions
 {
     public interface IAccessService
     {
