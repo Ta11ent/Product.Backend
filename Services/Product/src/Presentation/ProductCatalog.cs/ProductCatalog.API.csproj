@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductCatalog.Application\ProductCatalog.Application.csproj" />
-    <ProjectReference Include="..\ProductCatalog.Data\ProductCatalog.Persistence.csproj" />
+    <ProjectReference Include="..\..\Core\ProductCatalog.Application\ProductCatalog.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ProductCatalog.Data\ProductCatalog.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

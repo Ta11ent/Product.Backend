@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductCatalog.Application\ProductCatalog.Application.csproj" />
-    <ProjectReference Include="..\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\ProductCatalog.Application\ProductCatalog.Application.csproj" />
+    <ProjectReference Include="..\..\Core\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>
