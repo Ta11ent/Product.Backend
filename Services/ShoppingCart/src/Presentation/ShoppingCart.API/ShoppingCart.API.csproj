@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />
-    <ProjectReference Include="..\ShoppingCart.Application\ShoppingCart.Application.csproj" />
-    <ProjectReference Include="..\ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj" />
-    <ProjectReference Include="..\ShoppingCatalog.Persistence\ShoppingCart.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\..\SharedModels\SharedModels.csproj" />
+    <ProjectReference Include="..\..\Core\ShoppingCart.Application\ShoppingCart.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ShoppingCart.Infrastructure\ShoppingCart.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ShoppingCatalog.Persistence\ShoppingCart.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

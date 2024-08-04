@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChoppingCart.Domain\ShoppingCart.Domain.csproj" />
-    <ProjectReference Include="..\ShoppingCart.Application\ShoppingCart.Application.csproj" />
+    <ProjectReference Include="..\..\Core\ChoppingCart.Domain\ShoppingCart.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\ShoppingCart.Application\ShoppingCart.Application.csproj" />
   </ItemGroup>
 
 </Project>
