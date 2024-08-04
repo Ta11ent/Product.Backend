@@ -12,7 +12,7 @@ using ProductCatalog.Data;
 namespace ProductCatalog.Persistence.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20240725210755_Initial")]
+    [Migration("20240731205827_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace ProductCatalog.Persistence.Migrations
 
             modelBuilder.Entity("ProductCatalog.Domain.Cost", b =>
                 {
-                    b.Property<Guid>("PriceId")
+                    b.Property<Guid>("CostId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -67,17 +67,17 @@ namespace ProductCatalog.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("ProductSaleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PriceId");
+                    b.HasKey("CostId");
+
+                    b.HasIndex("CostId")
+                        .IsUnique();
 
                     b.HasIndex("CurrencyId");
 
-                    b.HasIndex("PriceId")
-                        .IsUnique();
-
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductSaleId");
 
                     b.ToTable("Costs");
                 });
@@ -142,9 +142,6 @@ namespace ProductCatalog.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Available")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -158,9 +155,6 @@ namespace ProductCatalog.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("SubCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("ManufacturerId");
@@ -171,9 +165,61 @@ namespace ProductCatalog.Persistence.Migrations
                     b.HasIndex("ProductId")
                         .IsUnique();
 
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.ProductSale", b =>
+                {
+                    b.Property<Guid>("ProductSaleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Available")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SubCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductSaleId");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.HasIndex("ProductSaleId")
+                        .IsUnique();
+
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("ProductSale");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.ROE", b =>
+                {
+                    b.Property<Guid>("ROEId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CurrecnyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Rate")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)");
+
+                    b.HasKey("ROEId");
+
+                    b.HasIndex("CurrecnyId");
+
+                    b.HasIndex("ROEId")
+                        .IsUnique();
+
+                    b.ToTable("ROE");
                 });
 
             modelBuilder.Entity("ProductCatalog.Domain.SubCategory", b =>
@@ -211,20 +257,20 @@ namespace ProductCatalog.Persistence.Migrations
             modelBuilder.Entity("ProductCatalog.Domain.Cost", b =>
                 {
                     b.HasOne("ProductCatalog.Domain.Currency", "Currency")
-                        .WithMany("Costs")
+                        .WithMany()
                         .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProductCatalog.Domain.Product", "Product")
+                    b.HasOne("ProductCatalog.Domain.ProductSale", "ProductSale")
                         .WithMany("Costs")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductSaleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Currency");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductSale");
                 });
 
             modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
@@ -235,15 +281,37 @@ namespace ProductCatalog.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Manufacturer");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.ProductSale", b =>
+                {
+                    b.HasOne("ProductCatalog.Domain.Product", "Product")
+                        .WithOne("ProductSale")
+                        .HasForeignKey("ProductCatalog.Domain.ProductSale", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProductCatalog.Domain.SubCategory", "SubCategory")
-                        .WithMany("Products")
+                        .WithMany("ProductsForSale")
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Manufacturer");
+                    b.Navigation("Product");
 
                     b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.ROE", b =>
+                {
+                    b.HasOne("ProductCatalog.Domain.Currency", "Currency")
+                        .WithMany("ROEs")
+                        .HasForeignKey("CurrecnyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("ProductCatalog.Domain.SubCategory", b =>
@@ -264,7 +332,7 @@ namespace ProductCatalog.Persistence.Migrations
 
             modelBuilder.Entity("ProductCatalog.Domain.Currency", b =>
                 {
-                    b.Navigation("Costs");
+                    b.Navigation("ROEs");
                 });
 
             modelBuilder.Entity("ProductCatalog.Domain.Manufacturer", b =>
@@ -274,12 +342,18 @@ namespace ProductCatalog.Persistence.Migrations
 
             modelBuilder.Entity("ProductCatalog.Domain.Product", b =>
                 {
+                    b.Navigation("ProductSale")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductCatalog.Domain.ProductSale", b =>
+                {
                     b.Navigation("Costs");
                 });
 
             modelBuilder.Entity("ProductCatalog.Domain.SubCategory", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("ProductsForSale");
                 });
 #pragma warning restore 612, 618
         }

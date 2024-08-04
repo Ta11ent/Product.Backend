@@ -71,15 +71,33 @@ namespace ProductCatalog.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ROE",
+                columns: table => new
+                {
+                    ROEId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrecnyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    DateFrom = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ROE", x => x.ROEId);
+                    table.ForeignKey(
+                        name: "FK_ROE_Currency_CurrecnyId",
+                        column: x => x.CurrecnyId,
+                        principalTable: "Currency",
+                        principalColumn: "CurrencyId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Available = table.Column<bool>(type: "bit", nullable: false)
+                    ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,8 +108,28 @@ namespace ProductCatalog.Persistence.Migrations
                         principalTable: "Manufacturer",
                         principalColumn: "ManufacturerId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductSale",
+                columns: table => new
+                {
+                    ProductSaleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Available = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSale", x => x.ProductSaleId);
                     table.ForeignKey(
-                        name: "FK_Products_SubCategories_SubCategoryId",
+                        name: "FK_ProductSale_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSale_SubCategories_SubCategoryId",
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategories",
                         principalColumn: "SubCategoryId",
@@ -102,15 +140,15 @@ namespace ProductCatalog.Persistence.Migrations
                 name: "Costs",
                 columns: table => new
                 {
-                    PriceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductSaleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DatePrice = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Costs", x => x.PriceId);
+                    table.PrimaryKey("PK_Costs", x => x.CostId);
                     table.ForeignKey(
                         name: "FK_Costs_Currency_CurrencyId",
                         column: x => x.CurrencyId,
@@ -118,10 +156,10 @@ namespace ProductCatalog.Persistence.Migrations
                         principalColumn: "CurrencyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Costs_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
+                        name: "FK_Costs_ProductSale_ProductSaleId",
+                        column: x => x.ProductSaleId,
+                        principalTable: "ProductSale",
+                        principalColumn: "ProductSaleId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -138,20 +176,20 @@ namespace ProductCatalog.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Costs_CostId",
+                table: "Costs",
+                column: "CostId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Costs_CurrencyId",
                 table: "Costs",
                 column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Costs_PriceId",
+                name: "IX_Costs_ProductSaleId",
                 table: "Costs",
-                column: "PriceId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Costs_ProductId",
-                table: "Costs",
-                column: "ProductId");
+                column: "ProductSaleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Currency_Code",
@@ -195,9 +233,32 @@ namespace ProductCatalog.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_SubCategoryId",
-                table: "Products",
+                name: "IX_ProductSale_ProductId",
+                table: "ProductSale",
+                column: "ProductId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSale_ProductSaleId",
+                table: "ProductSale",
+                column: "ProductSaleId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSale_SubCategoryId",
+                table: "ProductSale",
                 column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ROE_CurrecnyId",
+                table: "ROE",
+                column: "CurrecnyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ROE_ROEId",
+                table: "ROE",
+                column: "ROEId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubCategories_CategoryId",
@@ -224,16 +285,22 @@ namespace ProductCatalog.Persistence.Migrations
                 name: "Costs");
 
             migrationBuilder.DropTable(
+                name: "ROE");
+
+            migrationBuilder.DropTable(
+                name: "ProductSale");
+
+            migrationBuilder.DropTable(
                 name: "Currency");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Manufacturer");
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
-                name: "SubCategories");
+                name: "Manufacturer");
 
             migrationBuilder.DropTable(
                 name: "Categories");

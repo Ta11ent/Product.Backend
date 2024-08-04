@@ -14,18 +14,20 @@ namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
             _dbContext = dbContect ?? throw new ArgumentNullException(nameof(dbContect));
         public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await
-                _dbContext.Products
-                .Include(x => x.Costs)
-                .FirstOrDefaultAsync(x => x.SubCategory.CategoryId == request.CategoryId
-                    && x.SubCategoryId == request.SubCategoryId
-                    && x.ProductId == request.ProductId, cancellationToken);
+            var product =
+                await _dbContext.ProductSale
+                    .Include(x => x.Costs)
+                    .Include(x => x.Product)
+                    .FirstOrDefaultAsync(x => x.SubCategoryId == request.SubCategoryId
+                        && x.ProductSaleId == request.ProductId,
+                        cancellationToken);
 
             if (product == null)
                 throw new NotFoundExceptions(nameof(product), cancellationToken);
 
-            product.Name = request.Name;
-            product.Description = request.Description;
+            var pr = product.Product;
+            pr.Name = request.Name;
+            pr.Description = request.Description;
             product.SubCategoryId = request.SubCategoryId;
             product.Available = request.Available is null
                 ? product.Available
@@ -36,8 +38,8 @@ namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
             if (cost.Price != request.Price)
                 await _dbContext.Costs.AddAsync(new Domain.Cost()
                 {
-                    PriceId = Guid.NewGuid(),
-                    ProductId = request.ProductId,
+                    CostId = Guid.NewGuid(),
+                    ProductSaleId = request.ProductId,
                     Price = request.Price,
                     DatePrice = DateTime.Now,
                     CurrencyId = cost.CurrencyId

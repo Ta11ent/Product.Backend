@@ -9,5 +9,6 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
         public Guid SubCategoryId { get; set; }
         public Guid[]? ProductIds { get; set; }
         public bool? Available { get; set; }
+        public string? CurrencyCode { get; set; }
     }
 }

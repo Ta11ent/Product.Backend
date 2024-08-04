@@ -5,6 +5,7 @@ namespace ProductCatalog.API.Models.Product
     public class GetProductDto : ProductPath, IMapWith<GetProductDetailsQuery>
     {
         public Guid Id { get; set; }
+        public string? Ccy {  get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<GetProductDto, GetProductDetailsQuery>()
@@ -13,7 +14,9 @@ namespace ProductCatalog.API.Models.Product
                 .ForMember(x => x.SubCategoryId,
                     opt => opt.MapFrom(y => y.SubCategoryId))
                 .ForMember(x => x.ProductId,
-                    opt => opt.MapFrom(y => y.Id));
+                    opt => opt.MapFrom(y => y.Id))
+                .ForMember(x => x.CurrencyCode,
+                    opt => opt.MapFrom(y => y.Ccy));
         }
     }
 }

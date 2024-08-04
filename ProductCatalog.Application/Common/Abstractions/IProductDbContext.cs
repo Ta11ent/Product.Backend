@@ -11,6 +11,8 @@ namespace ProductCatalog.Application.Common.Interfaces
         DbSet<Cost> Costs { get; set; }
         DbSet<Manufacturer> Manufacturer { get; set; }
         DbSet<Currency> Currency { get; set; }
+        DbSet<ProductSale> ProductSale { get; set; }
+        DbSet<ROE> ROE { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

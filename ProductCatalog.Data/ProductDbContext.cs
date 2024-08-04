@@ -14,6 +14,8 @@ namespace ProductCatalog.Data
         public DbSet<Cost> Costs { get; set; }
         public DbSet<Manufacturer> Manufacturer { get; set; }
         public DbSet<Currency> Currency { get; set; }
+        public DbSet<ProductSale> ProductSale { get; set; }
+        public DbSet<ROE> ROE { get; set; }
 
         public ProductDbContext(DbContextOptions<ProductDbContext> options) 
             : base(options) { }
@@ -25,6 +27,8 @@ namespace ProductCatalog.Data
             modelBuilder.ApplyConfiguration(new CostConfiguration());
             modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
             modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
+            modelBuilder.ApplyConfiguration(new ROEConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSaleConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

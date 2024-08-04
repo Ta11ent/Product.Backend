@@ -13,16 +13,14 @@ namespace ProductCatalog.Application.Application.Commands.Product.DeleteProduct
 
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await
-                _dbContext.Products
-                 .FirstOrDefaultAsync(x => x.SubCategory.CategoryId == request.CategoryId
-                    && x.SubCategoryId == request.SubCategoryId
-                    && x.ProductId == request.ProductId, cancellationToken);
-
+            var product = 
+                await _dbContext.ProductSale
+                    .FirstOrDefaultAsync(x => x.SubCategoryId == request.SubCategoryId
+                        && x.ProductSaleId == request.ProductId, 
+                        cancellationToken);
             if (product == null) 
                 throw new NotFoundExceptions(nameof(product), request.ProductId);
 
-            // _dbContext.Products.Remove(product);
             product.Available = false;
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

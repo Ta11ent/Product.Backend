@@ -7,5 +7,6 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         public Guid CategoryId { get; set; }
         public Guid SubCategoryId { get; set; }
         public Guid ProductId { get; set; }
+        public string? CurrencyCode { get; set; }
     }
 }

@@ -21,18 +21,34 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
         public async Task<ProductDetailsResponse> Handle(GetProductDetailsQuery request, CancellationToken cancellationToken)
         {
             var product = await
-                _dbContext.Products
+                _dbContext.ProductSale
                 .Include(x => x.SubCategory)
                     .ThenInclude(x => x.Category)
-                .Include(x => x.Costs) // need to add logic
-                .Include(x => x.Manufacturer)
+                .Include(x => x.Costs
+                    .OrderByDescending(y => y.DatePrice).Take(1))
+                    .ThenInclude(x => x.Currency)
+                        .ThenInclude(x => x.ROEs
+                            .OrderByDescending(x => x.DateFrom).Take(1))
+                .Include(x => x.Product)
+                    .ThenInclude(x => x.Manufacturer)
                 .Where(x => x.SubCategory.CategoryId == request.CategoryId 
                     && x.SubCategoryId == request.SubCategoryId
-                    && x.ProductId == request.ProductId)
+                    && x.ProductSaleId == request.ProductId)
                 .ProjectTo<ProductDetailsDto>(_mapper.ConfigurationProvider)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
-               
+
+            if(!String.IsNullOrEmpty(request.CurrencyCode)) { 
+            var roe = 
+                await _dbContext.ROE
+                    .Where(x => x.Currency.Code == request.CurrencyCode)
+                    .OrderByDescending(x => x.DateFrom)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                product.Ccy = request.CurrencyCode;
+                product.Price = (product.Price / product.Rate) * roe.Rate;
+                product.Rate = roe.Rate;
+            }
 
             if (product == null)
                 throw new NotFoundExceptions(nameof(product), request.ProductId);

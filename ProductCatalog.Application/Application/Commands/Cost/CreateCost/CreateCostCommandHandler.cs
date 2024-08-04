@@ -9,20 +9,9 @@ namespace ProductCatalog.Application.Application.Commands.Cost.CreateCost
         public CreateCostCommandHandler(IProductDbContext dbContext) =>
                 _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 
-        public async Task<Guid> Handle(CreateCostCommand command, CancellationToken cancellationToken)
+        public Task<Guid> Handle(CreateCostCommand request, CancellationToken cancellationToken)
         {
-            var price = new Domain.Cost
-            {
-                PriceId = Guid.NewGuid(),
-                ProductId = command.ProductId,
-                Price = command.Price,
-                DatePrice = DateTime.Now
-            };
-
-            await _dbContext.Costs.AddAsync(price);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            return price.PriceId;
+            throw new NotImplementedException();
         }
     }
 }

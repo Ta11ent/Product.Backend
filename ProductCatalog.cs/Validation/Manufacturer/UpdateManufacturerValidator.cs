@@ -2,9 +2,9 @@
 
 namespace ProductCatalog.API.Validation.Manufacturer
 {
-    public class UpdateManufacturerValidation : AbstractValidator<UpdateManufacturerDto>
+    public class UpdateManufacturerValidator : AbstractValidator<UpdateManufacturerDto>
     {
-        public UpdateManufacturerValidation()
+        public UpdateManufacturerValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Description).NotEmpty().MaximumLength(300);

@@ -10,5 +10,6 @@ namespace ProductCatalog.Application.Application.Commands.Product.CreateProduct
         public Guid SubCategoryId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid CurrencyId { get; set; }
+        public Guid ManufacturerId { get; set; }
     }
 }

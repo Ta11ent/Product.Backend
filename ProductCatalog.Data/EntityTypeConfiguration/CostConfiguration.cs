@@ -8,14 +8,14 @@ namespace ProductCatalog.Persistence.EntityTypeConfiguration
     {
         public void Configure(EntityTypeBuilder<Cost> builder)
         {
-            builder.HasKey(x => x.PriceId);
-            builder.HasIndex(x => x.PriceId).IsUnique();
-            builder.Property(x => x.PriceId).IsRequired();
+            builder.HasKey(x => x.CostId);
+            builder.HasIndex(x => x.CostId).IsUnique();
+            builder.Property(x => x.CostId).IsRequired();
             builder.Property(x => x.Price).IsRequired();
-            builder.HasOne(x => x.Product)
+            builder.HasOne(x => x.ProductSale)
                 .WithMany(y => y.Costs)
-                .HasPrincipalKey(x => x.ProductId)
-                .HasForeignKey(x => x.ProductId);
+                .HasPrincipalKey(x => x.ProductSaleId)
+                .HasForeignKey(x => x.ProductSaleId);
         }
     }
 }

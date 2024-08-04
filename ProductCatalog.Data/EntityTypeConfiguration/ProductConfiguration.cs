@@ -13,10 +13,6 @@ namespace ProductCatalog.Data.EntityTypeConfiguration
             builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Description).HasMaxLength(300).IsRequired();
-            builder.HasOne(x => x.SubCategory)
-                .WithMany(x => x.Products)
-                .HasPrincipalKey(x => x.SubCategoryId)
-                .HasForeignKey(x => x.SubCategoryId);
             builder.HasOne(x => x.Manufacturer)
                 .WithMany(x => x.Products)
                 .HasPrincipalKey(x => x.ManufacturerId)

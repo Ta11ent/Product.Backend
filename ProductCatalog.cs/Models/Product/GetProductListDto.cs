@@ -9,6 +9,7 @@ namespace ProductCatalog.APIcs.Models.Product
         public int? PageSize { get; set; }        
         public Guid[]? ProductId { get; set; }
         public bool? Available { get; set; }
+        public string? Ccy {  get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<GetProductListDto, GetProductListQuery>()
@@ -23,7 +24,9 @@ namespace ProductCatalog.APIcs.Models.Product
                 .ForMember(x => x.ProductIds,
                     opt => opt.MapFrom(y => y.ProductId))
                 .ForMember(x => x.Available,
-                    opt => opt.MapFrom(y => y.Available));
+                    opt => opt.MapFrom(y => y.Available))
+                .ForMember(x => x.CurrencyCode,
+                    opt => opt.MapFrom(y => y.Ccy));
         }
     }
 }

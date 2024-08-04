@@ -43,10 +43,12 @@ if (app.Environment.IsDevelopment())
 }
 
 CategoryEndpoint.Map(app);
+SubCategoryEndpoint.Map(app);
 ProductEndpoint.Map(app);
 CostEndpoint.Map(app);
 CurrecnyEndpoint.Map(app);
 ManufacturerEndpoint.Map(app);
+ROEEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 

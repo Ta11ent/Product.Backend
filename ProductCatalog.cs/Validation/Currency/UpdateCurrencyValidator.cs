@@ -2,9 +2,9 @@
 
 namespace ProductCatalog.API.Validation.Currency
 {
-    public class CreateCurrencyValidation : AbstractValidator<CreateCurrencyDto>
+    public class UpdateCurrencyValidator : AbstractValidator<UpdateCurrencyDto>
     {
-        public CreateCurrencyValidation()
+        public UpdateCurrencyValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Code).NotEmpty().MaximumLength(3);
