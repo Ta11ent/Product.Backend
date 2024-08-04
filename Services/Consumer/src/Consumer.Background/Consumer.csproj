@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\SharedModels\SharedModels.csproj" />
     <ProjectReference Include="..\MessgaeService.cs\MessageService.cs.csproj" />
-    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />
   </ItemGroup>
 
 </Project>
