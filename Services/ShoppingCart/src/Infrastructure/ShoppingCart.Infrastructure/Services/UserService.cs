@@ -19,8 +19,17 @@ namespace ShoppingCart.Infrastructure.Services
 
         public async Task<UserDto> GetUserAsync(string Id)
         {
-            var response = await _httpClient.GetAsync($"{_config.API["UserAPI"]}/{Id}");
-            var apiContent = await response.Content.ReadAsStringAsync();
+            string apiContent = default!;
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_config.API["UserAPI"]}/{Id}");
+                apiContent = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
             return JsonConvert.DeserializeObject<Response<UserDto>>(apiContent) is var dataContent
                 ? dataContent!.data
                 : new UserDto();

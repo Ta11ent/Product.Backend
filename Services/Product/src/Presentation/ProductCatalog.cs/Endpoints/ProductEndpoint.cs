@@ -22,6 +22,12 @@ namespace ProductCatalog.APIcs.Endpoints
                 .MapToApiVersion(1.0)
                 .WithOpenApi();
 
+            RouteGroupBuilder productBuilder = 
+                app.MapGroup("api/v{version:apiVersion}/")
+                .WithApiVersionSet(versionSet)
+                .MapToApiVersion(1.0)
+                .WithOpenApi();
+
             groupBuilder.MapGet("products/{Id}",
                 async ([AsParameters] GetProductDto productDto, IMapper mapper, ISender sender) =>
                 {
@@ -34,7 +40,6 @@ namespace ProductCatalog.APIcs.Endpoints
                 .WithSummary("Get the Product by Id")
                 .WithDescription("JSON object containing Product information");
 
-
             groupBuilder.MapGet("products",
                 async ([AsParameters] GetProductListDto entity, IMapper mapper, ISender sender) =>
                 {
@@ -43,6 +48,15 @@ namespace ProductCatalog.APIcs.Endpoints
                 })
                 .WithSummary("Get the list of Product")
                 .WithDescription("JSON object containing Product information");
+
+            productBuilder.MapGet("products",
+               async ([AsParameters] GetProductListDto entity, IMapper mapper, ISender sender) =>
+               {
+                   var query = mapper.Map<GetProductListQuery>(entity);
+                   return await sender.Send(query);
+               })
+               .WithSummary("Get the list of Product")
+               .WithDescription("JSON object containing Product information");
 
             groupBuilder.MapPost("products",
                 async ([AsParameters]ProductPath path, CreateProductDto entity, IMapper mapper, ISender sender) =>

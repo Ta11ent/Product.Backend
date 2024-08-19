@@ -1,8 +1,8 @@
 ﻿namespace ProductCatalog.API.Models.Product
 {
-    public class ProductPath
+    public class ProductPath 
     {
-        public Guid CategoryId { get; set; }
-        public Guid SubCategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? SubCategoryId { get; set; }
     }
 }

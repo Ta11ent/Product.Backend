@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using ShoppingCart.Application.Application.Queries.ProductRange.GetProductRangeDetails;
 using ShoppingCart.Application.Common.Mapping;
+using ShoppingCart.Application.Common.Models.Order;
+using ShoppingCart.Application.Common.Models.Status;
 using ShoppingCart.Application.Common.Models.User;
 
 namespace ShoppingCart.Application.Application.Queries.Order.GetOrderDetails
@@ -14,10 +15,8 @@ namespace ShoppingCart.Application.Application.Queries.Order.GetOrderDetails
             get { return User.UserId; }
         }
         public UserOrderDetailsDto User { get; set; }
-        public IEnumerable<ProductRangeDetailsDto> ProductRanges { get; set; }
-        public DateTime? OrderTime { get; set; }
-        public decimal Price { get; set; }
-        public bool IsPaid { get; set; }
+        public IEnumerable<StatusDto> StatusHistory { get; set; }
+        public IEnumerable<OrderItemDto> OrderItems { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -26,12 +25,10 @@ namespace ShoppingCart.Application.Application.Queries.Order.GetOrderDetails
                    opt => opt.MapFrom(y => y.OrderId))
                 .ForMember(x => x.UserId,
                    opt => opt.MapFrom(y => y.UserId))
-                .ForMember(x => x.ProductRanges,
-                   opt => opt.MapFrom(y => y.ProductRanges))
-                 .ForMember(x => x.OrderTime,
-                   opt => opt.MapFrom(y => y.OrderTime))
-                 .ForMember(x => x.IsPaid,
-                   opt => opt.MapFrom(y => y.IsPaid));
+                .ForMember(x => x.OrderItems,
+                   opt => opt.MapFrom(y => y.OrderItems))
+                .ForMember(x => x.StatusHistory,
+                   opt => opt.MapFrom(y => y.Statuses));
         }
     }
 }

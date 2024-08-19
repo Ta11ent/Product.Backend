@@ -11,8 +11,7 @@ namespace ShoppingCart.Persistence.EntityTypeConfiguration
             builder.HasKey(x => x.OrderId);
             builder.HasIndex(x => x.OrderId).IsUnique();
             builder.Property(x => x.UserId).IsRequired();
-            builder.Property(x => x.Price).IsRequired();
-            builder.Property(x => x.IsPaid).IsRequired();
+            builder.Property(x => x.Number).UseIdentityColumn(seed: 1, increment: 1);
         }
     }
 }

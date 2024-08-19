@@ -4,7 +4,6 @@ namespace ShoppingCart.Application.Common.Abstractions
 {
     public interface IProductService
     {
-        Task<ProductDto> GetProductByIdAsync(Guid id);
         Task<IEnumerable<ProductDto>> GetProductsAsync(string? param);
     }
 }

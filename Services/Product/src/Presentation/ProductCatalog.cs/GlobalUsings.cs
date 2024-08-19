@@ -19,3 +19,4 @@ global using ProductCatalog.Application.Common.Exceptions;
 global using System.Text.Json;
 global using Microsoft.AspNetCore.Mvc;
 global using ProductCatalog.API.Exception;
+global using ProductCatalog.Infrastructure;

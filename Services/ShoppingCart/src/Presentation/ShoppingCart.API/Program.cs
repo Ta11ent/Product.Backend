@@ -26,8 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-ProductRangeEndpoint.Map(app);
 OrderEndpoint.Map(app);
+OrderItemEndpoint.Map(app);
 
 app.UseHttpsRedirection();
 

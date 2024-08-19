@@ -1,12 +1,12 @@
 ﻿using SharedModels;
 using ShoppingCart.Application.Application.Queries.Order.GetOrderDetails;
-using ShoppingCart.Application.Application.Queries.ProductRange.GetProductRangeDetails;
+using ShoppingCart.Application.Common.Models.Order;
 
 namespace ShoppingCart.API.Models.Order
 {
     public class OrderPaidDto : OrderDetails, IMapWith<OrderDetailsDto>
     {
-        public new IEnumerable<ProductRangeDetailsDto> ProductRanges { get; set; }
+        public new IEnumerable<OrderItemDto> OrderItems { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<OrderDetailsDto, OrderPaidDto>()
@@ -14,20 +14,20 @@ namespace ShoppingCart.API.Models.Order
                     opt => opt.MapFrom(y => y.User.UserName))
                 .ForPath(x => x.Email,
                     opt => opt.MapFrom(y => y.User.Email))
-                .ForPath(x => x.ProductRanges,
-                    opt => opt.MapFrom(y => y.ProductRanges))
-                .ForPath(x => x.OrderTime,
-                    opt => opt.MapFrom(y => y.OrderTime))
+                .ForPath(x => x.OrderItems,
+                    opt => opt.MapFrom(y => y.OrderItems))
                 .ForPath(x => x.Price,
-                    opt => opt.MapFrom(y => y.Price));
+                    opt => opt.MapFrom(y => y.OrderItems.Sum(x => x.Price)))
+                .ForPath(x => x.Status,
+                    opt => opt.MapFrom(y => y.StatusHistory.FirstOrDefault()));
         }
     }
 
-    public class OrderProductRangeDetails : ProductRangeDetails
+    public class OrderProductRangeDetails : OrderItemDetails
     {
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<ProductRangeDetailsDto, ProductRangeDetails>()
+            profile.CreateMap<OrderItemDto, OrderItemDetails>()
                 .ForPath(x => x.Name,
                     opt => opt.MapFrom(y => y.Name))
                 .ForPath(x => x.Description,

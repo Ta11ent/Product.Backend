@@ -2,9 +2,9 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoppingCart.Application.Application.Queries.ProductRange.GetProductRangeDetails;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Helpers;
+using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.Product;
 using ShoppingCart.Application.Common.Models.User;
 
@@ -32,37 +32,43 @@ namespace ShoppingCart.Application.Application.Queries.Order.GetOrderDetails
         {
             var data =
               await _dbContext.Orders
-              .Include(x => x.ProductRanges)
+              .Include(x => x.Statuses)
+              .Include(x => x.OrderItems)
               .ProjectTo<OrderDetailsDto>(_mapper.ConfigurationProvider)
               .FirstOrDefaultAsync(x => x.OrderId == request.OrderId);
 
-            var ProductIds = data!.ProductRanges.Select(x => x.ProductId).Distinct().ToList();
+            if(data is not null) { 
+                var ProductIds = data!.OrderItems.Select(x => x.ProductId).Distinct().ToList();
 
-            var productDetails = _productService
-                .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId))
-                    + QueryBuilder.GeneratePaginationParam(ProductIds.Count()));
+                var productDetails = _productService
+                    .GetProductsAsync(new ParamQueryBuilder()
+                    .AddIdAsParams(nameof(ProductDto.ProductId), ProductIds)
+                    .AddPaginationAsParams(ProductIds.Count())
+                    .AddCustomParam(nameof(request.Ccy), request.Ccy)
+                    .GetParamAsString());
 
-            var user = _userService.GetUserAsync(data.User.UserId);
+                var user = _userService.GetUserAsync(data.User.UserId);
 
-            await Task.WhenAll(productDetails, user);
+                await Task.WhenAll(productDetails, user);
 
-            foreach (var product in data.ProductRanges)
-                AddProductDetails(product, productDetails.Result);
+                foreach (var product in data.OrderItems)
+                    AddProductDetails(product, productDetails.Result.FirstOrDefault(x => x.ProductId == product.ProductId)!);
 
-            AddUserDetails(data.User, user.Result);
+                AddUserDetails(data.User, user.Result);
+            }
 
             return new OrderDetailsResponse(data!);
         }
 
-        private ProductRangeDetailsDto AddProductDetails(
-            ProductRangeDetailsDto product,
-             IEnumerable<ProductDto> productDetails)
+        private void AddProductDetails(
+             OrderItemDto product,
+             ProductDto productDetails)
         {
-            var pr = productDetails.First(x => x.ProductId == product.ProductId);
-            product.Description = pr.Description;
-            product.Name = pr.Name;
-            product.Available = pr.Available;
-            return product;
+            product.Name = productDetails.Name;
+            product.Description = productDetails.Description;
+            product.Manufacturer = productDetails.Manufacturer;
+            product.Price = productDetails.Price;
+            product.Ccy = productDetails.Ccy;
         }
 
         private void AddUserDetails(UserOrderDetailsDto user, UserDto userDetails)

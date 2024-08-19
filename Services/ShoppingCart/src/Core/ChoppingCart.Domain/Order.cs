@@ -4,9 +4,8 @@
     {
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
-        public DateTime? OrderTime { get; set; }
-        public decimal Price { get; set; }
-        public bool IsPaid { get; set; }
-        public IEnumerable<ProductRange> ProductRanges { get;set; }
+        public int Number { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public IEnumerable<Status> Statuses { get; set; } = new List<Status>();
     }
 }

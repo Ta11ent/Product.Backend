@@ -9,7 +9,8 @@ namespace ShoppingCart.API.Models.Order
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
         public Guid? UserId { get; set; }
-        public bool? IsPaid { get; set; }
+        public string? Status { get; set; }
+        public string? Ccy {  get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -24,8 +25,8 @@ namespace ShoppingCart.API.Models.Order
                     opt => opt.MapFrom(y => y.DateTo))
                 .ForMember(x => x.UserId,
                     opt => opt.MapFrom(y => y.UserId))
-                .ForMember(x => x.IsPaid,
-                    opt => opt.MapFrom(y => y.IsPaid));
+                .ForMember(x => x.Status,
+                    opt => opt.MapFrom(y => y.Status));
         }
     }
 }

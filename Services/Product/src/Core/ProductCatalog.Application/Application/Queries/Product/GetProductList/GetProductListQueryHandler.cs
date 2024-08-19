@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Application.Common.Predicate;
 
@@ -12,11 +13,13 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
     {
         private readonly IProductDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly ICurrencyService _currencyService;
 
-        public GetProductListQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetProductListQueryHandler(IProductDbContext dbContext, IMapper mapper, ICurrencyService currency)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
+            _currencyService = currency;
         }
 
         public async Task<ProductListResponse> Handle(GetProductListQuery request, CancellationToken cancellationToken)
@@ -46,17 +49,16 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 
             if (!String.IsNullOrEmpty(request.CurrencyCode))
             {
-                var roe =
-                 await _dbContext.ROE
-                   .Where(x => x.Currency.Code == request.CurrencyCode)
-                   .OrderByDescending(x => x.DateFrom)
-                   .FirstOrDefaultAsync(cancellationToken);
+                var currency = await _currencyService.GetCurrentROEofCurrency(request.CurrencyCode, cancellationToken);
 
-                foreach(var product in products)
-                {
-                    product.Ccy = request.CurrencyCode;
-                    product.Price = (product.Price / product.Rate) * roe.Rate;
-                    product.Rate = roe.Rate;
+                if (currency != null) { 
+
+                    foreach(var product in products)
+                    {
+                        product.Ccy = currency.Code;
+                        product.Price = Math.Round((product.Price / product.Rate) * currency.Rate, 4);
+                        product.Rate = currency.Rate;
+                    }
                 }
 
             }

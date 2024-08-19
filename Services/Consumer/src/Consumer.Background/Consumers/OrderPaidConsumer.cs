@@ -25,7 +25,7 @@ namespace Consumer.Consumers
             logger.LogInformation(jsonMessage);
 
             StringBuilder products = new();
-            foreach(var item in context.Message.ProductRanges)
+            foreach(var item in context.Message.OrderItems)
                 products.Append($"{item.Name}, Count: {item.Count}\n");
 
             var email = emailBuilder
@@ -33,7 +33,8 @@ namespace Consumer.Consumers
                  .AddSubject("Information about the paid bill")
                  .AddBody($"{context.Message.UserName}, Congratulations on your purchase! \n " +
                     $"{products.ToString()} \n" +
-                    $"Total price: {context.Message.Price}")
+                    $"Total price: {context.Message.Price} {context.Message.Currency} \n" +
+                    $"Status: {context.Message.Status}")
                  .Build();
 
             emailSender.Send(email);

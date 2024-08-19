@@ -1,5 +1,3 @@
-using ProductCatalog.Domain;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(config =>
@@ -9,6 +7,7 @@ builder.Services.AddAutoMapper(config =>
 });
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();

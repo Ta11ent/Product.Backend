@@ -6,8 +6,7 @@ namespace ShoppingCart.API.Validation.Order
     {
         public UpdateOrderValidator()
         {
-            RuleFor(x => x.OrderId).NotEqual(Guid.Empty);
-            RuleFor(x => x.IsPaid).NotEmpty();
+            RuleFor(x => x.Status).NotEmpty();
         }
     }
 }

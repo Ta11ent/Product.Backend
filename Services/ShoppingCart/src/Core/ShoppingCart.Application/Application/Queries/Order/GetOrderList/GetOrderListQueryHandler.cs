@@ -2,11 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ShoppingCart.Application.Application.Queries.ProductRange.GetProductRangeDetails;
 using ShoppingCart.Application.Common.Abstractions;
 using ShoppingCart.Application.Common.Helpers;
+using ShoppingCart.Application.Common.Models.Order;
 using ShoppingCart.Application.Common.Models.Product;
-using ShoppingCart.Application.Common.Models.User;
 using ShoppingCart.Application.Common.Predicate;
 using ShoppingCart.Application.Queries.Order.GetOrderList;
 
@@ -31,46 +30,41 @@ namespace ShoppingCart.Application.Application.Queries.Order.GetOrderList
             var predicate = PredicateBuilder.True<Domain.Order>();
             var data =
                    await _dbContext.Orders
-                   .Include(x => x.ProductRanges)
+                   .Include(x => x.OrderItems)
+                   .Include(x => x.Statuses.OrderByDescending(x => x.StatusDate).Take(1))
                    .Where(predicate
-                    .And(x => x.OrderTime >= request.DateFrom, request.DateFrom)
-                    .And(x => x.OrderTime <= request.DateTo, request.DateTo)
+                    .And(x => x.Statuses.LastOrDefault()!.StatusDate >= request.DateFrom, request.DateFrom)
+                    .And(x => x.Statuses.LastOrDefault()!.StatusDate <= request.DateTo, request.DateTo)
                     .And(x => x.UserId == request.UserId, request.UserId)
-                    .And(x => x.IsPaid == request.IsPaid, request.IsPaid))
+                    .And(x => x.Statuses.LastOrDefault()!.TypeOfStatus == request.Status, request.Status))
                    .Skip((request.Page - 1) * request.PageSize)
                    .Take(request.PageSize)
                    .ProjectTo<OrderListDto>(_mapper.ConfigurationProvider)
                    .ToListAsync();
 
 
-            var ProductIds = data.SelectMany(x => x.ProductRanges.Select(x => x.ProductId)).Distinct().ToList();
+            var ProductIds = data.SelectMany(x => x.OrderItems.Select(x => x.ProductId)).Distinct().ToList();
 
             var productDetails = await _productService
                 .GetProductsAsync(QueryBuilder.ConvertToIdString(ProductIds, nameof(ProductDto.ProductId))
                     + QueryBuilder.GeneratePaginationParam(ProductIds.Count()));
 
             foreach (var item in data)
-                foreach (var product in item.ProductRanges)
-                    AddProductDetails(product, ref productDetails);
+                foreach (var product in item.OrderItems)
+                    AddProductDetails(product, productDetails.FirstOrDefault(x => x.ProductId == product.ProductId)!);
 
             return new OrderListResponse(data, request);
         }
 
-        private ProductRangeDetailsDto AddProductDetails(
-           ProductRangeDetailsDto product,
-           ref IEnumerable<ProductDto> productDetails)
+        private void AddProductDetails(
+            OrderItemDto product,
+            ProductDto productDetails)
         {
-            var pr = productDetails.First(x => x.ProductId == product.ProductId);
-            product.Description = pr.Description;
-            product.Name = pr.Name;
-            product.Available = pr.Available;
-            return product;
-        }
-
-        private void AddUserDetails(UserOrderDetailsDto user, ref UserDto userDetails)
-        {
-            user.UserName = userDetails.UserName;
-            user.Email = userDetails.Email;
+            product.Name = productDetails.Name;
+            product.Description = productDetails.Description;
+            product.Manufacturer = productDetails.Manufacturer;
+            product.Price = productDetails.Price;
+            product.Ccy = productDetails.Ccy;
         }
     }
 }

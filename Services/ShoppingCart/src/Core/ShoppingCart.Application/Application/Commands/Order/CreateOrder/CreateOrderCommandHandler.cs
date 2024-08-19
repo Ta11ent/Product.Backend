@@ -15,7 +15,6 @@ namespace ShoppingCart.Application.Application.Commands.Order.CreateOrder
             {
                 OrderId = Guid.NewGuid(),
                 UserId = command.UserId,
-                IsPaid = false
             };
 
             await _dbContext.Orders.AddAsync(order);

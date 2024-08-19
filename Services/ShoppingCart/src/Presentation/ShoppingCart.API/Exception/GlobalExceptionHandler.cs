@@ -46,7 +46,7 @@
                 Extensions = new Dictionary<string, object?>
                 {
                     { "isSuccess", false},
-                    { "errors", result }
+                    { "message", result }
                 }
             };
         }

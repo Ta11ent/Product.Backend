@@ -23,9 +23,11 @@ namespace ShoppingCart.API.Endpoints
                 .WithOpenApi();
 
             routeGroup.MapGet("orders/{Id}",
-               async (Guid Id, ISender sender) =>
+               async (Guid Id, [AsParameters]GetOrderDetailsDto param, IMapper mapper, ISender sender) =>
                {
-                   return await sender.Send(new GetOrderDetailsQuery() { OrderId = Id }) is var response
+                   param.OrderId = Id;
+                   var query = mapper.Map<GetOrderDetailsQuery>(param);
+                   return await sender.Send(query) is var response
                     ? Results.Ok(response)
                     : Results.NotFound();
                })
@@ -48,10 +50,13 @@ namespace ShoppingCart.API.Endpoints
               {
                   entity.OrderId = Id;
                   var command = mapper.Map<UpdateOrderCommand>(entity);
-                  await sender.Send(command);
-                  var response = await sender.Send(new GetOrderDetailsQuery() { OrderId = Id });
-                  var order = mapper.Map<OrderPaidDto>(response.data);
-                  await publishEndpoint.Publish(order);
+                  var answer = await sender.Send(command);
+                  if(answer && entity.Status == "Paid") { 
+                      var response = await sender.Send(new GetOrderDetailsQuery() { OrderId = Id, Ccy = "USD" });
+                      var order = mapper.Map<OrderPaidDto>(response.data);
+                      order.Currency = "USD";
+                      await publishEndpoint.Publish(order);
+                  }
 
                   return Results.NoContent();
               })

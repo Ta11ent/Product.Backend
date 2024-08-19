@@ -38,7 +38,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "Role": [  "Admin" ]
+        "Role": [ "Admin" ]
       }
     },
     /// <summary>
@@ -240,7 +240,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "Role": "Admin" 
+        "Role": "Admin"
       }
     },
     {
@@ -384,7 +384,7 @@
     },
 
     {
-      "UpstreamPathTemplate": "/api/v{version}/productRange",
+      "UpstreamPathTemplate": "/api/v{version}/orderitems",
       "UpstreamHttpMethod": [ "Post" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -393,7 +393,7 @@
           "Port": 7174
         }
       ],
-      "DownstreamPathTemplate": "/api/v{version}/productRange",
+      "DownstreamPathTemplate": "/api/v{version}/orderitems",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
@@ -403,26 +403,7 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/v{version}/productRange/{id}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7174
-        }
-      ],
-      "DownstreamPathTemplate": "/api/v{version}/productRange/{Id}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "RouteClaimsRequirement": {
-        "Role": [ "User", "Admin" ]
-      }
-    },
-    {
-      "UpstreamPathTemplate": "/api/v{version}/productRange/{id}",
+      "UpstreamPathTemplate": "/api/v{version}/orderitems/{id}",
       "UpstreamHttpMethod": [ "Put", "Delete", "Update" ],
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

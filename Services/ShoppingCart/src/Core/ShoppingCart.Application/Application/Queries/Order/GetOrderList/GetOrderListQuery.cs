@@ -5,9 +5,10 @@ namespace ShoppingCart.Application.Queries.Order.GetOrderList
 {
     public class GetOrderListQuery : PaginationParam, IRequest<OrderListResponse>
     {
+        public Guid? UserId { get; set; }
+        public string? Status {  get; set; } 
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
-        public Guid? UserId { get; set; }
-        public bool? IsPaid { get; set; }
+        public string? Ccy { get; set; }
     }
 }
