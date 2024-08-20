@@ -19,3 +19,5 @@ The backend part of the online store. The REST Api is an application implemented
 - MailKit
 - AspNetCore.Authentication
 - JwtBearer
+- StackExchangeRedis
+- Scrutor
