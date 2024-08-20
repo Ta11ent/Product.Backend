@@ -5,6 +5,7 @@ The backend part of the online store. The REST Api is an application implemented
 - Asp Net Core
 - MS SQl
 - Rabbit MQ
+- Redis
 - MailKit
 
 # Packages
