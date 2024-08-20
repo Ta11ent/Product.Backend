@@ -10,7 +10,7 @@ namespace ProductCatalog.Data
         public static IServiceCollection AddPersistence(this IServiceCollection services, 
             IConfiguration configuration)
         {
-            var connectionString = configuration["DbConnection"];
+            var connectionString = configuration.GetConnectionString("MsSQL");
             services.AddDbContext<ProductDbContext>(config =>
             {
                 config.UseSqlServer(connectionString);
