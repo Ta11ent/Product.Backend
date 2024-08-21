@@ -11,12 +11,20 @@ namespace ProductCatalog.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddScoped<ICurrencyService, CurrencyService>();
-
             services.TryAddScoped<ICashService, CashService>();
 
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.TryAddScoped<ICategoryRepository, CategoryRepository>();
+            services.TryAddScoped<ISubCategoryRepository, SubCategoryRepository>();
+            services.TryAddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.TryAddScoped<IManufacturerRepository, ManufacturerRepository>();
+
+            ///<summary
+            ///Cashed Repository
+            ///</summary>
             services.Decorate<ICategoryRepository, CashedCategoryRepository>();
+            services.Decorate<ISubCategoryRepository, CashedSubCategoryRepository>();
+            services.Decorate<ICurrencyRepository, CashedCurrencyRepoitory>();
+            services.Decorate<IManufacturerRepository, CashedManufacturerRepository>();
 
             services.AddStackExchangeRedisCache(redisOptions =>
             {

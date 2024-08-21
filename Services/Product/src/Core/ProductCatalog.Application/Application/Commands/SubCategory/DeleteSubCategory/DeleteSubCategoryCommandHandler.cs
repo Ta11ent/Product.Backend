@@ -1,27 +1,23 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Application.Application.Commands.SubCategory.DeleteSubCategory
 {
     public class DeleteSubCategoryCommandHandler : IRequestHandler<DeleteSubCategoryCommand>
     {
-        private readonly IProductDbContext _dbContext;
-        public DeleteSubCategoryCommandHandler(IProductDbContext dbContext) =>
-            _dbContext = dbContext ?? throw new ArgumentNullException("ProductDbContext");
+        private readonly ISubCategoryRepository _repository;
+        public DeleteSubCategoryCommandHandler(ISubCategoryRepository repository) =>
+            _repository = repository ?? throw new ArgumentNullException(nameof(ISubCategoryRepository));
         public async Task Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
         {
-            var subCategory = 
-                await _dbContext.SubCategories
-                    .FirstOrDefaultAsync(x => x.CategoryId == request.CategoryId
-                        && x.SubCategoryId == request.SubCategoryId);
+            var subCategory = await _repository.GetSubCategoryByIdAsync(request.CategoryId, request.SubCategoryId, cancellationToken);
             if (subCategory == null)
                 throw new NotFoundExceptions(nameof(subCategory), request.SubCategoryId);
 
-            _dbContext.SubCategories.Remove(subCategory);
+            _repository.DeleteSubCategory(subCategory);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.SaveChangesAsync(cancellationToken);
         }
     }
 }

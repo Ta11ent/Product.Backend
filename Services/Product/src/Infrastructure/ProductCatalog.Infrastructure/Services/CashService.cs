@@ -44,12 +44,13 @@ namespace ProductCatalog.Infrastructure.Services
             var entityKey = GenerateRedisKey<T>(key);
             var cacheEntryOptions = new DistributedCacheEntryOptions
             {
-                SlidingExpiration = slidingExpiration ?? TimeSpan.FromMinutes(60)
+                SlidingExpiration = slidingExpiration ?? TimeSpan.FromSeconds(60)
             };
 
             await _distributedCache.SetStringAsync(
                entityKey,
-               JsonConvert.SerializeObject(data),
+               JsonConvert.SerializeObject(data, Formatting.None,
+                        new JsonSerializerSettings() {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}),
                cacheEntryOptions,
                cancellationToken);
         }

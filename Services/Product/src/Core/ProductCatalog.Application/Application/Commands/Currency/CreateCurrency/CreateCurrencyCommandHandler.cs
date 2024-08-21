@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Abstractions;
 
 namespace ProductCatalog.Application.Application.Commands.Currency.CreateCurrency
 {
     public class CreateCurrencyCommandHandler : IRequestHandler<CreateCurrencyCommand, Guid>
     {
-        private readonly IProductDbContext _dbContext;
-        public CreateCurrencyCommandHandler(IProductDbContext dbContext) =>
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        private readonly ICurrencyRepository _repository;
+        public CreateCurrencyCommandHandler(ICurrencyRepository repository) =>
+            _repository = repository ?? throw new ArgumentNullException(nameof(ICurrencyRepository));
         public async Task<Guid> Handle(CreateCurrencyCommand request, CancellationToken cancellationToken)
         {
             var currecny = new Domain.Currency()
@@ -17,8 +17,8 @@ namespace ProductCatalog.Application.Application.Commands.Currency.CreateCurrenc
                 Name = request.Name,
             };
 
-            await _dbContext.Currency.AddAsync(currecny);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.CreateCurrencyAsync(currecny, cancellationToken);
+            await _repository.SaveChangesAsync(cancellationToken);
 
             return currecny.CurrencyId;
         }

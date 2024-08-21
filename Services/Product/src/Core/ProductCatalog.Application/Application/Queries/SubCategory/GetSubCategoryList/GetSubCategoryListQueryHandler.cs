@@ -1,31 +1,24 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Abstractions;
+
 
 namespace ProductCatalog.Application.Application.Queries.SubCategory.GetSubCategoryList
 {
     public class GetSubCategoryListQueryHandler : IRequestHandler<GetSubCategoryListQuery, SubCategoryListResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly ISubCategoryRepository _repository;
         private readonly IMapper _mapper;
-        public GetSubCategoryListQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetSubCategoryListQueryHandler(ISubCategoryRepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException("ProductDbContext");
+            _repository = repository ?? throw new ArgumentNullException(nameof(ISubCategoryRepository));
             _mapper = mapper;
         }
 
         public async Task<SubCategoryListResponse> Handle(GetSubCategoryListQuery request, CancellationToken cancellationToken)
         {
-            var subCategories =
-                await _dbContext.SubCategories
-                    .Where(x => x.CategoryId == request.CategoryId)
-                    .Skip((request.Page - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .OrderBy(x => x.Name)
-                    .ProjectTo<SubCategoryListDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken);
+            var subCategoriesdto = await _repository.GetAllSubCategoriesAsync(request.CategoryId, request, cancellationToken);
+            var subCategories = _mapper.Map<List<SubCategoryListDto>>(subCategoriesdto);
 
             return new SubCategoryListResponse(subCategories, request);
         }

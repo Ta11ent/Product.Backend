@@ -1,29 +1,25 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Abstractions;
+
 
 namespace ProductCatalog.Application.Application.Queries.Currency.GetCurrencyList
 {
     public class GetCurrencyListQueryHandler : IRequestHandler<GetCurrencyListQuery, CurrencyListResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly ICurrencyRepository _repository;
         private readonly IMapper _mapper;
-        public GetCurrencyListQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetCurrencyListQueryHandler(ICurrencyRepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _repository = repository ?? throw new ArgumentNullException(nameof(ICurrencyRepository));
             _mapper = mapper;
         }
         public async Task<CurrencyListResponse> Handle(GetCurrencyListQuery request, CancellationToken cancellationToken)
         {
-            var currencies = await
-               _dbContext.Currency
-               .Skip((request.Page - 1) * request.PageSize)
-               .Take(request.PageSize)
-               .ProjectTo<CurrencyListDto>(_mapper.ConfigurationProvider)
-               .ToListAsync(cancellationToken);
-
+            var currenciesdto =
+                await _repository.GetAllCurrenciesAsync(request, cancellationToken);
+            var currencies = _mapper.Map<List<CurrencyListDto>>(currenciesdto);
+             
             return new CurrencyListResponse(currencies, request);
         }
     }

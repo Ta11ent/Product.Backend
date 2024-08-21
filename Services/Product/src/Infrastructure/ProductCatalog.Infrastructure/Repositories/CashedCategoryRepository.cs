@@ -13,7 +13,7 @@ namespace ProductCatalog.Infrastructure.Repositories
         public async Task CreateCategoryAsync(Category category, CancellationToken cancellationToken)
         {
             await _decorated.CreateCategoryAsync(category, cancellationToken);
-            await _cashService.CreateAsync<Category>(
+            await _cashService.CreateAsync(
                 category.CategoryId,
                 category,
                 null,
@@ -27,9 +27,9 @@ namespace ProductCatalog.Infrastructure.Repositories
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync(IPagination pagination, CancellationToken cancellationToken)
             => await _decorated.GetAllCategoriesAsync(pagination, cancellationToken);
         public async Task<Category> GetCategoryByIdAsync(Guid categoryId, CancellationToken cancellationToken)
-            => await _cashService.GetByIdAsync<Category>(
+            => await _cashService.GetByIdAsync(
                 categoryId,
-                async() => await _decorated.GetCategoryByIdAsync(categoryId, cancellationToken),
+                async () => await _decorated.GetCategoryByIdAsync(categoryId, cancellationToken),
                 null,
                 cancellationToken);
 

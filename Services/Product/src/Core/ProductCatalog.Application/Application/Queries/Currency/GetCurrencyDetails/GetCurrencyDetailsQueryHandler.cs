@@ -1,30 +1,28 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
+
 
 namespace ProductCatalog.Application.Application.Queries.Currency.GetCurreencyDetails
 {
     public class GetCurrencyDetailsQueryHandler : IRequestHandler<GetCurrencyDetailsQuery, CurrencyDetailsResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly ICurrencyRepository _repository;
         private readonly IMapper _mapper;
-        public GetCurrencyDetailsQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetCurrencyDetailsQueryHandler(ICurrencyRepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _repository = repository ?? throw new ArgumentNullException(nameof(ICurrencyRepository));
             _mapper = mapper;
         }
         public async Task<CurrencyDetailsResponse> Handle(GetCurrencyDetailsQuery request, CancellationToken cancellationToken)
         {
-            var currency =
-                await _dbContext.Currency
-                    .ProjectTo<CurrencyDetailsDto>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(x => x.CurrencyId == request.CurrencyId, cancellationToken);
+            var currencydto =
+                await _repository.GetCurrencyByIdAsync(request.CurrencyId, cancellationToken);
+            if(currencydto == null)
+                throw new NotFoundExceptions(nameof(currencydto), request.CurrencyId);
 
-            if(currency == null)
-                throw new NotFoundExceptions(nameof(currency), request.CurrencyId);
+            var currency = _mapper.Map<CurrencyDetailsDto>(currencydto);
 
             return new CurrencyDetailsResponse(currency);
         }
