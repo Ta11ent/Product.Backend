@@ -17,6 +17,7 @@ namespace ProductCatalog.Infrastructure
             services.TryAddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.TryAddScoped<ICurrencyRepository, CurrencyRepository>();
             services.TryAddScoped<IManufacturerRepository, ManufacturerRepository>();
+            services.TryAddScoped<IROERepository, ROERepository>();
 
             ///<summary
             ///Cashed Repository

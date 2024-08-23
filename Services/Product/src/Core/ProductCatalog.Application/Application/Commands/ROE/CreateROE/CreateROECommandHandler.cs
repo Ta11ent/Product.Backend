@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Abstractions;
 
 namespace ProductCatalog.Application.Application.Commands.ROE.CreateROE
 {
     public class CreateROECommandHandler : IRequestHandler<CreateROECommand, Guid>
     {
-        private readonly IProductDbContext _dbContext;
-        public CreateROECommandHandler(IProductDbContext dbContext) =>
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        private readonly IROERepository _repository;
+        public CreateROECommandHandler(IROERepository repository) =>
+            _repository = repository ?? throw new ArgumentNullException(nameof(IROERepository));
         public async Task<Guid> Handle(CreateROECommand request, CancellationToken cancellationToken)
         {
             var roe = new Domain.ROE()
@@ -18,8 +18,8 @@ namespace ProductCatalog.Application.Application.Commands.ROE.CreateROE
                 DateFrom = request.DateFrom
             };
 
-            await _dbContext.ROE.AddAsync(roe, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.CreateROEAsync(roe, cancellationToken);
+            await _repository.SaveChangesAsync(cancellationToken);
 
             return roe.ROEId;
         }

@@ -1,34 +1,27 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
+
 
 namespace ProductCatalog.Application.Application.Queries.ROE.GetROEDetails
 {
     public class GetROEDetailsQueryHandler : IRequestHandler<GetROEDetailsQuery, ROEDetailsResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly IROERepository _repository;
         private readonly IMapper _mapper;
-        public GetROEDetailsQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetROEDetailsQueryHandler(IROERepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException("ProductDbContext");
+            _repository = repository ?? throw new ArgumentNullException("ProductDbContext");
             _mapper = mapper;
         }
         public async Task<ROEDetailsResponse> Handle(GetROEDetailsQuery request, CancellationToken cancellationToken)
         {
-            var roe =
-                await _dbContext.ROE
-                    .Where(x => x.CurrecnyId == request.CurrencyId
-                        && x.ROEId == request.ROEId)
-                    .ProjectTo<ROEDetailsDto>(_mapper.ConfigurationProvider)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(cancellationToken);
-
-            if (roe == null)
+            var roedto = await _repository.GetROEByIdAsync(request.CurrencyId, request.ROEId, cancellationToken);
+            if (roedto == null)
                 throw new NotFoundExceptions(nameof(ROE), request.ROEId);
 
+            var roe = _mapper.Map<ROEDetailsDto>(roedto);
             return new ROEDetailsResponse(roe);
         }
     }
