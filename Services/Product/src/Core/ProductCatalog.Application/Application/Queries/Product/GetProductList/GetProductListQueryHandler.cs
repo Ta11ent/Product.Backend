@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Models;
 using ProductCatalog.Application.Common.Predicate;
 
 
@@ -13,13 +14,16 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
     {
         private readonly IProductDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly ICurrencyService _currencyService;
+        private readonly ICurrencyRepository _currencyRepository;
 
-        public GetProductListQueryHandler(IProductDbContext dbContext, IMapper mapper, ICurrencyService currency)
+        public GetProductListQueryHandler(
+            IProductDbContext dbContext, 
+            IMapper mapper,
+            ICurrencyRepository currencyRepository)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
-            _currencyService = currency;
+            _currencyRepository = currencyRepository;
         }
 
         public async Task<ProductListResponse> Handle(GetProductListQuery request, CancellationToken cancellationToken)
@@ -49,7 +53,8 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 
             if (!String.IsNullOrEmpty(request.CurrencyCode))
             {
-                var currency = await _currencyService.GetCurrentROEofCurrency(request.CurrencyCode, cancellationToken);
+                var currencydto = await _currencyRepository.GetCurrencyWithActiveROEAsync(request.CurrencyCode, cancellationToken);
+                var currency = _mapper.Map<CurrencyDto>(currencydto);
 
                 if (currency != null) { 
 

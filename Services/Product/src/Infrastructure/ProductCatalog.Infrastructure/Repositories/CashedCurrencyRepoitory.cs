@@ -40,7 +40,10 @@ namespace ProductCatalog.Infrastructure.Repositories
                 null,
                 cancellationToken);
 
-        public Task SaveChangesAsync(CancellationToken cancellationToken)
-            => _decorated.SaveChangesAsync(cancellationToken);
+        public async Task<Currency> GetCurrencyWithActiveROEAsync(string code, CancellationToken cancellationToken)
+            => await _decorated.GetCurrencyWithActiveROEAsync(code, cancellationToken);
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+            => await _decorated.SaveChangesAsync(cancellationToken);
     }
 }

@@ -11,7 +11,6 @@ namespace ProductCatalog.Infrastructure.Repositories
         public CurrencyRepository(IProductDbContext dbContext) : base(dbContext) { }
         public async Task CreateCurrencyAsync(Currency currency, CancellationToken cancellationToken)
             => await _dbContext.Currency.AddAsync(currency);
-
         public void DeleteCurrency(Currency currency) => _dbContext.Currency.Remove(currency);
 
         public async Task<IEnumerable<Currency>> GetAllCurrenciesAsync(IPagination pagination, CancellationToken cancellationToken)
@@ -23,7 +22,14 @@ namespace ProductCatalog.Infrastructure.Repositories
                   .ToListAsync(cancellationToken);
             return data;
         }
-
+        public async Task<Currency> GetCurrencyWithActiveROEAsync(string code, CancellationToken cancellationToken)
+        {
+            var data = await _dbContext.Currency
+                .Where(x => x.Code == code)
+                .Include(x => x.ROEs.OrderByDescending(y => y.DateFrom).Take(1))
+                .FirstOrDefaultAsync(cancellationToken);
+            return data!;
+        }
         public async Task<Currency> GetCurrencyByIdAsync(Guid currencyId, CancellationToken cancellationToken)
         {
             var data =

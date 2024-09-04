@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
 using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Models;
 using ProductCatalog.Application.Common.Predicate;
 
 namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetails
@@ -13,13 +14,13 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
     {
         private readonly IProductDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly ICurrencyService _currency;
+        private readonly ICurrencyRepository _currencyRepository;
 
-        public GetProductDetailsQueryHandler(IProductDbContext dbContext, IMapper mapper, ICurrencyService currency)
+        public GetProductDetailsQueryHandler(IProductDbContext dbContext, IMapper mapper, ICurrencyRepository currencyRepository)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper;
-            _currency = currency;
+            _currencyRepository = currencyRepository;
         }
 
         public async Task<ProductDetailsResponse> Handle(GetProductDetailsQuery request, CancellationToken cancellationToken)
@@ -51,7 +52,9 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductDetai
                 throw new NotFoundExceptions(nameof(product), request.ProductId);
 
             if (!String.IsNullOrEmpty(request.CurrencyCode)) {
-                var currency = await _currency.GetCurrentROEofCurrency(request.CurrencyCode, cancellationToken);
+                //var currency = await _currency.GetCurrentROEofCurrency(request.CurrencyCode, cancellationToken);
+                var currencydto = await _currencyRepository.GetCurrencyWithActiveROEAsync(request.CurrencyCode, cancellationToken);
+                var currency = _mapper.Map<CurrencyDto>(currencydto);
 
                 if (currency != null)
                 {
