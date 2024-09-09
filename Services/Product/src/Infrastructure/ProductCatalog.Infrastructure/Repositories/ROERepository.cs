@@ -7,7 +7,7 @@ namespace ProductCatalog.Infrastructure.Repositories
 {
     public class ROERepository : BaseRepository, IROERepository
     {
-        protected ROERepository(IProductDbContext dbContext) : base(dbContext) { }
+        public ROERepository(IProductDbContext dbContext) : base(dbContext) { }
 
         public async Task CreateROEAsync(ROE roe, CancellationToken cancellationToken) =>
             await _dbContext.ROE.AddAsync(roe, cancellationToken);

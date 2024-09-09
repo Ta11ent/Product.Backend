@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Application.Application.Commands.Category.DeleteCategory
 {
