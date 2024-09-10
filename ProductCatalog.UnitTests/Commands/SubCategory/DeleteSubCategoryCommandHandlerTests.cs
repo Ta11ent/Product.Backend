@@ -1,25 +1,30 @@
 ﻿using Moq;
-using ProductCatalog.Application.Application.Commands.Category.DeleteCategory;
+using ProductCatalog.Application.Application.Commands.SubCategory.DeleteSubCategory;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
 
-namespace ProductCatalog.UnitTests.Commands.Category
+namespace ProductCatalog.UnitTests.Commands.SubCategory
 {
-    public class DeleteCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
+    public class DeleteSubCategoryCommandHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
-        private readonly DeleteCategoryCommand _command;
-        public DeleteCategoryCommandHandlerTests() : base () => _command = new() { CategoryId = Guid.NewGuid() };
+        private readonly DeleteSubCategoryCommand _command;
+        public DeleteSubCategoryCommandHandlerTests() : base() => _command = new()
+        {
+            CategoryId = Guid.NewGuid(),
+            SubCategoryId = Guid.NewGuid()
+        };
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
             _repository.Setup(
-                x => x.GetCategoryByIdAsync(
+                x => x.GetSubCategoryByIdAsync(
+                    It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteSubCategoryCommandHandler(_repository.Object);
 
             var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_command, default));
         }
@@ -29,24 +34,26 @@ namespace ProductCatalog.UnitTests.Commands.Category
         {
             //Arrange
             _repository.Setup(
-               x => x.GetCategoryByIdAsync(
+               x => x.GetSubCategoryByIdAsync(
+                   It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
+               .ReturnsAsync(new Domain.SubCategory()
                {
-                   CategoryId = _command.CategoryId,
+                   SubCategoryId = _command.SubCategoryId,
                    Name = "test name",
-                   Description = "test description"
+                   Description = "test description",
+                   CategoryId = _command.CategoryId
                });
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteSubCategoryCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);
 
             //Assert
             _repository.Verify(
-                x => x.DeleteCategory(
-                    It.IsAny<Domain.Category>()),
+                x => x.DeleteSubCategory(
+                    It.IsAny<Domain.SubCategory>()),
                 Times.Once);
 
         }
@@ -56,16 +63,18 @@ namespace ProductCatalog.UnitTests.Commands.Category
         {
             //Arrange
             _repository.Setup(
-               x => x.GetCategoryByIdAsync(
+               x => x.GetSubCategoryByIdAsync(
+                   It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
+               .ReturnsAsync(new Domain.SubCategory()
                {
-                   CategoryId = _command.CategoryId,
+                   SubCategoryId = _command.SubCategoryId,
                    Name = "test name",
-                   Description = "test description"
+                   Description = "test description",
+                   CategoryId = _command.CategoryId
                });
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteSubCategoryCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);

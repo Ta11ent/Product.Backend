@@ -1,39 +1,38 @@
 ﻿using FluentAssertions;
 using Moq;
-using ProductCatalog.Application.Application.Queries.Category.GetCategoryList;
+using ProductCatalog.Application.Application.Queries.Currency.GetCurrencyList;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Pagination;
 
-namespace ProductCatalog.UnitTests.Queries.Category
+namespace ProductCatalog.UnitTests.Queries.Currency
 {
-    public class GetCategoryListQueryHandlerTests : BaseTestHandler<ICategoryRepository>
+    public class GetCurrencyListQueryHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
-        private readonly GetCategoryListQuery _query;
-        public GetCategoryListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
-
+        private readonly GetCurrencyListQuery _query;
+        public GetCurrencyListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
         {
             //Arrange
             _repository.Setup(
-                mock => mock.GetAllCategoriesAsync(
+                mock => mock.GetAllCurrenciesAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.Category> {new Domain.Category()
+                .ReturnsAsync(new List<Domain.Currency> {new Domain.Currency()
                 {
-                    CategoryId = Guid.NewGuid(),
+                    CurrencyId = Guid.NewGuid(),
                     Name = "test name",
-                    Description = "test description"
+                    Code = "test code"
                 }});
 
-            var handle = new GetCategoryListQueryHandler(_repository.Object, _mapper);
+            var handle = new GetCurrencyListQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await handle.Handle(_query, default);
             //Assert
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
-            Assert.IsType<List<CategoryListDto>>(result.data);
-            
+            Assert.IsType<List<CurrencyListDto>>(result.data);
+
         }
 
         [Fact]
@@ -41,12 +40,12 @@ namespace ProductCatalog.UnitTests.Queries.Category
         {
             //Arrange 
             _repository.Setup(
-                mock => mock.GetAllCategoriesAsync(
+                mock => mock.GetAllCurrenciesAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var hadle = new GetCategoryListQueryHandler(_repository.Object, _mapper);
+            var hadle = new GetCurrencyListQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await hadle.Handle(_query, default);
             //

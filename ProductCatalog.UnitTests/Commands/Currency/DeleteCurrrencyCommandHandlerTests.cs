@@ -1,25 +1,24 @@
 ﻿using Moq;
-using ProductCatalog.Application.Application.Commands.Category.DeleteCategory;
+using ProductCatalog.Application.Application.Commands.Currency.DeleteCurrency;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
 
-namespace ProductCatalog.UnitTests.Commands.Category
+namespace ProductCatalog.UnitTests.Commands.Currency
 {
-    public class DeleteCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
+    public class DeleteCurrrencyCommandHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
-        private readonly DeleteCategoryCommand _command;
-        public DeleteCategoryCommandHandlerTests() : base () => _command = new() { CategoryId = Guid.NewGuid() };
-
+        private readonly DeleteCurrencyCommand _command;
+        public DeleteCurrrencyCommandHandlerTests() : base() => _command = new() { CurrencyId = Guid.NewGuid() };
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
             _repository.Setup(
-                x => x.GetCategoryByIdAsync(
+                x => x.GetCurrencyByIdAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteCurrencyCommandHandler(_repository.Object);
 
             var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_command, default));
         }
@@ -29,24 +28,24 @@ namespace ProductCatalog.UnitTests.Commands.Category
         {
             //Arrange
             _repository.Setup(
-               x => x.GetCategoryByIdAsync(
+               x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
+               .ReturnsAsync(new Domain.Currency()
                {
-                   CategoryId = _command.CategoryId,
+                   CurrencyId = _command.CurrencyId,
                    Name = "test name",
-                   Description = "test description"
+                   Code = "test code"
                });
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteCurrencyCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);
 
             //Assert
             _repository.Verify(
-                x => x.DeleteCategory(
-                    It.IsAny<Domain.Category>()),
+                x => x.DeleteCurrency(
+                    It.IsAny<Domain.Currency>()),
                 Times.Once);
 
         }
@@ -56,16 +55,16 @@ namespace ProductCatalog.UnitTests.Commands.Category
         {
             //Arrange
             _repository.Setup(
-               x => x.GetCategoryByIdAsync(
+               x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
+               .ReturnsAsync(new Domain.Currency()
                {
-                   CategoryId = _command.CategoryId,
+                   CurrencyId = _command.CurrencyId,
                    Name = "test name",
-                   Description = "test description"
+                   Code = "test code"
                });
-            var handler = new DeleteCategoryCommandHandler(_repository.Object);
+            var handler = new DeleteCurrencyCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);

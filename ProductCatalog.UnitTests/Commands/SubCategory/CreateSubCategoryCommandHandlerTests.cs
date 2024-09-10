@@ -1,27 +1,31 @@
-﻿using Moq;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Moq;
 using ProductCatalog.Application.Application.Commands.Category.CreateCategory;
+using ProductCatalog.Application.Application.Commands.SubCategory.CreateSubCategory;
 using ProductCatalog.Application.Common.Abstractions;
 
-namespace ProductCatalog.UnitTests.Commands.Category
+namespace ProductCatalog.UnitTests.Commands.SubCategory
 {
-    public class CreateCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
+    public class CreateSubCategoryCommandHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
-        private readonly CreateCategoryCommand _command = 
-            new CreateCategoryCommand() { Name = "TestName", Description = "TestDescription" };
-        public CreateCategoryCommandHandlerTests() : base() { }
-
+        private readonly CreateSubCategoryCommand _command;
+        public CreateSubCategoryCommandHandlerTests() : base() => _command = new()
+        {
+            CategoryId = Guid.NewGuid(),
+            Name = "test name",
+            Description = "test description"
+        };
         [Fact]
         public async Task Handle_Should_CallAddOnRepository()
         {
             //Arrange
-            var handler = new CreateCategoryCommandHandler(_repository.Object);
+            var handler = new CreateSubCategoryQueryHandler(_repository.Object);
             //Act
             var result = await handler.Handle(_command, default);
             //Assert
             _repository.Verify(
-                x => x.CreateCategoryAsync(
-                    It.IsAny<Domain.Category>(),
+                x => x.CreateSubCategoryAsync(
+                    It.IsAny<Domain.SubCategory>(),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
@@ -30,7 +34,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
         public async Task Handle_Should_ReturnSuccessResult()
         {
             //Arrange
-            var handler = new CreateCategoryCommandHandler(_repository.Object);
+            var handler = new CreateSubCategoryQueryHandler(_repository.Object);
             //Act
             var result = await handler.Handle(_command, default);
             //Assert
@@ -42,7 +46,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
         public async Task Handle_Should_CallSaveChanges()
         {
             //Arrange
-            var handler = new CreateCategoryCommandHandler(_repository.Object);
+            var handler = new CreateSubCategoryQueryHandler(_repository.Object);
             //Act
             var result = await handler.Handle(_command, default);
             //Assert

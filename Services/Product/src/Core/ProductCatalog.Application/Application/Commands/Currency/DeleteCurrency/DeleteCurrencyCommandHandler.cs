@@ -8,7 +8,7 @@ namespace ProductCatalog.Application.Application.Commands.Currency.DeleteCurrenc
     {
         private readonly ICurrencyRepository _repository;
         public DeleteCurrencyCommandHandler(ICurrencyRepository repository) =>
-            _repository = _repository ?? throw new ArgumentNullException(nameof(ICurrencyRepository));
+            _repository = repository ?? throw new ArgumentNullException(nameof(ICurrencyRepository));
         public async Task Handle(DeleteCurrencyCommand request, CancellationToken cancellationToken)
         {
             var currency = await _repository.GetCurrencyByIdAsync(request.CurrencyId, cancellationToken);

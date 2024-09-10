@@ -1,26 +1,30 @@
 ﻿using Moq;
-using ProductCatalog.Application.Application.Commands.Category.UpdateCategory;
+using ProductCatalog.Application.Application.Commands.Currency.UpdateCurrency;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
 
-namespace ProductCatalog.UnitTests.Commands.Category
+namespace ProductCatalog.UnitTests.Commands.Currency
 {
-    public class UpdateCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
+    public class UpdateCurrencyCommandHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
-        private readonly UpdateCategoryCommand _command;
-        public UpdateCategoryCommandHandlerTests() : base () =>
-            _command = new() { CategoryId = Guid.NewGuid(), Name = "TestName", Description = "TestDescription" };
+        private readonly UpdateCurrecnyCommand _command;
+        public UpdateCurrencyCommandHandlerTests() : base() => _command = new()
+        {
+            CurrencyId = Guid.NewGuid(),
+            Name = "test name",
+            Code = "test code"
+        };
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
             _repository.Setup(
-                x => x.GetCategoryByIdAsync(
+                x => x.GetCurrencyByIdAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var handler = new UpdateCategoryCommandHandler(_repository.Object);
+            var handler = new UpdateCurrecnyCommandHandler(_repository.Object);
 
             var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_command, default));
         }
@@ -30,16 +34,16 @@ namespace ProductCatalog.UnitTests.Commands.Category
         {
             //Arrange
             _repository.Setup(
-               x => x.GetCategoryByIdAsync(
+               x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
+               .ReturnsAsync(new Domain.Currency()
                {
-                   CategoryId = _command.CategoryId,
+                   CurrencyId = _command.CurrencyId,
                    Name = "test name",
-                   Description = "test description"
+                   Code = "test code"
                });
-            var handler = new UpdateCategoryCommandHandler(_repository.Object);
+            var handler = new UpdateCurrecnyCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);
@@ -50,3 +54,4 @@ namespace ProductCatalog.UnitTests.Commands.Category
         }
     }
 }
+
