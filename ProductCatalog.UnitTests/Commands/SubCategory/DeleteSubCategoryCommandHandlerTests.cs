@@ -15,7 +15,7 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
         };
 
         [Fact]
-        public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
+        public void Handle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
             _repository.Setup(
                 x => x.GetSubCategoryByIdAsync(

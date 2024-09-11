@@ -1,33 +1,28 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Application.Application.Queries.Manufacturer.GetManufacturerDetails
 {
     public class GetManufacturerDetailsQueryHandler : IRequestHandler<GetManufacturerDetailsQuery, ManufacturerDetailsResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly IManufacturerRepository _repository;
         private readonly IMapper _mapper;
-        public GetManufacturerDetailsQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetManufacturerDetailsQueryHandler(IManufacturerRepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _repository = repository ?? throw new ArgumentNullException(nameof(IManufacturerRepository));
             _mapper = mapper;
         }
         public async Task<ManufacturerDetailsResponse> Handle(GetManufacturerDetailsQuery request, CancellationToken cancellationToken)
         {
-           var manufacturer =
-               await _dbContext.Manufacturer
-                .Where(c => c.ManufacturerId == request.ManufacturerId)
-                .ProjectTo<ManufacturerDetailsDto>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(cancellationToken);
+            var manufacturer = await _repository.GetManufacturerByIdAsync(request.ManufacturerId, cancellationToken);
 
             if (manufacturer == null)
                 throw new NotFoundExceptions(nameof(manufacturer), request.ManufacturerId);
+            var manufacturerdto = _mapper.Map<ManufacturerDetailsDto>(manufacturer);
 
-            return new ManufacturerDetailsResponse(manufacturer);
+            return new ManufacturerDetailsResponse(manufacturerdto);
         }
     }
 }

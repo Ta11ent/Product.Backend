@@ -1,30 +1,24 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using ProductCatalog.Application.Common.Interfaces;
+using ProductCatalog.Application.Common.Abstractions;
 
 namespace ProductCatalog.Application.Application.Queries.Manufacturer.GetManufacturerList
 {
     public class GetManufacturerListQueryHandler : IRequestHandler<GetManufacturerListQuery, ManufacturerListResponse>
     {
-        private readonly IProductDbContext _dbContext;
+        private readonly IManufacturerRepository _repository;
         private readonly IMapper _mapper;
-        public GetManufacturerListQueryHandler(IProductDbContext dbContext, IMapper mapper)
+        public GetManufacturerListQueryHandler(IManufacturerRepository repository, IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _repository = repository ?? throw new ArgumentNullException(nameof(IManufacturerRepository));
             _mapper = mapper;
         }
         public async Task<ManufacturerListResponse> Handle(GetManufacturerListQuery request, CancellationToken cancellationToken)
         {
-            var manufacturers = await
-               _dbContext.Manufacturer
-               .Skip((request.Page - 1) * request.PageSize)
-               .Take(request.PageSize)
-               .ProjectTo<ManufacturerListDto>(_mapper.ConfigurationProvider)
-               .ToListAsync(cancellationToken);
+            var manufacturers = await _repository.GetAllManufacturersAsync(request, cancellationToken);
+            var manufacturersdto = _mapper.Map<List<ManufacturerListDto>>(manufacturers);
 
-            return new ManufacturerListResponse(manufacturers, request);
+            return new ManufacturerListResponse(manufacturersdto, request);
         }
     }
 }

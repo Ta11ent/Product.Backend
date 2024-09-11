@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Services\Product\src\Core\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\Product\" />
+  </ItemGroup>
+
 </Project>

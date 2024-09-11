@@ -1,13 +1,14 @@
 ﻿using MediatR;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Interfaces;
 
 namespace ProductCatalog.Application.Application.Commands.Manufacturer.CreateManufacturer
 {
     public class CreateManufacturerCommandHandler : IRequestHandler<CreateManufacturerCommand, Guid>
     {
-        private readonly IProductDbContext _dbContext;
-        public CreateManufacturerCommandHandler(IProductDbContext dbContext) =>
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        private readonly IManufacturerRepository _repository;
+        public CreateManufacturerCommandHandler(IManufacturerRepository repository) =>
+            _repository = repository ?? throw new ArgumentNullException(nameof(IManufacturerRepository));
         public async Task<Guid> Handle(CreateManufacturerCommand request, CancellationToken cancellationToken)
         {
             var manufacturer = new Domain.Manufacturer()
@@ -17,8 +18,8 @@ namespace ProductCatalog.Application.Application.Commands.Manufacturer.CreateMan
                 Description = request.Description
             };
 
-            await _dbContext.Manufacturer.AddAsync(manufacturer, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.CreateManufacturerAsync(manufacturer, cancellationToken);
+            await _repository.SaveChangesAsync(cancellationToken);
 
             return manufacturer.ManufacturerId;
         }

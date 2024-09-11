@@ -1,43 +1,44 @@
 ﻿using FluentAssertions;
 using Moq;
-using ProductCatalog.Application.Application.Queries.Currency.GetCurrencyList;
+using ProductCatalog.Application.Application.Queries.Manufacturer.GetManufacturerList;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Pagination;
 
-namespace ProductCatalog.UnitTests.Queries.Currency
+namespace ProductCatalog.UnitTests.Queries.Manufacturer
 {
-    public class GetCurrencyListQueryHandlerTests : BaseTestHandler<ICurrencyRepository>
+    public class GetManufacturerListQueryHandlerTests : BaseTestHandler<IManufacturerRepository>
     {
-        private readonly GetCurrencyListQuery _query;
-        public GetCurrencyListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
+        private readonly GetManufacturerListQuery _query;
+        public GetManufacturerListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize =10};
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
         {
             //Arrange
             _repository.Setup(
-                mock => mock.GetAllCurrenciesAsync(
+                mock => mock.GetAllManufacturersAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.Currency> {
-                    new Domain.Currency(){
-                    CurrencyId = Guid.NewGuid(),
+                .ReturnsAsync(new List<Domain.Manufacturer> {
+                    new Domain.Manufacturer(){
+                    ManufacturerId = Guid.NewGuid(),
                     Name = "test name",
-                    Code = "test code"
+                    Description = "test description"
                 },
-                new Domain.Currency(){
-                    CurrencyId = Guid.NewGuid(),
+                    new Domain.Manufacturer(){
+                    ManufacturerId = Guid.NewGuid(),
                     Name = "test name1",
-                    Code = "test code1"
-                }});
+                    Description = "test description1"
+                } });
 
-            var handle = new GetCurrencyListQueryHandler(_repository.Object, _mapper);
+            var handle = new GetManufacturerListQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await handle.Handle(_query, default);
             //Assert
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
-            Assert.IsType<List<CurrencyListDto>>(result.data);
+            Assert.IsType<List<ManufacturerListDto>>(result.data);
             result.meta.count.Should().Be(2);
+
         }
 
         [Fact]
@@ -45,12 +46,12 @@ namespace ProductCatalog.UnitTests.Queries.Currency
         {
             //Arrange 
             _repository.Setup(
-                mock => mock.GetAllCurrenciesAsync(
+                mock => mock.GetAllManufacturersAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var hadle = new GetCurrencyListQueryHandler(_repository.Object, _mapper);
+            var hadle = new GetManufacturerListQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await hadle.Handle(_query, default);
             //

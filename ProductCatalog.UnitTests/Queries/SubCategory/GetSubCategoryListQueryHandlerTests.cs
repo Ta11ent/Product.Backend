@@ -25,11 +25,17 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
                     It.IsAny<Guid>(),
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.SubCategory> {new Domain.SubCategory()
-                {
+                .ReturnsAsync(new List<Domain.SubCategory> {
+                   new Domain.SubCategory(){
                    SubCategoryId = Guid.NewGuid(),
                    Name = "test name",
                    Description = "test description",
+                   CategoryId = _query.CategoryId
+                },
+                   new Domain.SubCategory(){
+                   SubCategoryId = Guid.NewGuid(),
+                   Name = "test name1",
+                   Description = "test description1",
                    CategoryId = _query.CategoryId
                 }});
 
@@ -40,7 +46,7 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<SubCategoryListDto>>(result.data);
-
+            result.meta.count.Should().Be(2);
         }
 
         [Fact]
