@@ -18,6 +18,13 @@
             Available = avalible;
             return this;
         }
+
+        public ProductSale Create(Product product, Cost cost)
+        {
+            Product = product;
+            Costs = new List<Cost>() { cost };
+            return this;
+        }
         public ProductSale Update(Guid subCategoryId, bool avalible)
         {
             SubCategoryId = subCategoryId;

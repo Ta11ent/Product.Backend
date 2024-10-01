@@ -27,6 +27,7 @@ namespace ProductCatalog.Infrastructure
             services.Decorate<ISubCategoryRepository, CashedSubCategoryRepository>();
             services.Decorate<ICurrencyRepository, CashedCurrencyRepoitory>();
             services.Decorate<IManufacturerRepository, CashedManufacturerRepository>();
+            services.Decorate<IProductRepository, CashedProductRepository>();
 
             services.AddStackExchangeRedisCache(redisOptions =>
             {
