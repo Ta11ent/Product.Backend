@@ -9,6 +9,7 @@ namespace ProductCatalog.APIcs.Validation.Product
             RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Description).NotEmpty().MaximumLength(300);
             RuleFor(x => x.Price).GreaterThan(0).NotEmpty();
+            RuleFor(x => x.ManufacturerId).NotEmpty();
         }
     }
 }

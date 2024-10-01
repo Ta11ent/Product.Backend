@@ -11,7 +11,7 @@ namespace ProductCatalog.APIcs.Validation.Product
                 .MaximumLength(250);
             RuleFor(x => x.Description).NotEmpty().MaximumLength(300);
             RuleFor(x => x.Price).GreaterThan(0).NotEmpty();
-            RuleFor(x => x.Currency).NotNull();
+            RuleFor(x => x.CurrencyId).NotEqual(Guid.Empty);    
         }
     }
 }

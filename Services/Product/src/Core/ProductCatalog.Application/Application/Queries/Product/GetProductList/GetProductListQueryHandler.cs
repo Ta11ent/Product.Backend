@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Application.Common.Abstractions;
-using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Application.Common.Models;
 using ProductCatalog.Application.Common.Predicate;
 
@@ -12,44 +9,35 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 {
     public class GetProductListQueryHandler : IRequestHandler<GetProductListQuery, ProductListResponse>
     {
-        private readonly IProductDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly IProductRepository _productRepository;
         private readonly ICurrencyRepository _currencyRepository;
-
+        private readonly IMapper _mapper;
+       
         public GetProductListQueryHandler(
-            IProductDbContext dbContext, 
-            IMapper mapper,
-            ICurrencyRepository currencyRepository)
+            IProductRepository productRepository, 
+            ICurrencyRepository currencyRepository,
+            IMapper mapper)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _mapper = mapper;
+            _productRepository = productRepository;
             _currencyRepository = currencyRepository;
+            _mapper = mapper;
         }
 
         public async Task<ProductListResponse> Handle(GetProductListQuery request, CancellationToken cancellationToken)
         {
-            var predicate = PredicateBuilder.True<Domain.ProductSale>();
-
-            var products = await
-                _dbContext.ProductSale
-                .Include(x => x.Costs.OrderByDescending(y => y.DatePrice).Take(1))
-                    .ThenInclude(x => x.Currency)
-                        .ThenInclude(x => x.ROEs
-                            .OrderByDescending(x => x.DateFrom).Take(1))
-                .Where(predicate
-                    .And(x => x.SubCategory.CategoryId == request.CategoryId,
+            var predicate = PredicateBuilder
+                .True<Domain.ProductSale>()
+                .And(x => x.SubCategory.CategoryId == request.CategoryId,
                         request.CategoryId)
                     .And(x => x.SubCategoryId == request.SubCategoryId,
                         request.SubCategoryId)
                     .And(x => x.Available == request.Available,
                         request.Available)
                     .And(x => request.ProductIds!.Contains(x.ProductSaleId),
-                        request.ProductIds!.Any() ? request.ProductIds : null))
-                .Skip((request.Page - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .OrderBy(x => x.Product.Name)
-                .ProjectTo<ProductListDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                        request.ProductIds!.Any() ? request.ProductIds : null);
+
+            var products = await _productRepository.GetAllProductsAsync(predicate, request, cancellationToken);
+            var productsdto = _mapper.Map<List<ProductListDto>>(products);
 
             if (!String.IsNullOrEmpty(request.CurrencyCode))
             {
@@ -58,7 +46,7 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 
                 if (currency != null) { 
 
-                    foreach(var product in products)
+                    foreach(var product in productsdto)
                     {
                         product.Ccy = currency.Code;
                         product.Price = Math.Round((product.Price / product.Rate) * currency.Rate, 4);
@@ -68,7 +56,7 @@ namespace ProductCatalog.Application.Application.Queries.Product.GetProductList
 
             }
 
-            return new ProductListResponse(products, request);
+            return new ProductListResponse(productsdto, request);
         }
     }
 }

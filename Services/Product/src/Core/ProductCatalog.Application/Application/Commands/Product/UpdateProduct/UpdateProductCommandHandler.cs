@@ -1,51 +1,44 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
-using ProductCatalog.Application.Common.Interfaces;
-using System.Diagnostics;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using ProductCatalog.Application.Common.Predicate;
+
 
 namespace ProductCatalog.Application.Application.Commands.Product.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
     {
-        private readonly IProductDbContext _dbContext;
-        public UpdateProductCommandHandler(IProductDbContext dbContect) =>
-            _dbContext = dbContect ?? throw new ArgumentNullException(nameof(dbContect));
+        private readonly IProductRepository _productRepository;
+        public UpdateProductCommandHandler(IProductRepository productRepository) =>
+            _productRepository = productRepository ?? throw new ArgumentNullException(nameof(IProductRepository));
         public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product =
-                await _dbContext.ProductSale
-                    .Include(x => x.Costs)
-                    .Include(x => x.Product)
-                    .FirstOrDefaultAsync(x => x.SubCategoryId == request.SubCategoryId
-                        && x.ProductSaleId == request.ProductId,
-                        cancellationToken);
+            var predicate = PredicateBuilder
+               .True<Domain.ProductSale>()
+               .And(x => x.SubCategory.CategoryId == request.CategoryId,
+                       request.CategoryId)
+                   .And(x => x.SubCategoryId == request.SubCategoryId,
+                       request.SubCategoryId)
+                   .And(x => x.ProductSaleId == request.ProductId,
+                       request.ProductId);
 
-            if (product == null)
-                throw new NotFoundExceptions(nameof(product), cancellationToken);
+            var productSale = await _productRepository.GetProductByIdAsync(request.ProductId, predicate, cancellationToken);
+            if (productSale == null)
+                throw new NotFoundExceptions(nameof(productSale), request.ProductId);
 
-            var pr = product.Product;
-            pr.Name = request.Name;
-            pr.Description = request.Description;
-            product.SubCategoryId = request.SubCategoryId;
-            product.Available = request.Available is null
-                ? product.Available
-                : request.Available.Value;
+            productSale.Product.Update(request.Name, request.Description, request.ManufacturerId);
+            productSale.Update(request.SubCategoryId, request.Available ?? default);
 
-            var cost = product.Costs.OrderByDescending(y => y.DatePrice).FirstOrDefault();
+            var cost = productSale.Costs.OrderByDescending(y => y.DatePrice).FirstOrDefault();
+            if (cost!.Price != request.Price)
+                await _productRepository.CreateProductCostAsync(
+                    new Domain.Cost().Create(
+                        productSale.ProductSaleId, 
+                        request.Price,
+                        cost.CurrencyId),
+                    cancellationToken);
 
-            if (cost.Price != request.Price)
-                await _dbContext.Costs.AddAsync(new Domain.Cost()
-                {
-                    CostId = Guid.NewGuid(),
-                    ProductSaleId = request.ProductId,
-                    Price = request.Price,
-                    DatePrice = DateTime.Now,
-                    CurrencyId = cost.CurrencyId
-                });
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _productRepository.SaveChangesAsync(cancellationToken);
         }
     }
 }

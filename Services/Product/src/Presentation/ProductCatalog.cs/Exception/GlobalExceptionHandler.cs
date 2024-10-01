@@ -12,7 +12,7 @@
 
             var problemDetails = CreateProblemDetails(exception);
 
-            httpContext.Response.StatusCode = (int)problemDetails.Status;
+            httpContext.Response.StatusCode = (int)problemDetails.Status!;
             httpContext.Response.ContentType = "application/json";
 
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);

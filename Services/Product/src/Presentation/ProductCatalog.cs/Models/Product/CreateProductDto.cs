@@ -8,7 +8,8 @@ namespace ProductCatalog.cs.Models.Product
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        public Guid Currency { get; set; }
+        public Guid CurrencyId { get; set; }
+        public Guid ManufacturerId { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateProductDto, CreateProductCommand>()
@@ -23,7 +24,9 @@ namespace ProductCatalog.cs.Models.Product
                 .ForMember(x => x.Price,
                     opt => opt.MapFrom(y => y.Price))
                 .ForMember(x => x.CurrencyId,
-                    opt => opt.MapFrom(y => y.Currency));
+                    opt => opt.MapFrom(y => y.CurrencyId))
+                .ForMember(x => x.ManufacturerId,
+                    opt => opt.MapFrom(y => y.ManufacturerId));
         }
     }
 }
