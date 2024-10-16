@@ -1,28 +1,26 @@
 ﻿using Moq;
-using ProductCatalog.Application.Application.Commands.Manufacturer.UpdateManufacturer;
+using ProductCatalog.Application.Application.Commands.Category.UpdateCategory;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
 
-namespace ProductCatalog.UnitTests.Commands.Manufacturer
+namespace ProductCatalog.UnitTests.Commands.Category
 {
-    public class UpdateManufacturerCommandHandlerTests : BaseTestHandler<IManufacturerRepository>
+    public class UpdateCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
     {
-        private readonly UpdateManufacturerCommand _command;
-        public UpdateManufacturerCommandHandlerTests() : base() => _command = new() {
-            ManufacturerId = Guid.NewGuid(),
-            Description = "test description",
-            Name = "test name"
-        };
+        private readonly UpdateCategoryCommand _command;
+        public UpdateCategoryCommandHandlerTests() : base() =>
+            _command = new() { CategoryId = Guid.NewGuid(), Name = "TestName", Description = "TestDescription" };
+
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
             _repository.Setup(
-                x => x.GetManufacturerByIdAsync(
+                x => x.GetCategoryByIdAsync(
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
-            var handler = new UpdateManufacturerCommandHandler(_repository.Object);
+            var handler = new UpdateCategoryCommandHandler(_repository.Object);
 
             var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_command, default));
         }
@@ -32,16 +30,16 @@ namespace ProductCatalog.UnitTests.Commands.Manufacturer
         {
             //Arrange
             _repository.Setup(
-               x => x.GetManufacturerByIdAsync(
+               x => x.GetCategoryByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Manufacturer()
+               .ReturnsAsync(new Domain.Category()
                {
-                   ManufacturerId = _command.ManufacturerId,
-                   Description = _command.Description,
-                   Name = _command.Name
+                   CategoryId = _command.CategoryId,
+                   Name = "test name",
+                   Description = "test description"
                });
-            var handler = new UpdateManufacturerCommandHandler(_repository.Object);
+            var handler = new UpdateCategoryCommandHandler(_repository.Object);
 
             //Act
             await handler.Handle(_command, default);

@@ -16,7 +16,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
         {
             _repository.Setup(
                 mock => mock.GetCategoryByIdAsync(
-                    It.IsAny<Guid>(), 
+                    It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => null!);
 
@@ -24,7 +24,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
 
             var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
         }
-        
+
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
         {
@@ -44,7 +44,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
             var category = await handler.Handle(_query, default);
             //Assert
             Assert.NotNull(category);
-            category.isSuccess.Should().BeTrue();   
+            category.isSuccess.Should().BeTrue();
             Assert.Equal(category.data.CategoryId, _query.CategoryId);
             Assert.IsType<CategoryDetailsDto>(category.data);
         }

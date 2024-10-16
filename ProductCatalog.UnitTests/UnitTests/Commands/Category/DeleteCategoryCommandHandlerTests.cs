@@ -8,7 +8,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
     public class DeleteCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
     {
         private readonly DeleteCategoryCommand _command;
-        public DeleteCategoryCommandHandlerTests() : base () => _command = new() { CategoryId = Guid.NewGuid() };
+        public DeleteCategoryCommandHandlerTests() : base() => _command = new() { CategoryId = Guid.NewGuid() };
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()

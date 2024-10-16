@@ -7,7 +7,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
 {
     public class CreateCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
     {
-        private readonly CreateCategoryCommand _command = 
+        private readonly CreateCategoryCommand _command =
             new CreateCategoryCommand() { Name = "TestName", Description = "TestDescription" };
         public CreateCategoryCommandHandlerTests() : base() { }
 

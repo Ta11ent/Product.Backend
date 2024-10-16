@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Moq;
-using ProductCatalog.Application.Application.Commands.Category.CreateCategory;
 using ProductCatalog.Application.Application.Commands.SubCategory.CreateSubCategory;
 using ProductCatalog.Application.Common.Abstractions;
 

@@ -39,7 +39,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<CategoryListDto>>(result.data);
             result.meta.count.Should().Be(2);
-            
+
         }
 
         [Fact]

@@ -12,7 +12,8 @@ namespace ProductCatalog.UnitTests
         public BaseTestHandler()
         {
             _repository = new();
-            _mapper = new MapperConfiguration(config =>{
+            _mapper = new MapperConfiguration(config =>
+            {
                 config.AddProfile(new AssemblyMappingProfile(typeof(IProductDbContext).Assembly));
             }).CreateMapper();
         }

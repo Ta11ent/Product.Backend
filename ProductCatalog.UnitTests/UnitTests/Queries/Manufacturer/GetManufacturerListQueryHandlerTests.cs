@@ -9,7 +9,8 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
     public class GetManufacturerListQueryHandlerTests : BaseTestHandler<IManufacturerRepository>
     {
         private readonly GetManufacturerListQuery _query;
-        public GetManufacturerListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize =10};
+        public GetManufacturerListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
+
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
         {
