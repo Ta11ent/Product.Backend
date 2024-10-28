@@ -13,12 +13,14 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
     {
         private readonly GetProductDetailsQuery _query;
         private readonly Mock<ICurrencyRepository> _currencyRepository;
+        private readonly ProductSale _product;
         public GetProductDetailsQueryHandlerTests() {
+            _product = new ProductSale().Create(Guid.NewGuid(), Guid.NewGuid(), true);
             _query = new GetProductDetailsQuery()
             {
                 CategoryId = Guid.NewGuid(),
-                SubCategoryId = Guid.NewGuid(),
-                ProductId = Guid.NewGuid(),
+                SubCategoryId = _product.SubCategoryId,
+                ProductId = _product.ProductId
             };
             _currencyRepository = new();
         }
@@ -32,10 +34,10 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
                    It.IsAny<Guid>(),
                    It.IsAny<Expression<Func<ProductSale, bool>>>(),
                    It.IsAny<CancellationToken>()))
-              .ReturnsAsync(new Domain.ProductSale().Create(Guid.NewGuid(), Guid.NewGuid(), true));
+              .ReturnsAsync(() => null!);
             var handler = new GetProductDetailsQueryHandler(_repository.Object, _mapper, _currencyRepository.Object);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = await Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
         }
 
         [Fact]
@@ -47,9 +49,7 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
                   It.IsAny<Guid>(),
                   It.IsAny<Expression<Func<ProductSale, bool>>>(),
                   It.IsAny<CancellationToken>()))
-             .ReturnsAsync(
-                new Domain.ProductSale()
-                    .Create(Guid.NewGuid(), Guid.NewGuid(), true));
+             .ReturnsAsync(_product);
             var handler = new GetProductDetailsQueryHandler(_repository.Object, _mapper, _currencyRepository.Object);
             //Act
             var result = await handler.Handle(_query, default);

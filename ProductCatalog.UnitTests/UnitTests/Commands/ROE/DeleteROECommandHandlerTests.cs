@@ -8,7 +8,22 @@ namespace ProductCatalog.UnitTests.Commands.ROE
     public class DeleteROECommandHandlerTests : BaseTestHandler<IROERepository>
     {
         private readonly DeleteROECommand _command;
-        public DeleteROECommandHandlerTests() : base() => _command = new() { CurrencyId = Guid.NewGuid(), ROEId = Guid.NewGuid() };
+        private readonly Domain.ROE _roe;
+        public DeleteROECommandHandlerTests() : base()
+        {
+            _roe = new()
+            {
+                ROEId = Guid.NewGuid(),
+                CurrecnyId = Guid.NewGuid(),
+                Rate = 0.023253m,
+                DateFrom = DateTime.Now
+            };
+            _command = new() {
+                CurrencyId = _roe.CurrecnyId,
+                ROEId = Guid.NewGuid() 
+            };
+        }
+
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -33,13 +48,7 @@ namespace ProductCatalog.UnitTests.Commands.ROE
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ROE()
-               {
-                   ROEId = Guid.NewGuid(),
-                   CurrecnyId = _command.CurrencyId,
-                   Rate = 0.023253m,
-                   DateFrom = DateTime.Now
-               });
+               .ReturnsAsync(_roe);
             var handler = new DeleteROECommandHandler(_repository.Object);
 
             //Act
@@ -62,13 +71,7 @@ namespace ProductCatalog.UnitTests.Commands.ROE
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ROE()
-               {
-                   ROEId = Guid.NewGuid(),
-                   CurrecnyId = _command.CurrencyId,
-                   Rate = 0.023253m,
-                   DateFrom = DateTime.Now
-               });
+               .ReturnsAsync(_roe);
             var handler = new DeleteROECommandHandler(_repository.Object);
 
             //Act

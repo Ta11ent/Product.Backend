@@ -9,7 +9,19 @@ namespace ProductCatalog.UnitTests.Queries.Category
     public class GetCategoryDetailsQueryHandlerTests : BaseTestHandler<ICategoryRepository>
     {
         private readonly GetCategoryDetailsQuery _query;
-        public GetCategoryDetailsQueryHandlerTests() : base() => _query = new() { CategoryId = Guid.NewGuid() };
+        private readonly Domain.Category _category;
+        public GetCategoryDetailsQueryHandlerTests() : base()
+        {
+            _category = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _query = new() {
+                CategoryId = _category.CategoryId
+            };
+        }
 
         [Fact]
         public async Task Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -22,7 +34,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
 
             var handler = new GetCategoryDetailsQueryHandler(_repository.Object, _mapper);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = await Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
         }
 
         [Fact]
@@ -33,12 +45,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
                mock => mock.GetCategoryByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
-               {
-                   CategoryId = _query.CategoryId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_category);
             var handler = new GetCategoryDetailsQueryHandler(_repository.Object, _mapper);
             //Act
             var category = await handler.Handle(_query, default);

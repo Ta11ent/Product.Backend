@@ -8,11 +8,23 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
     public class DeleteSubCategoryCommandHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
         private readonly DeleteSubCategoryCommand _command;
-        public DeleteSubCategoryCommandHandlerTests() : base() => _command = new()
+        private readonly Domain.SubCategory _subcategory;
+        public DeleteSubCategoryCommandHandlerTests() : base()
         {
-            CategoryId = Guid.NewGuid(),
-            SubCategoryId = Guid.NewGuid()
-        };
+            _subcategory = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                SubCategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description",
+               
+            };
+            _command = new()
+            {
+                SubCategoryId = _subcategory.SubCategoryId,
+                CategoryId = _subcategory.CategoryId
+            };
+        }
 
         [Fact]
         public void Handle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -38,13 +50,7 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.SubCategory()
-               {
-                   SubCategoryId = _command.SubCategoryId,
-                   Name = "test name",
-                   Description = "test description",
-                   CategoryId = _command.CategoryId
-               });
+               .ReturnsAsync(_subcategory);
             var handler = new DeleteSubCategoryCommandHandler(_repository.Object);
 
             //Act
@@ -67,13 +73,7 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.SubCategory()
-               {
-                   SubCategoryId = _command.SubCategoryId,
-                   Name = "test name",
-                   Description = "test description",
-                   CategoryId = _command.CategoryId
-               });
+               .ReturnsAsync(_subcategory);
             var handler = new DeleteSubCategoryCommandHandler(_repository.Object);
 
             //Act

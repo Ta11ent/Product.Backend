@@ -8,7 +8,19 @@ namespace ProductCatalog.UnitTests.Commands.Manufacturer
     public class DeleteManufacturerCommandHandlerTests : BaseTestHandler<IManufacturerRepository>
     {
         private readonly DeleteManufacturerCommand _command;
-        public DeleteManufacturerCommandHandlerTests() : base() => _command = new() { ManufacturerId = Guid.NewGuid() };
+        private readonly Domain.Manufacturer _manufacturer;
+        public DeleteManufacturerCommandHandlerTests() : base()
+        {
+            _manufacturer = new() {
+                ManufacturerId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _command = new() { 
+                ManufacturerId = _manufacturer.ManufacturerId
+            };
+           
+        }
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -31,12 +43,7 @@ namespace ProductCatalog.UnitTests.Commands.Manufacturer
                x => x.GetManufacturerByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Manufacturer()
-               {
-                   ManufacturerId = _command.ManufacturerId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_manufacturer);
             var handler = new DeleteManufacturerCommandHandler(_repository.Object);
 
             //Act
@@ -58,12 +65,7 @@ namespace ProductCatalog.UnitTests.Commands.Manufacturer
                x => x.GetManufacturerByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Manufacturer()
-               {
-                   ManufacturerId = _command.ManufacturerId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_manufacturer);
             var handler = new DeleteManufacturerCommandHandler(_repository.Object);
 
             //Act

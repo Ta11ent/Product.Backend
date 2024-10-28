@@ -12,13 +12,15 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
     {
         private readonly GetProductListQuery _query;
         private readonly Mock<ICurrencyRepository> _currencyRepository;
+        private readonly Domain.ProductSale _product;
         public GetProductListQueryHandlerTests() {
+            _product = new ProductSale().Create(Guid.NewGuid(), Guid.NewGuid());
             _query = new()
             {
                 CategoryId = Guid.NewGuid(),
-                SubCategoryId = Guid.NewGuid(),
+                SubCategoryId = _product.SubCategoryId,
                 Available = true,
-                ProductIds = [Guid.NewGuid(), Guid.NewGuid()],
+                ProductIds = [_product.ProductId],
                 Page = 1,
                 PageSize = 10
             };
@@ -33,10 +35,7 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
                     It.IsAny<Expression<Func<ProductSale, bool>>>(),
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<ProductSale>() {
-                    new ProductSale().Create(Guid.NewGuid(), Guid.NewGuid()),
-                    new ProductSale().Create(Guid.NewGuid(), Guid.NewGuid())
-                });
+                .ReturnsAsync(new List<ProductSale>() { _product });
 
             var handle = new GetProductListQueryHandler(_repository.Object, _currencyRepository.Object, _mapper);
 
@@ -45,7 +44,7 @@ namespace ProductCatalog.UnitTests.UnitTests.Queries.Product
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<ProductListDto>>(result.data);
-            result.meta.count.Should().Be(2);
+            result.meta.count.Should().Be(1);
 
         }
 

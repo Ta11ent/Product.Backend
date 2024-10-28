@@ -8,7 +8,18 @@ namespace ProductCatalog.UnitTests.Commands.Currency
     public class DeleteCurrrencyCommandHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
         private readonly DeleteCurrencyCommand _command;
-        public DeleteCurrrencyCommandHandlerTests() : base() => _command = new() { CurrencyId = Guid.NewGuid() };
+        private readonly Domain.Currency _currency;
+        public DeleteCurrrencyCommandHandlerTests() : base()
+        {
+            _currency = new() {
+                CurrencyId = Guid.NewGuid(),
+                Name = "test name",
+                Code = "test code"
+            };
+            _command = new() { 
+                CurrencyId = _currency.CurrencyId
+            };
+        }
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -31,12 +42,7 @@ namespace ProductCatalog.UnitTests.Commands.Currency
                x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Currency()
-               {
-                   CurrencyId = _command.CurrencyId,
-                   Name = "test name",
-                   Code = "test code"
-               });
+               .ReturnsAsync(_currency);
             var handler = new DeleteCurrencyCommandHandler(_repository.Object);
 
             //Act
@@ -58,12 +64,7 @@ namespace ProductCatalog.UnitTests.Commands.Currency
                x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Currency()
-               {
-                   CurrencyId = _command.CurrencyId,
-                   Name = "test name",
-                   Code = "test code"
-               });
+               .ReturnsAsync(_currency);
             var handler = new DeleteCurrencyCommandHandler(_repository.Object);
 
             //Act

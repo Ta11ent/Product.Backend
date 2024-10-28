@@ -8,13 +8,24 @@ namespace ProductCatalog.UnitTests.Commands.ROE
     public class UpdateROECommandHandlerTests : BaseTestHandler<IROERepository>
     {
         private readonly UpdateROECommand _command;
-        public UpdateROECommandHandlerTests() : base() => _command = new()
+        private readonly Domain.ROE _roe;
+        public UpdateROECommandHandlerTests() : base()
         {
-            CurrencyId = Guid.NewGuid(),
-            ROEId = Guid.NewGuid(),
-            Rate = 0.2321m,
-            DateFrom = DateTime.Now
-        };
+            _roe = new()
+            {
+                ROEId = Guid.NewGuid(),
+                CurrecnyId = Guid.NewGuid(),
+                Rate = 0.023253m,
+                DateFrom = DateTime.Now
+            };
+            _command = new()
+            {
+                CurrencyId =_roe.CurrecnyId,
+                ROEId = _roe.ROEId,
+                Rate = 0.2321m,
+                DateFrom = DateTime.Now
+            };
+        }
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -39,13 +50,7 @@ namespace ProductCatalog.UnitTests.Commands.ROE
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ROE()
-               {
-                   ROEId = Guid.NewGuid(),
-                   CurrecnyId = _command.CurrencyId,
-                   Rate = 0.023253m,
-                   DateFrom = DateTime.Now
-               });
+               .ReturnsAsync(_roe);
             var handler = new UpdateROECommandHandler(_repository.Object);
 
             //Act

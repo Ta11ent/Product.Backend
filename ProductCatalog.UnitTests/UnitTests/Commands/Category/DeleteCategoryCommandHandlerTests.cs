@@ -8,7 +8,19 @@ namespace ProductCatalog.UnitTests.Commands.Category
     public class DeleteCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
     {
         private readonly DeleteCategoryCommand _command;
-        public DeleteCategoryCommandHandlerTests() : base() => _command = new() { CategoryId = Guid.NewGuid() };
+        private readonly Domain.Category _category;
+        public DeleteCategoryCommandHandlerTests() : base() {
+            _category = new() {
+                CategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _command = new() { 
+                CategoryId = _category.CategoryId
+            };
+           
+        }
+
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -32,12 +44,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
                x => x.GetCategoryByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
-               {
-                   CategoryId = _command.CategoryId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_category);
             var handler = new DeleteCategoryCommandHandler(_repository.Object);
 
             //Act
@@ -59,12 +66,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
                x => x.GetCategoryByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
-               {
-                   CategoryId = _command.CategoryId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_category);
             var handler = new DeleteCategoryCommandHandler(_repository.Object);
 
             //Act

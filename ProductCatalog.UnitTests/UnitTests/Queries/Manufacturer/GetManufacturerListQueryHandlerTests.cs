@@ -9,7 +9,20 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
     public class GetManufacturerListQueryHandlerTests : BaseTestHandler<IManufacturerRepository>
     {
         private readonly GetManufacturerListQuery _query;
-        public GetManufacturerListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
+        private readonly Domain.Manufacturer _manufacturer;
+        public GetManufacturerListQueryHandlerTests() : base()
+        {
+            _manufacturer = new()
+            {
+                ManufacturerId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _query = new() { 
+                Page = 1,
+                PageSize = 10 
+            };
+        }
 
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
@@ -19,17 +32,7 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
                 mock => mock.GetAllManufacturersAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.Manufacturer> {
-                    new Domain.Manufacturer(){
-                    ManufacturerId = Guid.NewGuid(),
-                    Name = "test name",
-                    Description = "test description"
-                },
-                    new Domain.Manufacturer(){
-                    ManufacturerId = Guid.NewGuid(),
-                    Name = "test name1",
-                    Description = "test description1"
-                } });
+                .ReturnsAsync(new List<Domain.Manufacturer> { _manufacturer });
 
             var handle = new GetManufacturerListQueryHandler(_repository.Object, _mapper);
             //Act
@@ -38,7 +41,7 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<ManufacturerListDto>>(result.data);
-            result.meta.count.Should().Be(2);
+            result.meta.count.Should().Be(1);
 
         }
 

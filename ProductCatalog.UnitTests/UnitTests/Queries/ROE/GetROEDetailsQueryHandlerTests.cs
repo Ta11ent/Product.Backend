@@ -9,7 +9,21 @@ namespace ProductCatalog.UnitTests.Queries.ROE
     public class GetROEDetailsQueryHandlerTests : BaseTestHandler<IROERepository>
     {
         private readonly GetROEDetailsQuery _query;
-        public GetROEDetailsQueryHandlerTests() : base() => _query = new() { CurrencyId = Guid.NewGuid(), ROEId = Guid.NewGuid() };
+        private readonly Domain.ROE _roe;
+        public GetROEDetailsQueryHandlerTests() : base()
+        {
+            _roe = new()
+            {
+                ROEId = Guid.NewGuid(),
+                CurrecnyId = Guid.NewGuid(),
+                Rate = 0.023253m,
+                DateFrom = DateTime.Now
+            };
+            _query = new() { 
+                CurrencyId = _roe.CurrecnyId, 
+                ROEId = _roe.ROEId
+            };
+        }
         [Fact]
         public async Task Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -22,7 +36,9 @@ namespace ProductCatalog.UnitTests.Queries.ROE
 
             var handler = new GetROEDetailsQueryHandler(_repository.Object, _mapper);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = 
+                await Assert.ThrowsAsync<NotFoundExceptions>(
+                    async () => await handler.Handle(_query, default));
         }
 
         [Fact]
@@ -34,13 +50,7 @@ namespace ProductCatalog.UnitTests.Queries.ROE
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ROE()
-               {
-                   ROEId = _query.ROEId,
-                   CurrecnyId = _query.CurrencyId,
-                   Rate = 0.023253m,
-                   DateFrom = DateTime.Now
-               });
+               .ReturnsAsync(_roe);
             var handler = new GetROEDetailsQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await handler.Handle(_query, default);

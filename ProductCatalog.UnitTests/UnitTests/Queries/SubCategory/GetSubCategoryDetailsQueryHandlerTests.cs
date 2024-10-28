@@ -9,11 +9,23 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
     public class GetSubCategoryDetailsQueryHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
         private readonly GetSubCategoryDetailsQuery _query;
-        public GetSubCategoryDetailsQueryHandlerTests() : base() => _query = new()
+        private readonly Domain.SubCategory _subCategory;
+        public GetSubCategoryDetailsQueryHandlerTests() : base()
         {
-            CategoryId = Guid.NewGuid(),
-            SubCategoryId = Guid.NewGuid()
-        };
+            _subCategory = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                SubCategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description",
+            };
+            _query = new()
+            {
+                CategoryId = _subCategory.CategoryId,
+                SubCategoryId = _subCategory.SubCategoryId
+            };
+        }
+
         [Fact]
         public async Task Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -26,7 +38,9 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
 
             var handler = new GetSubCategoryQueryHandler(_repository.Object, _mapper);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = 
+                await Assert.ThrowsAsync<NotFoundExceptions>(
+                    async() => await handler.Handle(_query, default));
         }
 
         [Fact]
@@ -38,13 +52,7 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
                    It.IsAny<Guid>(),
                     It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.SubCategory()
-               {
-                   SubCategoryId = _query.SubCategoryId,
-                   Name = "test name",
-                   Description = "test description",
-                   CategoryId = _query.CategoryId
-               });
+               .ReturnsAsync(_subCategory);
             var handler = new GetSubCategoryQueryHandler(_repository.Object, _mapper);
             //Act
             var category = await handler.Handle(_query, default);

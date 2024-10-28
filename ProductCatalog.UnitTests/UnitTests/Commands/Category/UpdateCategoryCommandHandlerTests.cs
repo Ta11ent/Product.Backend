@@ -8,8 +8,23 @@ namespace ProductCatalog.UnitTests.Commands.Category
     public class UpdateCategoryCommandHandlerTests : BaseTestHandler<ICategoryRepository>
     {
         private readonly UpdateCategoryCommand _command;
-        public UpdateCategoryCommandHandlerTests() : base() =>
-            _command = new() { CategoryId = Guid.NewGuid(), Name = "TestName", Description = "TestDescription" };
+        private readonly Domain.Category _category;
+        public UpdateCategoryCommandHandlerTests() : base()
+        {
+            _category = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _command = new()
+            {
+                CategoryId = _category.CategoryId,
+                Name = "TestName",
+                Description = "TestDescription"
+            };
+
+        }
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -33,12 +48,7 @@ namespace ProductCatalog.UnitTests.Commands.Category
                x => x.GetCategoryByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Category()
-               {
-                   CategoryId = _command.CategoryId,
-                   Name = "test name",
-                   Description = "test description"
-               });
+               .ReturnsAsync(_category);
             var handler = new UpdateCategoryCommandHandler(_repository.Object);
 
             //Act

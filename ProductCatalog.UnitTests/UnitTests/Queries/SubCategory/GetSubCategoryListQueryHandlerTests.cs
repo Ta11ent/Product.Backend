@@ -9,12 +9,23 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
     public class GetSubCategoryListQueryHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
         private readonly GetSubCategoryListQuery _query;
-        public GetSubCategoryListQueryHandlerTests() : base() => _query = new()
+        private readonly Domain.SubCategory _subCategory;
+        public GetSubCategoryListQueryHandlerTests() : base()
         {
-            CategoryId = Guid.NewGuid(),
-            Page = 1,
-            PageSize = 10
-        };
+            _subCategory = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                SubCategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description",
+            };
+            _query = new()
+            {
+                CategoryId = _subCategory.CategoryId,
+                Page = 1,
+                PageSize = 10
+            };
+        }
 
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
@@ -25,19 +36,7 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
                     It.IsAny<Guid>(),
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.SubCategory> {
-                   new Domain.SubCategory(){
-                   SubCategoryId = Guid.NewGuid(),
-                   Name = "test name",
-                   Description = "test description",
-                   CategoryId = _query.CategoryId
-                },
-                   new Domain.SubCategory(){
-                   SubCategoryId = Guid.NewGuid(),
-                   Name = "test name1",
-                   Description = "test description1",
-                   CategoryId = _query.CategoryId
-                }});
+                .ReturnsAsync(new List<Domain.SubCategory> { _subCategory});
 
             var handle = new GetSubCategoryListQueryHandler(_repository.Object, _mapper);
             //Act
@@ -46,7 +45,7 @@ namespace ProductCatalog.UnitTests.Queries.SubCategory
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<SubCategoryListDto>>(result.data);
-            result.meta.count.Should().Be(2);
+            result.meta.count.Should().Be(1);
         }
 
         [Fact]

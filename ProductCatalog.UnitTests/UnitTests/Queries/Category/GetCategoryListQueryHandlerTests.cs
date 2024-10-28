@@ -9,7 +9,20 @@ namespace ProductCatalog.UnitTests.Queries.Category
     public class GetCategoryListQueryHandlerTests : BaseTestHandler<ICategoryRepository>
     {
         private readonly GetCategoryListQuery _query;
-        public GetCategoryListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
+        private readonly Domain.Category _category;
+        public GetCategoryListQueryHandlerTests() : base()
+        {
+            _category = new()
+            {
+                CategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description"
+            };
+            _query = new() {
+                Page = 1,
+                PageSize = 10 
+            };
+        }
 
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
@@ -19,17 +32,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
                 mock => mock.GetAllCategoriesAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.Category> {
-                    new Domain.Category(){
-                    CategoryId = Guid.NewGuid(),
-                    Name = "test name",
-                    Description = "test description"
-                },
-                    new Domain.Category(){
-                    CategoryId = Guid.NewGuid(),
-                    Name = "test name1",
-                    Description = "test description1"
-                } });
+                .ReturnsAsync(new List<Domain.Category> { _category });
 
             var handle = new GetCategoryListQueryHandler(_repository.Object, _mapper);
             //Act
@@ -38,7 +41,7 @@ namespace ProductCatalog.UnitTests.Queries.Category
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<CategoryListDto>>(result.data);
-            result.meta.count.Should().Be(2);
+            result.meta.count.Should().Be(1);
 
         }
 

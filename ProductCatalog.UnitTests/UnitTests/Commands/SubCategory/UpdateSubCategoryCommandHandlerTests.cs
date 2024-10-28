@@ -8,13 +8,24 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
     public class UpdateSubCategoryCommandHandlerTests : BaseTestHandler<ISubCategoryRepository>
     {
         private readonly UpdateSubCategoryCommand _command;
-        public UpdateSubCategoryCommandHandlerTests() : base() => _command = new()
+        private readonly Domain.SubCategory _subCategory;
+        public UpdateSubCategoryCommandHandlerTests() : base()
         {
-            CategoryId = Guid.NewGuid(),
-            SubCategoryId = Guid.NewGuid(),
-            Name = "test name",
-            Description = "test description"
-        };
+            _subCategory = new()
+            {
+                SubCategoryId = Guid.NewGuid(),
+                Name = "test name",
+                Description = "test description",
+                CategoryId = Guid.NewGuid()
+            };
+            _command = new()
+            {
+                CategoryId = _subCategory.CategoryId,
+                SubCategoryId = _subCategory.SubCategoryId,
+                Name = "test name",
+                Description = "test description"
+            };
+        }
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -40,13 +51,7 @@ namespace ProductCatalog.UnitTests.Commands.SubCategory
                    It.IsAny<Guid>(),
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.SubCategory()
-               {
-                   SubCategoryId = _command.SubCategoryId,
-                   Name = "test name",
-                   Description = "test description",
-                   CategoryId = _command.CategoryId
-               });
+               .ReturnsAsync(_subCategory);
             var handler = new UpdateSubCategoryCommandHandler(_repository.Object);
 
             //Act

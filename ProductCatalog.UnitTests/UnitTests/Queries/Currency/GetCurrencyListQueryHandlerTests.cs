@@ -3,13 +3,27 @@ using Moq;
 using ProductCatalog.Application.Application.Queries.Currency.GetCurrencyList;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Pagination;
+using ProductCatalog.Domain;
 
 namespace ProductCatalog.UnitTests.Queries.Currency
 {
     public class GetCurrencyListQueryHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
         private readonly GetCurrencyListQuery _query;
-        public GetCurrencyListQueryHandlerTests() : base() => _query = new() { Page = 1, PageSize = 10 };
+        private readonly Domain.Currency _currency;
+        public GetCurrencyListQueryHandlerTests() : base()
+        {
+            _currency = new()
+            {
+                CurrencyId = Guid.NewGuid(),
+                Name = "test name",
+                Code = "test code"
+            };
+            _query = new() { 
+                Page = 1, 
+                PageSize = 10
+            };
+        }
         [Fact]
         public async Task Handle_Should_ReturnSuccessResult()
         {
@@ -18,17 +32,7 @@ namespace ProductCatalog.UnitTests.Queries.Currency
                 mock => mock.GetAllCurrenciesAsync(
                     It.IsAny<IPagination>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new List<Domain.Currency> {
-                    new Domain.Currency(){
-                    CurrencyId = Guid.NewGuid(),
-                    Name = "test name",
-                    Code = "test code"
-                },
-                new Domain.Currency(){
-                    CurrencyId = Guid.NewGuid(),
-                    Name = "test name1",
-                    Code = "test code1"
-                }});
+                .ReturnsAsync(new List<Domain.Currency> { _currency });
 
             var handle = new GetCurrencyListQueryHandler(_repository.Object, _mapper);
             //Act
@@ -37,7 +41,7 @@ namespace ProductCatalog.UnitTests.Queries.Currency
             Assert.NotEmpty(result.data);
             result.isSuccess.Should().BeTrue();
             Assert.IsType<List<CurrencyListDto>>(result.data);
-            result.meta.count.Should().Be(2);
+            result.meta.count.Should().Be(1);
         }
 
         [Fact]

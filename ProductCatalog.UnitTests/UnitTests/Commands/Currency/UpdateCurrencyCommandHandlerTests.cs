@@ -8,12 +8,22 @@ namespace ProductCatalog.UnitTests.Commands.Currency
     public class UpdateCurrencyCommandHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
         private readonly UpdateCurrecnyCommand _command;
-        public UpdateCurrencyCommandHandlerTests() : base() => _command = new()
+        private readonly Domain.Currency _currency;
+        public UpdateCurrencyCommandHandlerTests() : base()
         {
-            CurrencyId = Guid.NewGuid(),
-            Name = "test name",
-            Code = "test code"
-        };
+            _currency = new()
+            {
+                CurrencyId = Guid.NewGuid(),
+                Name = "test name",
+                Code = "test code"
+            };
+            _command = new()
+            {
+                CurrencyId = _currency.CurrencyId,
+                Name = "test name",
+                Code = "test code"
+            };
+        }
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
@@ -37,12 +47,7 @@ namespace ProductCatalog.UnitTests.Commands.Currency
                x => x.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Currency()
-               {
-                   CurrencyId = _command.CurrencyId,
-                   Name = "test name",
-                   Code = "test code"
-               });
+               .ReturnsAsync(_currency);
             var handler = new UpdateCurrecnyCommandHandler(_repository.Object);
 
             //Act

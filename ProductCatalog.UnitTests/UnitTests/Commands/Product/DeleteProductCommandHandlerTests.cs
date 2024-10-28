@@ -10,13 +10,17 @@ namespace ProductCatalog.UnitTests.Commands.Product
     public class DeleteProductCommandHandlerTests : BaseTestHandler<IProductRepository>
     {
         private readonly DeleteProductCommand _command;
+        private readonly Domain.ProductSale _product;
         public DeleteProductCommandHandlerTests()
-            => _command = new DeleteProductCommand()
+        {
+            _product = new ProductSale().Create(Guid.NewGuid(), Guid.NewGuid(), true);
+            _command = new DeleteProductCommand()
             {
                 CategoryId = Guid.NewGuid(),
-                SubCategoryId = Guid.NewGuid(),
-                ProductId = Guid.NewGuid()
+                SubCategoryId = _product.SubCategoryId,
+                ProductId = _product.ProductId
             };
+        }
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoProduct()
         {
@@ -41,7 +45,7 @@ namespace ProductCatalog.UnitTests.Commands.Product
                     It.IsAny<Guid>(),
                     It.IsAny<Expression<Func<ProductSale, bool>>>(),
                     It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ProductSale().Create(Guid.NewGuid(), Guid.NewGuid(), true));
+               .ReturnsAsync(_product);
             var handler = new DeleteProductCommandHandler(_repository.Object);
 
             //Act
@@ -50,7 +54,7 @@ namespace ProductCatalog.UnitTests.Commands.Product
             //Assert
             _repository.Verify(
                 x => x.DeleteProduct(
-                    It.IsAny<Domain.ProductSale>()),
+                    It.IsAny<ProductSale>()),
                 Times.Once);
 
         }
@@ -64,7 +68,7 @@ namespace ProductCatalog.UnitTests.Commands.Product
                     It.IsAny<Guid>(),
                     It.IsAny<Expression<Func<ProductSale, bool>>>(),
                     It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ProductSale().Create(Guid.NewGuid(), Guid.NewGuid(), true));
+               .ReturnsAsync(_product);
             var handler = new DeleteProductCommandHandler(_repository.Object);
 
             //Act

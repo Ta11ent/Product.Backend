@@ -1,6 +1,4 @@
 ﻿using Moq;
-using ProductCatalog.Application.Application.Commands.Manufacturer.UpdateManufacturer;
-using ProductCatalog.Application.Application.Commands.Product.DeleteProduct;
 using ProductCatalog.Application.Application.Commands.Product.UpdateProduct;
 using ProductCatalog.Application.Common.Abstractions;
 using ProductCatalog.Application.Common.Exceptions;
@@ -12,18 +10,26 @@ namespace ProductCatalog.UnitTests.Commands.Product
     public class UpdateProductCommandHandlerTests : BaseTestHandler<IProductRepository>
     {
         private readonly UpdateProductCommand _command;
-        public UpdateProductCommandHandlerTests() 
-            => _command = new UpdateProductCommand()
+        private readonly ProductSale _product;
+        public UpdateProductCommandHandlerTests()
         {
-            ProductId = Guid.NewGuid(),
-            Name = "test name",
-            Description = "test description",
-            SubCategoryId = Guid.NewGuid(),
-            CategoryId = Guid.NewGuid(),
-            ManufacturerId = Guid.NewGuid(),
-            Available = true,
-            Price = 5000
-        };
+            _product = new ProductSale()
+                .Create(Guid.NewGuid(), Guid.NewGuid(), true)
+                .Create(new Domain.Product().Create(".name", "description", Guid.NewGuid()),
+                        new Domain.Cost().Create(Guid.NewGuid(), 600, Guid.NewGuid()));
+
+            _command = new UpdateProductCommand()
+            {
+                ProductId = _product.ProductId,
+                Name = "test name",
+                Description = "test description",
+                SubCategoryId = _product.SubCategoryId,
+                CategoryId = Guid.NewGuid(),
+                ManufacturerId = Guid.NewGuid(),
+                Available = true,
+                Price = 5000
+            };
+        }
 
         [Fact]
         public void Habdle_Should_ReturnFailureResult_WhenThereIsNoProduct()
@@ -49,11 +55,7 @@ namespace ProductCatalog.UnitTests.Commands.Product
                     It.IsAny<Guid>(),
                     It.IsAny<Expression<Func<ProductSale, bool>>>(),
                     It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.ProductSale()
-                    .Create(_command.SubCategoryId, _command.ProductId, true)
-                    .Create(
-                        new Domain.Product().Create(".name", "description", Guid.NewGuid()), 
-                        new Domain.Cost().Create(Guid.NewGuid(), 600, Guid.NewGuid())));
+               .ReturnsAsync(_product);
             var handler = new UpdateProductCommandHandler(_repository.Object);
 
             //Act

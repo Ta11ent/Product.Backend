@@ -9,7 +9,19 @@ namespace ProductCatalog.UnitTests.Queries.Currency
     public class GetCurrencyDetailsQueryHandlerTests : BaseTestHandler<ICurrencyRepository>
     {
         private readonly GetCurrencyDetailsQuery _query;
-        public GetCurrencyDetailsQueryHandlerTests() : base() => _query = new() { CurrencyId = Guid.NewGuid() };
+        private readonly Domain.Currency _currency;
+        public GetCurrencyDetailsQueryHandlerTests() : base()
+        {
+            _currency = new()
+            {
+                CurrencyId = Guid.NewGuid(),
+                Name = "test name",
+                Code = "test code"
+            };
+            _query = new() { 
+                CurrencyId = _currency.CurrencyId
+            };
+        }
         [Fact]
         public async Task Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -21,7 +33,7 @@ namespace ProductCatalog.UnitTests.Queries.Currency
 
             var handler = new GetCurrencyDetailsQueryHandler(_repository.Object, _mapper);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = await Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
         }
 
         [Fact]
@@ -32,12 +44,7 @@ namespace ProductCatalog.UnitTests.Queries.Currency
                mock => mock.GetCurrencyByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Currency()
-               {
-                   CurrencyId = _query.CurrencyId,
-                   Name = "test name",
-                   Code = "test code"
-               });
+               .ReturnsAsync(_currency);
             var handler = new GetCurrencyDetailsQueryHandler(_repository.Object, _mapper);
             //Act
             var category = await handler.Handle(_query, default);

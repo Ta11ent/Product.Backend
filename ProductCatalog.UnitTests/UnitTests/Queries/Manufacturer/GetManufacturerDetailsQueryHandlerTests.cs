@@ -9,7 +9,19 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
     public class GetManufacturerDetailsQueryHandlerTests : BaseTestHandler<IManufacturerRepository>
     {
         private readonly GetManufacturerDetailsQuery _query;
-        public GetManufacturerDetailsQueryHandlerTests() : base() => _query = new() { ManufacturerId = Guid.NewGuid() };
+        private readonly Domain.Manufacturer _manufacturer;
+        public GetManufacturerDetailsQueryHandlerTests() : base()
+        {
+            _manufacturer = new()
+            {
+                ManufacturerId = Guid.NewGuid(),
+                Description = "test description",
+                Name = "test name"
+            };
+            _query = new() { 
+                ManufacturerId = _manufacturer.ManufacturerId
+            };
+        }
         [Fact]
         public async Task Habdle_Should_ReturnFailureResult_WhenThereIsNoCategory()
         {
@@ -21,7 +33,7 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
 
             var handler = new GetManufacturerDetailsQueryHandler(_repository.Object, _mapper);
 
-            var caughtException = Assert.ThrowsAsync<NotFoundExceptions>(() => handler.Handle(_query, default));
+            var caughtException = await Assert.ThrowsAsync<NotFoundExceptions>(async () => await handler.Handle(_query, default));
         }
 
         [Fact]
@@ -32,12 +44,7 @@ namespace ProductCatalog.UnitTests.Queries.Manufacturer
                mock => mock.GetManufacturerByIdAsync(
                    It.IsAny<Guid>(),
                    It.IsAny<CancellationToken>()))
-               .ReturnsAsync(new Domain.Manufacturer()
-               {
-                   ManufacturerId = _query.ManufacturerId,
-                   Description = "test description",
-                   Name = "test name"
-               });
+               .ReturnsAsync(_manufacturer);
             var handler = new GetManufacturerDetailsQueryHandler(_repository.Object, _mapper);
             //Act
             var result = await handler.Handle(_query, default);
