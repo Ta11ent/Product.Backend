@@ -19,12 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\..\src\Core\ProductCatalog.Application\ProductCatalog.Application.csproj" />
+    <ProjectReference Include="..\..\src\Core\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Services\Product\src\Core\ProductCatalog.Application\ProductCatalog.Application.csproj" />
-    <ProjectReference Include="..\Services\Product\src\Core\ProductCatalog.Domain\ProductCatalog.Domain.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
