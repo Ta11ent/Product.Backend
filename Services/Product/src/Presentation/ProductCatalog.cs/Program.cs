@@ -1,3 +1,5 @@
+using ProductCatalog.Persistence.Migrations;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(config =>
@@ -20,25 +22,26 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    try
-    {
-        var context = serviceProvider.GetRequiredService<ProductDbContext>();
-        DbInitialize.Initialize(context);
-    }
-    catch (Exception exception)
-    {
-        var loger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        loger.LogError(exception, "Ann error ocurred while app initialization");
-    }
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var serviceProvider = scope.ServiceProvider;
+//    try
+//    {
+//        var context = serviceProvider.GetRequiredService<ProductDbContext>();
+//        DbInitialize.Initialize(context);
+//    }
+//    catch (Exception exception)
+//    {
+//        var loger = serviceProvider.GetRequiredService<ILogger<Program>>();
+//        loger.LogError(exception, "Ann error ocurred while app initialization");
+//    }
+//}
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigration();
 }
 
 CategoryEndpoint.Map(app);
