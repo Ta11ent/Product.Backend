@@ -10,7 +10,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories",
@@ -29,7 +29,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{Id}",
@@ -51,7 +51,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories",
@@ -70,7 +70,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{Id}",
@@ -89,7 +89,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{Id}",
@@ -111,7 +111,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{SubCategoryId}/products",
@@ -130,7 +130,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{SubCategoryId}/products",
@@ -149,7 +149,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{SubCategoryId}/products/{Id}",
@@ -168,7 +168,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/categories/{CategoryId}/subcategories{SubCategoryId}/products/{Id}",
@@ -190,7 +190,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/manufacturers",
@@ -209,7 +209,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/manufacturers/{Id}",
@@ -231,7 +231,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/currencies",
@@ -250,7 +250,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/currencies/{Id}",
@@ -272,7 +272,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/currencies/{CurrencyId}/roe/{Id}",
@@ -291,7 +291,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7002
+          "Port": 7001
         }
       ],
       "DownstreamPathTemplate": "/api/v{version}/currencies/{CurrencyId}/roe",
