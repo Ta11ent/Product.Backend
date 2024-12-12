@@ -13,7 +13,14 @@ namespace ProductCatalog.Persistence.Migrations
             {
                 using ProductDbContext dbContext = 
                     scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-                dbContext.Database.Migrate();
+
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations.Any())
+                {
+                    dbContext.Database.Migrate();
+                }
+                else return;
+                
             }
         }
     }
